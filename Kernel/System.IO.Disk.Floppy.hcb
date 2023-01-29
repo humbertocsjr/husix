@@ -6,20 +6,30 @@ Module FloppyDisk
     Pointer Dim FloppyA as DiskInfo
     Pointer Dim FloppyB as DiskInfo
     Dim Buffer as Block512B
+    Dim MotorCounter as UInt16
 
     Public Sub Initialize
        Dim t as Thread
        t = Thread.RequestNew()
-       Thread.Start t, 4, AddressOf(Main)
+       ' Start main task with 2 KiB of Stack 
+       Thread.Start t, 2, AddressOf(Main)
     End
 
     Sub Main()
-        Console.Write "FLOPPY"
-        Thread.Sleep 2000
+        MotorCounter = 0
         While 1 
-            Console.Write "Floppy"
-            Thread.Yield
+            If MotorCounter > 0 Then
+                MotorCounter--
+                If MotorCounter == 0 Then
+                    StopMotor
+                End
+            End
+            Thread.Sleep 1000
         End
+    End
+
+    Sub StopMotor
+
     End
 
     Sub IOBlock(callType as UInt16, disk as DiskInfo, block as Block512B, positionLow as UInt16, positionHigh as UInt16)

@@ -2,6 +2,7 @@ Imports System
 Imports System.IO
 Imports System.Threading
 
+' Relógio Global
 Module Clock
     Public Dim TimerMiliSeconds as UInt16
     Public Dim TimerSeconds as UInt16
@@ -77,6 +78,7 @@ Module SystemTimer
         asm "cs push word [_systemtimer_biosint8ip]"
         asm "retf"
         asm ".return:"
+        ' Atualiza o relógio
         asm "cs add word [_clock_milisecond], 55"
         asm "cs add word [_clock_timermiliseconds], 55"
         asm "cs cmp word [_clock_milisecond], 990"
@@ -95,10 +97,7 @@ Module SystemTimer
         asm "cs inc word [_clock_hour]"
         Clock.AutoAjust
         asm ".end_clock:"
+        ' Troca de tarefa
         Thread.Yield
     End
-End
-
-Module Timer
-
 End

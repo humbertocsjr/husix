@@ -16,7 +16,19 @@ Module Program
 
     Public Sub Main(args as PtrByteArray)
         Dim ptr as PtrByteArray
-        Console.WriteLine "HUSIX Operating System Kernel"
+        Dim ver as Version
+        ver = new
+        HusixVersion.GetVersion ver
+        Console.Mode80x25x4
+        Console.WriteLine "HUSIX Operating System"
+        Console.Write "Kernel v"
+        Console.WriteUInt16 ver.Version
+        Console.Write "."
+        Console.WriteUInt16 ver.SubVersion
+        Console.Write " R"
+        Console.WriteUInt16 ver.Revision
+        Console.Write " - "
+        Console.WriteLine ver.Release
         Console.Write "Initializing"
         MultiThreading.PreInitialize
         Console.Write "."

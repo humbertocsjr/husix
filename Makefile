@@ -10,6 +10,7 @@ distro:
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/360PC.img
 	@mv -f Distro/720TEST.img Distro/720PC.img
+	@mv -f Distro/1200TEST.img Distro/1200PC.img
 	@mv -f Distro/1440TEST.img Distro/1440PC.img
 	@$(MAKE) clean
 	@$(MAKE) config_xt
@@ -17,7 +18,24 @@ distro:
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/360XT.img
 	@mv -f Distro/720TEST.img Distro/720XT.img
+	@mv -f Distro/1200TEST.img Distro/1200XT.img
 	@mv -f Distro/1440TEST.img Distro/1440XT.img
+	@$(MAKE) clean
+	@$(MAKE) config_at
+	@$(MAKE) producao
+	@$(MAKE) discos
+	@mv -f Distro/360TEST.img Distro/360AT.img
+	@mv -f Distro/720TEST.img Distro/720AT.img
+	@mv -f Distro/1200TEST.img Distro/1200AT.img
+	@mv -f Distro/1440TEST.img Distro/1440AT.img
+	@$(MAKE) clean
+	@$(MAKE) config_custom
+	@$(MAKE) producao
+	@$(MAKE) discos
+	@mv -f Distro/360TEST.img Distro/360Custom.img
+	@mv -f Distro/720TEST.img Distro/720Custom.img
+	@mv -f Distro/1200TEST.img Distro/1200Custom.img
+	@mv -f Distro/1440TEST.img Distro/1440Custom.img
 	@mv -f Kernel/ConfigDefault.old Kernel/ConfigDefault.hcb
 
 config_pc:
@@ -31,6 +49,10 @@ config_xt:
 config_at:
 	@-rm Kernel/ConfigDefault.hcb >> /dev/null
 	@ln -s ../ConfigAT.hcb Kernel/ConfigDefault.hcb
+
+config_custom:
+	@-rm Kernel/ConfigDefault.hcb >> /dev/null
+	@ln -s ../ConfigCustom.hcb Kernel/ConfigDefault.hcb
 
 ferramentas:
 	@$(MAKE) -C DevTools

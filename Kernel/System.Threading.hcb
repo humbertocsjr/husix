@@ -2,6 +2,7 @@ Imports System
 Imports System.IO
 Imports System.IO.Console
 
+' Representa uma tarefa, função próxima do .Net
 Structure Thread
     Dim Id as UInt16
     Dim Active as UInt16
@@ -15,17 +16,20 @@ Structure Thread
     Dim Previous as PtrByteArray
 End
 
+' Representa um semaforo, serve para limitar o acesso simultaneo a um recurso/rotina
 Structure Semaphore
     Dim Count as UInt16
     Dim Limit as UInt16
 End
 
 Module Semaphore
+    ' Deve ser chamado para criar um Semaforo, informando o limite de acessos simultaneos
     Public Sub Initialize(s as Semaphore, limit as UInt16)
         s.Count = 0
         s.Limit = limit
     End
 
+    ' Chamado para esperar uma vaga no semaforo, permite a execução apenas após uma vaga ser liberada por outro processo
     Public Sub WaitOne(s as Semaphore)
         waiting:
         While s.Count >= s.Limit
@@ -41,6 +45,7 @@ Module Semaphore
         asm "popf"
     End
 
+    ' DEVE ser chamado sempre ao final de uma rotina onde teve um WaitOne, esta rotina que libera o semaforo, caso esqueça de chama-lo em algum retorno da função, haverá o travamento da rotina que chama o WaitOne por falta de vagas, não sendo mais executada a partir dai
     Public Sub Release(s as Semaphore)
         asm "pushf"
         asm "cli"
@@ -49,6 +54,7 @@ Module Semaphore
     End
 End
 
+' Uso interno, gerencia, efetua a troca automatizada das tarefas simultãneas
 Module MultiThreading
     Dim Active as UInt16
     Dim List as PtrByteArray
@@ -94,6 +100,7 @@ Module MultiThreading
 
     Sub Int81(ss as UInt16, sp as UInt16) Handles Interrupt
         ' DONT ADD STACK VARS TO THIS ROUTINE
+        ' NAO DECLARE VARIAVEIS NESSA ROTINA
         Current.StackSegment = ss
         Current.StackPointer = sp
         find_next:
@@ -124,6 +131,7 @@ Module MultiThreading
         End
     End
 
+    ' Usado pelo Thread para requisitar uma nova tarefa para uso
     Public Function RequestNew() as PtrByteArray
         Dim ptr as PtrByteArray
         Dim t as Thread
@@ -143,6 +151,7 @@ Module MultiThreading
         Throw CapacityOverflowError
     End
 
+    ' Lista uma Thread
     Public Function Item(i as UInt16) as PtrByteArray
         Dim ptr as PtrByteArray
         i --
@@ -152,6 +161,7 @@ Module MultiThreading
         Return ptr
     End
 
+    ' Retorna a quantidade de Threads executando
     Public Function Count() as UInt16
         Dim ptr as PtrByteArray
         Dim t as Thread
@@ -167,6 +177,7 @@ Module MultiThreading
         Return ret
     End
 
+    ' Inicia uma Thread gerada pelo RequestNew (USO INTERNO)
     Public Sub StartThread(t as Thread)
         Dim status as UInt16
         Dim ptrP as PtrByteArray
@@ -184,24 +195,29 @@ Module MultiThreading
         If status Then Resume
     End
 
+    ' Retorna se a troca de tarefas automaticamente esta ativa
     Public Function IsActive() as UInt16
         Return Active
     End
 
+    ' Suspende a multitarefa
     Public Sub Suspend
         Active = 0
     End
 
+    ' Reativa a multitarefa
     Public Sub Resume
         Active = 1
     End
 End
 
 Module Thread
+    ' Solitita uma tarefa nova
     Public Function RequestNew() as PtrByteArray
         Return MultiThreading.RequestNew()
     End
 
+    ' Inicia a tarefa solicitada, informando o tamanho da pilha que deve ser reservada e a rotina a ser executada em paralelo
     Public Sub Start(t as Thread, stackSizeKiB as UInt16, action as PtrByteArray)
         Dim stack as PtrWordArray
         Dim ptr as PtrByteArray
@@ -215,24 +231,31 @@ Module Thread
         MultiThreading.StartThread t
     End
 
+    ' Uso interno
     Sub EndThread()
+        t.Active = 0
+        t.Suspended = 1
         While 1 Thread.Yield
     End
 
+    ' Encerra uma tarefa
     Public Sub Abort(t as Thread)
         t.Suspended = 1
         t.Active = 0
     End
 
+    ' Aponta pra tarefa(Thread) atual
     Public Function Current() as PtrByteArray
         Return MultiThreading.Current
     End
 
+    ' Entrega o controle para a proxima tarefa expontaneamente
     Public Sub Yield()
         If MultiThreading.IsActive() == 0 Then Return
         asm "int 0x81"
     End
 
+    ' Aguarda X milisegundos (Precisão depende do intervalo do relógio, normalmente ficando em média de 18 vezes por segundo, ou a cada 55 milisegundos apoximadamente de precisão)
     Public Sub Sleep(miliseconds as UInt16)
         Dim oldmili as UInt16
         Dim diff  as UInt16
@@ -240,6 +263,18 @@ Module Thread
         While 1
             diff = Clock.TimerMiliSeconds - oldmili
             If diff >= miliseconds Then Return
+            Yield
+        End
+    End
+
+    ' Aguarda X segundos
+    Public Sub SleepSeconds(seconds as UInt16)
+        Dim oldsec as UInt16
+        Dim diff  as UInt16
+        oldsec = Clock.TimerSeconds
+        While 1
+            diff = Clock.TimerSeconds - oldsec
+            If diff >= seconds Then Return
             Yield
         End
     End
