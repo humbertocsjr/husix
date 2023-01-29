@@ -1,0 +1,51 @@
+Imports System
+
+Module IO
+    Public Sub OutputByte(port as UInt16, value as UInt8)
+        asm "mov dx, [bp+6]"
+        asm "mov ax, [bp+8]"
+        asm "out dx, al"
+    End
+
+    Public Sub OutputWord(port as UInt16, value as UInt16)
+        asm "mov dx, [bp+6]"
+        asm "mov ax, [bp+8]"
+        asm "out dx, ax"
+    End
+
+    Public Function InputByte(port as UInt16) as UInt8
+        asm "mov dx, [bp+6]"
+        asm "xor ax, ax"
+        asm "in al, dx"
+    End
+
+    Public Function InputWord(port as UInt16) as UInt16
+        asm "mov dx, [bp+6]"
+        asm "in ax, dx"
+    End
+
+    Public Sub RegisterHandler(interrupt as UInt8, handler as PtrByteArray)
+        Dim ptr as PtrWordArray
+        asm "pushf"
+        asm "cli"
+        #ptr = 0
+        @ptr = interrupt * 4
+        ptr = @handler
+        @ptr ++
+        @ptr ++
+        ptr = #handler
+        asm "popf"
+    End
+
+    Public Function GetHandler(interrupt as UInt8) as PtrByteArray
+        Dim ptr as PtrWordArray
+        Dim ret as PtrByteArray
+        #ptr = 0
+        @ptr = interrupt * 4
+        @ret = ptr
+        @ptr ++
+        @ptr ++
+        #ret = ptr
+        Return ret
+    End
+End

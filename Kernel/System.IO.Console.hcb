@@ -1,0 +1,91 @@
+Imports System
+Imports System.Text
+
+Module Console
+
+    Public Sub Mode80x25x4
+        asm "mov ax, 3"
+        asm "int 0x10"
+    End
+
+    Public Function ReadChar() as UInt8
+        return OS.ConsoleReadChar()
+    End
+
+    Public Sub ReadLine(txt as PtrByteArray)
+        Dim len as UInt16
+        Dim c as UInt16
+        Dim pos as UInt16
+        len = txt
+        @txt++
+        c = 0
+        pos = 1
+        While 1
+            c = OS.ConsoleReadChar()
+            If c == 13 Then Goto done
+            If c == 10 Then Goto done
+            If c == 9 Then
+                If pos > 1 Then
+                    pos--
+                    @txt--
+                    txt = 0
+                    Console.WriteChar 9
+                    Console.WriteChar 32
+                    Console.WriteChar 9
+                End
+            Else
+                If pos < len Then
+                    Console.WriteChar c
+                    txt = c
+                    pos++
+                    @txt++
+                End
+            End
+        End
+        done:
+        txt = 0
+    End
+
+    Public Sub WriteChar(c as UInt8)
+        OS.ConsoleWriteChar c
+    End
+
+    Public Sub Write(txt as PtrByteArray)
+        ' Ignora o byte inicial com a capacidade da variavel
+        @txt ++
+        While txt > 0
+            WriteChar UTF8.ConvertCharToCP437(txt)
+            @txt ++
+        End
+    End
+
+    Public Sub WriteLine(txt as PtrByteArray)
+        Write txt
+        WriteChar 13
+        WriteChar 10
+    End
+
+    Public Sub WriteUInt16(nro as UInt16)
+        Dim tmp as UInt16
+        Dim prox as UInt16
+        let tmp = nro mod 10
+        let prox = nro / 10
+        If prox > 0 Then WriteUInt16 prox
+        WriteChar 48 + tmp
+    End
+
+    Public Sub WriteInt16(nro as Int16)
+        If nro < 0 Then
+            let nro = -nro
+        End
+        WriteUInt16 nro
+    End
+
+    Public Sub WriteUInt8(nro as UInt8)
+        WriteUInt16 nro
+    End
+
+    Public Sub WriteInt8(nro as Int8)
+        WriteInt16 nro
+    End
+End

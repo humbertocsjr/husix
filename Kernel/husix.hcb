@@ -1,0 +1,63 @@
+' HUSIX - Humberto Sistema *NIX
+' Kernel
+
+Imports System
+Imports System.Memory
+Imports System.Threading
+Imports System.IO
+Imports System.IO.Console
+Imports System.Timer
+Imports System.IO.Disk
+Imports System.Collections
+Imports Version
+Imports ConfigDefault
+
+Module Program
+
+    Public Sub Main(args as PtrByteArray)
+        Dim ptr as PtrByteArray
+        Console.WriteLine "HUSIX Operating System Kernel"
+        Console.Write "Initializing"
+        MultiThreading.PreInitialize
+        Console.Write "."
+        GlobalMemory.Initialize
+        Console.Write "."
+        Memory.Initialize
+        Console.Write "."
+        MultiThreading.Initialize
+        Console.Write "."
+        SystemTimer.Initialize
+        Console.Write "."
+        MultiThreading.Resume
+        Console.Write "."
+        Disk.Initialize
+        Console.WriteLine ". [ OK ]"
+        
+        ConfigDefault.Initialize
+
+        While 1
+            Console.WriteChar 13
+            Console.WriteUInt16 Clock.Minute
+            Console.Write ":"
+            Console.WriteUInt16 Clock.Second
+            Thread.Yield
+        End
+    End
+
+    Public Sub FatalError(msg as String, file as String, line as UInt16)
+        Console.Mode80x25x4
+        Console.WriteLine "FATAL ERROR:"
+        Console.Write file
+        Console.Write ":"
+        Console.WriteUInt16 line
+        Console.WriteLine ":"
+        Console.WriteLine msg
+        Console.WriteLine ""
+        Console.WriteLine "<SYSTEM HALTED>"
+        While 1
+            asm "cli"
+            asm "hlt"
+        End
+    End
+
+End

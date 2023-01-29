@@ -1,0 +1,246 @@
+Imports System
+Imports System.IO
+Imports System.IO.Console
+
+Structure Thread
+    Dim Id as UInt16
+    Dim Active as UInt16
+    Dim Suspended as UInt16
+    Dim NewStack as UInt16
+    Dim Allocated as UInt16
+    Dim Action as Action(Of Thread)
+    Dim StackSegment as UInt16
+    Dim StackPointer as UInt16
+    Dim Next as PtrByteArray
+    Dim Previous as PtrByteArray
+End
+
+Structure Semaphore
+    Dim Count as UInt16
+    Dim Limit as UInt16
+End
+
+Module Semaphore
+    Public Sub Initialize(s as Semaphore, limit as UInt16)
+        s.Count = 0
+        s.Limit = limit
+    End
+
+    Public Sub WaitOne(s as Semaphore)
+        waiting:
+        While s.Count >= s.Limit
+            Thread.Yield
+        End
+        asm "pushf"
+        asm "cli"
+        If s.Count >= s.Limit Then
+            asm "popf"
+            Goto waiting
+        End
+        s.Count++
+        asm "popf"
+    End
+
+    Public Sub Release(s as Semaphore)
+        asm "pushf"
+        asm "cli"
+        If s.Count > 0 Then s.Count--
+        asm "popf"
+    End
+End
+
+Module MultiThreading
+    Dim Active as UInt16
+    Dim List as PtrByteArray
+    Public Pointer Dim Current as Thread
+    Public Dim KernelThread as Thread
+    Dim InUse as Semaphore
+
+    Public Sub PreInitialize
+        ' Chama antes da GlobalMemory
+        Active = 0
+        KernelThread.Id = 1
+    End
+
+    Public Sub Initialize
+        List = Memory.Alloc(SizeOf(Thread) * 128)
+        Dim i as UInt16
+        Dim ptr as PtrByteArray
+        Dim t as Thread
+        For i = 1 to 128
+            ptr = Item(i)
+            t = ptr
+            t.Id = i
+            t.Active = 0
+            t.Suspended = 1
+            t.NewStack = 0
+            t.Next = ptr
+            t.Previous = ptr
+            If i == 1 Then
+                #KernelThread = #ptr
+                @KernelThread = @ptr
+                #Current = #ptr
+                @Current = @ptr
+            End
+        End
+        Semaphore.Initialize InUse, 1
+        KernelThread.Active = 1
+        KernelThread.Suspended = 0
+        IO.RegisterHandler 0x81, AddressOf(Int81)
+
+    End
+
+    Dim Int81Temp as PtrByteArray
+
+    Sub Int81(ss as UInt16, sp as UInt16) Handles Interrupt
+        ' DONT ADD STACK VARS TO THIS ROUTINE
+        Current.StackSegment = ss
+        Current.StackPointer = sp
+        find_next:
+        Int81Temp = Current.Next
+        Current = Int81Temp
+        ss = Current.StackSegment
+        sp = Current.StackPointer
+        If Current.Suspended Then Goto find_next
+        If Current.NewStack Then
+            Current.NewStack = 0
+            Int81Temp = Current.Action
+            asm "mov ax, [bp+2]"
+            asm "mov bx, [bp+4]"
+            asm "cli"
+            asm "mov ss, ax"
+            asm "mov sp, ax"
+            asm "sti"
+            asm "push cs"
+            asm "mov ax, _thread_endthread"
+            asm "push ax"
+            asm "pushf"
+            asm "cs push word [_multithreading_int81temp+2]"
+            asm "cs push word [_multithreading_int81temp]"
+            asm "mov ax, ss"
+            asm "mov es, ax"
+            asm "mov ds, ax"
+            asm "jmp FIM_multithreading_int81"
+        End
+    End
+
+    Public Function RequestNew() as PtrByteArray
+        Dim ptr as PtrByteArray
+        Dim t as Thread
+        Dim i as UInt16
+        Semaphore.WaitOne InUse
+        For i = 1 To 128
+            t = Item(i)
+            If t.Active == 0 Then
+                t.Active = 1
+                t.Suspended = 1
+                t.Allocated = 0
+                Semaphore.Release InUse
+                Return t
+            End
+        End
+        Semaphore.Release InUse
+        Throw CapacityOverflowError
+    End
+
+    Public Function Item(i as UInt16) as PtrByteArray
+        Dim ptr as PtrByteArray
+        i --
+        If i >= 128 Then Throw NotFoundError
+        ptr = List
+        @ptr = @ptr + (i * SizeOf(Thread))
+        Return ptr
+    End
+
+    Public Function Count() as UInt16
+        Dim ptr as PtrByteArray
+        Dim t as Thread
+        Dim i as UInt16
+        Dim ret as UInt16
+        ret = 0
+        For i = 1 To 128
+            ptr = Item(i)
+            #t = #ptr
+            @t = @ptr
+            If t.Active <> 0 Then ret++
+        End
+        Return ret
+    End
+
+    Public Sub StartThread(t as Thread)
+        Dim status as UInt16
+        Dim ptrP as PtrByteArray
+        Dim ptrN as PtrByteArray
+        status = IsActive()
+        If status Then Suspend
+        #ptrN = #t
+        @ptrN = @t
+        ptrP = Current.Previous
+        Current.Next = ptrN
+        #ptrN = #Current
+        @ptrN = @Current
+        t.Previous = ptrP
+        t.Next = ptrN
+        If status Then Resume
+    End
+
+    Public Function IsActive() as UInt16
+        Return Active
+    End
+
+    Public Sub Suspend
+        Active = 0
+    End
+
+    Public Sub Resume
+        Active = 1
+    End
+End
+
+Module Thread
+    Public Function RequestNew() as PtrByteArray
+        Return MultiThreading.RequestNew()
+    End
+
+    Public Sub Start(t as Thread, stackSizeKiB as UInt16, action as PtrByteArray)
+        Dim stack as PtrWordArray
+        Dim ptr as PtrByteArray
+        t.Suspended = 0
+        stack = GlobalMemory.AllocKiB(t, stackSizeKiB)
+        @stack = (stackSizeKiB * 1024) - 2
+        t.StackPointer = @stack
+        t.StackSegment = #stack
+        t.NewStack = 1
+        t.Action = action
+        MultiThreading.StartThread t
+    End
+
+    Sub EndThread()
+        While 1 Thread.Yield
+    End
+
+    Public Sub Abort(t as Thread)
+        t.Suspended = 1
+        t.Active = 0
+    End
+
+    Public Function Current() as PtrByteArray
+        Return MultiThreading.Current
+    End
+
+    Public Sub Yield()
+        If MultiThreading.IsActive() == 0 Then Return
+        asm "int 0x81"
+    End
+
+    Public Sub Sleep(miliseconds as UInt16)
+        Dim oldmili as UInt16
+        Dim diff  as UInt16
+        oldmili = Clock.TimerMiliSeconds
+        While 1
+            diff = Clock.TimerMiliSeconds - oldmili
+            If diff >= miliseconds Then Return
+            Yield
+        End
+    End
+End

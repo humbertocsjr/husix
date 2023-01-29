@@ -1,0 +1,40 @@
+Module UTF8
+
+    Public Function CharSize(c as PtrByteArray) as UInt16
+        If c < 128 Then Return 1
+        If c >= 0xc2 AndAlso c <= 0xdf Then Return 2
+        If c >= 0xe0 AndAlso c <= 0xef Then Return 3
+        If c >= 0xf0 AndAlso c <= 0xff Then Return 4
+        Return 1
+    End
+
+    Public Function ConvertCharToCP437(c as PtrByteArray) as UInt8
+        If c < 128 Then Return c
+        If c == 0xc3 Then
+            @c++
+            If c == 0x87 Then Return 0x80
+            If c == 0xa7 Then Return 0x87
+            If c == 0x83 Then Return 0x41
+            If c == 0xa3 Then Return 0x61
+            If c == 0x93 Then Return 0x4f
+            If c == 0xb3 Then Return 0xa2
+        End
+        If c == 0xe2 Then
+            @c++
+            If c == 0x98 Then
+                @c++
+                If c == 0xba Then Return 1
+                If c == 0xbb Then Return 2
+            End
+            If c == 0x99 Then
+                @c++
+                If c == 0xa5 Then Return 3
+                If c == 0xa6 Then Return 4
+                If c == 0xa3 Then Return 5
+                If c == 0xa0 Then Return 6
+            End
+        End
+        Return 63
+    End
+
+End

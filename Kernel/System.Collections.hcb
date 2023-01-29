@@ -1,0 +1,146 @@
+Imports System
+
+Structure List
+    Dim Capacity as UInt16
+    Dim Count as UInt16
+    Dim FirstBlock as PtrByteArray
+    Dim ItemSize as UInt16
+    Dim LastId as UInt16
+End
+
+Structure ListBlock
+    Dim NextBlock as PtrByteArray
+    Dim BlockCapacity as UInt16
+End
+
+Module List
+    Public Sub Initialize(l as List, itemSize as UInt16)
+        Dim ptr as PtrByteArray
+        #ptr = 0
+        @ptr = 0
+        l.Capacity = 0
+        l.ItemSize = itemSize
+        l.FirstBlock = ptr
+        l.LastId = 0
+        l.Count = 0
+    End
+
+    Function AllocBlock(l as list) as PtrByteArray
+        Dim capacity as UInt16
+        Dim ptr as PtrByteArray
+        Dim ptrZero as PtrByteArray
+        Dim block as ListBlock
+        If l.ItemSize <= 64 Then capacity = 15
+        If l.ItemSize <= 128 Then capacity = 7
+        If l.ItemSize <= 512 Then capacity = 3
+        If l.ItemSize > 512 Then capacity = 1
+        ptr = Memory.Alloc(SizeOf(ListBlock) + (l.Capacity * l.ItemSize) + (l.Capacity * 2))
+        @block = @ptr
+        #block = #ptr
+        block.BlockCapacity = capacity
+        #ptrZero = 0
+        @ptrZero = 0
+        block.NextBlock = ptrZero
+        Return ptr
+    End
+
+    Sub SetId(l as List, block as ListBlock, pos as UInt16, id as UInt16)
+        Dim ptr as PtrWordArray
+        #ptr = @block
+        @ptr = #block + SizeOf(ListBlock) + ((pos - 1) * (l.ItemSize + 2))
+        ptr = id
+    End
+
+    Function GetId(l as List, block as ListBlock, pos as UInt16) as UInt16
+        Dim ptr as PtrWordArray
+        #ptr = @block
+        @ptr = #block + SizeOf(ListBlock) + ((pos - 1) * (l.ItemSize + 2))
+        Return ptr
+    End
+
+    Function GetPtr(l as List, block as ListBlock, pos as UInt16) as PtrByteArray
+        Dim ptr as PtrWordArray
+        #ptr = @block
+        @ptr = #block + SizeOf(ListBlock) + ((pos - 1) * (l.ItemSize + 2)) + 2
+        Return ptr
+    End
+
+    Public Function Count(l as List) as UInt16
+        Return l.Count
+    End
+
+    Public Function Item(l as List, id as UInt16) as PtrByteArray
+        Dim ptr as PtrByteArray
+        Dim block as ListBlock
+        Dim i as UInt16
+        If id == 0 Then Throw NotFoundError
+        If id > l.Count Then Throw NotFoundError
+        ptr = l.FirstBlock
+        list_find_in_block_item:
+        @block = @ptr
+        #block = #ptr
+        For i = 1 to block.BlockCapacity
+            If GetId(l, block, i) == id Then
+                Return GetPtr(l, block, i)
+            End
+        End
+        ptr = block.NextBlock
+        If #ptr == 0 Then
+            ptr = AllocBlock(l)
+            block.NextBlock = ptr
+        End
+        Goto list_find_in_block_item
+    End
+
+    Public Function Insert(l as List, id as UInt16) as PtrByteArray
+        Throw NotImplementedError
+    End
+
+    Public Sub RemoveAt(l as List, id as UInt16)
+        Throw NotImplementedError
+    End
+
+    Public Sub Remove(l as List, item as PtrByteArray)
+        Throw NotImplementedError
+    End
+
+    Public Function Add(l as List) as PtrByteArray
+        Dim ptr as PtrByteArray
+        Dim block as ListBlock
+        Dim i as UInt16
+        If l.Capacity == 0 Then
+            If l.ItemSize < 64 Then l.Capacity = 5
+            If l.ItemSize < 128 Then l.Capacity = 4
+            If l.ItemSize >= 128 Then l.Capacity = 1
+            ptr = AllocBlock(l)
+            @block = @ptr
+            #block = #ptr
+            l.FirstBlock = ptr
+            l.Count = 1
+            l.LastId = 1
+            SetId l, block, 1, 1
+            For i = 2 to block.BlockCapacity
+                SetId l, block, i, 0
+            End
+            Return GetPtr(l, block, 1)
+        Else
+            ptr = l.FirstBlock
+            list_find_in_block_add:
+            @block = @ptr
+            #block = #ptr
+            For i = 1 to block.BlockCapacity
+                If GetId(l, block, i) == 0 Then
+                    l.LastId = l.LastId + 1
+                    SetId l, block, i, l.LastId
+                    Return GetPtr(l, block, i)
+                End
+            End
+            ptr = block.NextBlock
+            If #ptr == 0 Then
+                ptr = AllocBlock(l)
+                block.NextBlock = ptr
+            End
+            Goto list_find_in_block_add
+        End
+    End
+End

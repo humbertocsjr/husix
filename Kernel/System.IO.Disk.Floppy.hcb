@@ -1,0 +1,42 @@
+Imports System
+Imports System.IO.Disk
+Imports System.Threading
+
+Module FloppyDisk
+    Pointer Dim FloppyA as DiskInfo
+    Pointer Dim FloppyB as DiskInfo
+    Dim Buffer as Block512B
+
+    Public Sub Initialize
+       Dim t as Thread
+       t = Thread.RequestNew()
+       Thread.Start t, 4, AddressOf(Main)
+    End
+
+    Sub Main()
+        Console.Write "FLOPPY"
+        Thread.Sleep 2000
+        While 1 
+            Console.Write "Floppy"
+            Thread.Yield
+        End
+    End
+
+    Sub IOBlock(callType as UInt16, disk as DiskInfo, block as Block512B, positionLow as UInt16, positionHigh as UInt16)
+        Dim cil as UInt16
+        Dim set as UInt16
+        Dim head as UInt16
+        Dim supressMultitask as UInt16
+        Dim setPerTrack as UInt16
+        setPerTrack = disk.Sectors * disk.Heads
+        If positionHigh <> 0 Then Throw OutOfBoundsError
+    End
+
+    Sub ReadBlock(disk as DiskInfo, block as Block512B, positionLow as UInt16, positionHigh as UInt16)
+        IOBlock 1, disk, block, positionLow, positionHigh
+    End
+
+    Sub WriteBlock(disk as DiskInfo, block as Block512B, positionLow as UInt16, positionHigh as UInt16)
+        IOBlock 2, disk, block, positionLow, positionHigh
+    End
+End

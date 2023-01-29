@@ -1,0 +1,34 @@
+Imports System
+
+Structure Stream
+    Dim Id as UInt16
+    Dim ReadRaw as Func(Of Stream, ptrbytearray, UInt16, UInt16)
+    Dim Read as Func(Of Stream, ptrbytearray, UInt16)
+    Dim WriteRaw as Func(Of Stream, ptrbytearray, UInt16, UInt16)
+    Dim Write as Func(Of Stream, ptrbytearray, UInt16)
+    Dim Close as Func(Of Stream, UInt16)
+    Dim SeekCurrent as Func(Of Stream, UInt16, UInt16)
+    Dim SeekStart as Func(Of Stream, UInt16, UInt16)
+    Dim SeekEnd as Func(Of Stream, UInt16, UInt16)
+End
+
+Module Stream
+    Public Sub Initialize(s as Stream)
+        Dim ptr as PtrByteArray
+        #ptr = 0
+        @ptr = 0
+        s.Id = 0
+        s.Read = ptr
+        s.ReadRaw = ptr
+        s.Write = ptr
+        s.WriteRaw = ptr
+        s.Close = ptr
+        s.SeekCurrent = ptr
+        s.SeekStart = ptr
+        s.SeekEnd = ptr
+    End
+
+    Public Function Close(s as Stream) as UInt16
+        Return s.Close.Invoke(s)
+    End
+End

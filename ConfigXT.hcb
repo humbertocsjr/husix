@@ -1,0 +1,5 @@
+
+Module ConfigDefault
+    Public Sub Initialize
+    End
+End

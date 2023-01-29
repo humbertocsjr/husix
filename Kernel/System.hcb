@@ -1,0 +1,32 @@
+error Error = 0
+error DivByZeroError = 1
+error StackOverflowError = 2
+error OutOfMemoryError = 3
+error OutOfBoundsError = 4
+error NotFoundError = 5
+error AlreadyExistsError = 6
+error NotImplementedError = 7
+error UnknownError = 8
+error CapacityOverflowError = 9
+error NoAnswerError = 10
+error TimeoutError = 11
+error InvalidValueError = 12
+error AccessDeniedError = 13
+
+module String
+    public function Length(text as ptrbytearray) as uint16
+        dim i as uint16
+        let i = 0
+        ' Ignora o byte inicial com a capacidade da variavel
+        let @text++
+        while text > 0
+            let i ++
+            let @text++
+        end
+        return i
+    end
+end
+
+Structure String
+    Dim Capacity as UInt8
+End

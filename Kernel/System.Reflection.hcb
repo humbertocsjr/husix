@@ -1,0 +1,37 @@
+Imports System
+
+Structure AssemblyHeader
+    Dim Jmp0 as UInt16
+    Dim Jmp1 as UInt16
+    Dim Signature as UInt16
+    Dim VersionAPI as UInt16
+    Dim NameLocalPtr as UInt16
+    Dim Version as UInt16
+    Dim SubVersion as UInt16
+    Dim Revision as UInt16
+    Dim ImportsLocalPtr as UInt16
+    Dim ExportsLocalPtr as UInt16
+End
+
+Structure AssemblyImpExpReg
+    Dim RegType as UInt16
+    Dim Id as UInt16
+    Dim LocalPtr as UInt16
+End
+
+Structure Assembly
+    Dim Thread as PtrByteArray
+    Dim Contents as PtrByteArray
+End
+
+Module Assembly
+
+    Public Sub LoadAssembly(assm as Assembly, filename as PtrByteArray)
+
+    End
+
+    Public Function GetMethod(assm as Assembly, moduleName as String, methodName as String) as PtrByteArray
+        
+    End
+
+End

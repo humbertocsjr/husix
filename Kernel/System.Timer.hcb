@@ -1,0 +1,104 @@
+Imports System
+Imports System.IO
+Imports System.Threading
+
+Module Clock
+    Public Dim TimerMiliSeconds as UInt16
+    Public Dim TimerSeconds as UInt16
+    Public Dim MiliSecond as UInt16
+    Public Dim Second as UInt16
+    Public Dim Minute as UInt16
+    Public Dim Hour as UInt16
+    Public Dim Day as UInt16
+    Public Dim Month as UInt16
+    Public Dim Year as UInt16
+
+    Public Sub Initialize
+        Year = 2023
+        Month = 1
+        Day = 1
+        Hour = 0
+        Minute = 0
+        Second = 0
+        MiliSecond = 0
+        TimerSeconds = 0
+    End
+
+    Public Sub AutoAjust
+        If Hour < 24 Then Goto end_ajust
+        Hour = 0
+        Day ++
+        If Day < 28 Then Goto end_ajust
+        If Day >= 32 Then Goto calc_month
+        If Month == 2 Then goto calc_month
+        If Day < 30 Then Goto end_ajust
+        If Month == 4 Then goto calc_month
+        If Month == 6 Then goto calc_month
+        If Month == 9 Then goto calc_month
+        If Month == 11 Then goto calc_month
+        Goto end_ajust
+        calc_month:
+        If (Month > 13) Or (Month == 0) Then
+            Month = 1
+            Year  ++
+        End
+        end_ajust:
+    End
+End
+
+Module SystemTimer
+    Dim BiosInt8CS as UInt16
+    Dim BiosInt8IP as UInt16
+    Public Dim TickLow as UInt16
+    Public Dim TickHigh as UInt16
+    Public Dim DefaultFlags as UInt16
+
+    Public Sub Initialize
+        Dim ptr as PtrByteArray
+        ptr = IO.GetHandler(8)
+        BiosInt8CS = #ptr
+        BiosInt8IP = @ptr
+        IO.RegisterHandler 8, AddressOf(IntTick)
+        asm "sti"
+        asm "pushf"
+        asm "cs pop word [_systemtimer_defaultflags]"
+
+    End
+
+    Sub IntTick() Handles Interrupt
+        asm "cs add word [_systemtimer_ticklow], 1"
+        asm "cs adc word [_systemtimer_tickhigh], 0"
+        ' Chama antiga interrupcao 0x8 (BIOS)
+        asm "pushf"
+        asm "push cs"
+        asm "mov ax, .return"
+        asm "push ax"
+        asm "cs push word [_systemtimer_biosint8cs]"
+        asm "cs push word [_systemtimer_biosint8ip]"
+        asm "retf"
+        asm ".return:"
+        asm "cs add word [_clock_milisecond], 55"
+        asm "cs add word [_clock_timermiliseconds], 55"
+        asm "cs cmp word [_clock_milisecond], 990"
+        asm "jb .end_clock"
+        asm "cs mov word [_clock_milisecond], 0"
+        asm "cs add word [_clock_timermiliseconds], 10"
+        asm "cs inc word [_clock_second]"
+        asm "cs inc word [_clock_timerseconds]"
+        asm "cs cmp word [_clock_second], 60"
+        asm "jb .end_clock"
+        asm "cs mov word [_clock_second], 0"
+        asm "cs inc word [_clock_minute]"
+        asm "cs cmp word [_clock_minute], 60"
+        asm "jb .end_clock"
+        asm "cs mov word [_clock_minute], 0"
+        asm "cs inc word [_clock_hour]"
+        Clock.AutoAjust
+        asm ".end_clock:"
+        Thread.Yield
+    End
+End
+
+Module Timer
+
+End

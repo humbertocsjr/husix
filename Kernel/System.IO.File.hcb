@@ -1,0 +1,11 @@
+Imports System
+
+Structure File
+End
+
+Structure FileInfo
+    
+End
+
+Structure Directory
+End

@@ -1,0 +1,135 @@
+Module OS
+    Dim TryStack as UInt16
+    Dim TryCode as UInt16
+    Dim TryBase as UInt16
+    Dim TryFatal as UInt16
+    Dim MinStackPtr as UInt16
+
+    Sub Start
+        ' Inicializa o compilador
+        asm "cpu 8086"
+        asm "bits 16"
+        asm "org 0x100"
+        asm "mov word [_os_minstackptr], END"
+        Start2
+    End
+
+    Sub StackCheck
+        
+    End
+
+    Sub Start2
+        ' Declara ponteiro para os argumentos
+        dim args as ptrbytearray
+        ' Realoca executavel
+        Dim realoc as PtrWordArray
+        Dim ptr as PtrWordArray
+        Dim tipoRealoc as UInt16
+        Dim desvio as UInt16
+        Dim soma as UInt16
+        #realoc = CodeSegment()
+        #ptr = CodeSegment()
+        @realoc = RealocTable()
+        while realoc <> 0
+            tipoRealoc = realoc
+            @realoc ++
+            @realoc ++
+            @ptr = realoc
+            @realoc ++
+            @realoc ++
+            desvio = realoc
+            @realoc ++
+            @realoc ++
+            soma = realoc
+            @realoc ++
+            @realoc ++
+            if tipoRealoc == 3 then
+                desvio = desvio + @ptr
+                ptr = desvio
+                @ptr ++
+                @ptr ++
+                ptr = CodeSegment() + soma
+            end
+            if tipoRealoc == 2 then
+                @ptr = @ptr + desvio
+                ptr = StackSegment() + soma
+            end
+            if tipoRealoc == 1 then
+                @ptr = @ptr + desvio
+                ptr = CodeSegment() + soma
+            end
+        end
+        ' Define ponteiro
+        asm "mov ax, cs"
+        asm "mov [bp-2], ax"
+        asm "mov word [bp-4], 0x80"
+        ' Adiciona um zero ao final da variavel para ser ASCIZ
+        asm "mov al, [0x80]"
+        asm "xor ah, ah"
+        asm "mov si, ax"
+        asm "add si, 0x80"
+        asm "mov byte [si+1], 0"
+        ' Chama o Main
+        Try
+            Program.Main args
+        Catch DivByZeroError
+            Program.FatalError "Divisão por zero", ErrorFile(), ErrorLine()
+        Catch StackOverflowError
+            Program.FatalError "Estouro de pilha", ErrorFile(), ErrorLine()
+        Catch OutOfMemoryError
+            Program.FatalError "Sem memória", ErrorFile(), ErrorLine()
+        Catch OutOfBoundsError
+            Program.FatalError "Valor fora dos limites", ErrorFile(), ErrorLine()
+        Catch NotFoundError
+            Program.FatalError "Não encontrado", ErrorFile(), ErrorLine()
+        Catch AlreadyExistsError
+            Program.FatalError "Item já existe", ErrorFile(), ErrorLine()
+        Catch NotImplementedError
+            Program.FatalError "Não implementado", ErrorFile(), ErrorLine()
+        Catch UnknownError
+            Program.FatalError "Falha desconhecida", ErrorFile(), ErrorLine()
+        Catch CapacityOverflowError
+            Program.FatalError "Estouro da Capacidade", ErrorFile(), ErrorLine()
+        Catch NoAnswerError
+            Program.FatalError "Sem resposta", ErrorFile(), ErrorLine()
+        Catch TimeoutError
+            Program.FatalError "Estouro do tempo limite", ErrorFile(), ErrorLine()
+        Catch InvalidValueError
+            Program.FatalError "Valor inválido", ErrorFile(), ErrorLine()
+        Catch AccessDeniedError
+            Program.FatalError "Acesso negado", ErrorFile(), ErrorLine()
+        Catch Error
+            Program.FatalError "Ocorreu um erro não tratado", ErrorFile(), ErrorLine()
+        End
+        ' Loop infinito
+        While 1
+            asm "hlt"
+        End
+    End
+
+    Public Function CodeSegment() as UInt16
+        asm "mov ax, cs"
+    End
+
+    Public Function StackSegment() as UInt16
+        asm "mov ax, ss"
+    End
+
+    public function RealocTable() as uint16
+        asm "mov ax, REALOC_TABLE"
+    end
+
+    Public Function ConsoleAvail() as UInt16
+
+    End
+
+    Public Function ConsoleReadChar() as UInt16
+
+    End
+
+    Public Sub ConsoleWriteChar(c as UInt8)
+        asm "mov ax, [bp+6]"
+        asm "mov ah, 0xe"
+        asm "int 0x10"
+    End
+End

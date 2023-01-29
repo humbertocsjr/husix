@@ -1,0 +1,54 @@
+Imports System
+
+Structure Block512B
+    Spacing 512
+End
+
+Structure Block1KiB
+    Spacing 1024
+End
+
+Structure Block2KiB
+    Spacing 2048
+End
+
+Structure DiskInfo
+    Dim InternalId as UInt16
+    Dim Cilinders as UInt16
+    Dim Heads as UInt16
+    Dim Sectors as UInt16
+    Dim BlockSize as UInt16
+    Dim ReadBlock as Action(Of DiskInfo, PtrByteArray, UInt16, UInt16)
+    Dim WriteBlock as Action(Of DiskInfo, PtrByteArray, UInt16, UInt16)
+End
+
+Module Disk
+    Dim Disks as List
+
+    Public Sub Initialize
+        List.Initialize Disks, SizeOf(DiskInfo)
+    End
+    
+    Public Function RegisterNew(internalId as UInt16, cilinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
+        Dim info as DiskInfo 
+        Dim ptr as PtrByteArray
+        ptr = List.Add(Disks)
+        #info = #ptr
+        @info = @ptr
+        info.InternalId = internalId
+        info.Cilinders = cilinders
+        info.Heads = heads
+        info.Sectors = sectors
+        info.ReadBlock = AddressOf(GenericReadBlock)
+        info.WriteBlock = AddressOf(GenericWriteBlock)
+        Return ptr
+    End
+
+    Sub GenericReadBlock(info as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        Throw NotImplementedError
+    End
+
+    Sub GenericWriteBlock(info as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        Throw NotImplementedError
+    End
+End

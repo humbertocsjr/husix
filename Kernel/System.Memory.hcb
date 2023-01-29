@@ -1,0 +1,221 @@
+Imports System
+Imports System.OS
+Imports System.Threading
+
+Module GlobalMemory
+    Dim MemorySizeKiB as UInt16
+    Dim MapPtr as PtrByteArray
+    Dim InUse as Semaphore
+
+    Public Sub Initialize
+        Dim freeKiB as UInt16
+        Dim i as UInt16
+        asm "xor ax, ax"
+        asm "int 0x12"
+        asm "cs mov [_globalmemory_memorysizekib], ax"
+
+        #MapPtr = OS.CodeSegment() + 4096
+        @MapPtr = 0
+        freeKiB = (#MapPtr SHR 6) + 2
+        For i = 1 To MemorySizeKiB
+            If i < freeKiB Then MapPtr = 129 Else MapPtr = 0
+            @MapPtr++
+        End
+        Semaphore.Initialize InUse, 1
+    End
+
+    Public Function AllocKiB(t as Thread, sizeKiB as UInt16) as PtrByteArray
+        Dim ptr as PtrByteArray
+        Dim i as UInt16
+        Dim first as UInt16
+        Dim len as UInt16
+        Dim searching  as UInt16
+        #ptr = 0
+        @ptr = 0
+        If t.Id > 127 Then Throw OutOfBoundsError
+        If sizeKiB > 64 Then Throw InvalidValueError
+        searching  = 0
+        Semaphore.WaitOne InUse
+        @MapPtr = 0
+        len = 0
+        For i = 1 To MemorySizeKiB
+            If searching  Then
+                If MapPtr == 0 Then
+                    len ++
+                Else
+                    searching  = 0
+                End
+            Else
+                IF MapPtr == 0 Then
+                    len = 1
+                    first = i - 1
+                    searching = 1
+                End
+            End
+            If len >= sizeKiB Then
+                #ptr = first SHL 6
+                Memory.SetBytes ptr, 0, (1024 * sizeKiB) - 1
+                @MapPtr = first
+                For i = 1 To sizeKiB
+                    If i == 1 Then
+                        MapPtr = t.Id or 128
+                    Else
+                        MapPtr = t.Id
+                    End
+                    @MapPtr ++
+                End
+                Semaphore.Release InUse
+                Return ptr
+            End
+            @MapPtr++
+        End
+        Semaphore.Release InUse
+        Throw OutOfMemoryError
+    End
+
+    Public Function GetAvailKiB() as UInt16
+        Dim ret as UInt16
+        Dim i as UInt16
+        ret = 0
+        Semaphore.WaitOne InUse
+        @MapPtr = 0
+        For i = 0 To MemorySizeKiB
+            If MapPtr == 0 Then ret++
+            @MapPtr++
+        End
+        Semaphore.Release InUse
+        Return ret
+    End 
+
+    Public Function GetUsedKiB() as UInt16
+        Dim ret as UInt16
+        Dim i as UInt16
+        ret = 0
+        Semaphore.WaitOne InUse
+        @MapPtr = 0
+        For i = 0 To MemorySizeKiB
+            If MapPtr <> 0 Then ret++
+            @MapPtr++
+        End
+        Semaphore.Release InUse
+        Return ret
+    End
+End
+
+
+Module Memory
+    Dim FirstBlockPtr as PtrWordArray
+    Dim InUse as Semaphore
+
+    Public Sub Initialize
+        FirstBlockPtr = GlobalMemory.AllocKiB(MultiThreading.KernelThread, 1)
+        Semaphore.Initialize InUse, 1
+    End
+
+    Public Function Alloc(size as UInt16) as PtrByteArray
+        Dim blocks as UInt16
+        Dim i  as UInt16
+        Dim first as UInt16
+        Dim searching as UInt16
+        Dim ptr as PtrByteArray
+        Dim block as PtrWordArray
+        Dim len as UInt8
+        Dim kibs as UInt16
+        blocks = size / 64
+        If size mod 64 Then blocks++
+        If blocks > 10 Then
+            kibs = (size / 1024) + 16
+            If size mod 1024 Then kibs++
+            ptr = GlobalMemory.AllocKiB(MultiThreading.KernelThread, kibs)
+            ptr = 1
+            @ptr = 16
+            Return ptr
+        End
+        Semaphore.WaitOne InUse
+        searching = 0
+        len = 0
+        block = FirstBlockPtr
+        While 1
+            @block = 4
+            For i = 1 to 15
+                If searching Then
+                    If block == 0 Then
+                        len ++
+                    Else
+                        searching = 0
+                    End
+                Else
+                    If block == 0 Then
+                        len = 1
+                        first = i - 1
+                        searching = 1
+                    End
+                End
+                If len >= blocks Then
+                    #ptr = #block
+                    @ptr = i * 64
+                    SetBytes ptr, 0, blocks * 64
+                    @block = 4 + (first * 2)
+                    For i = 1 to blocks
+                        If i == 1 Then
+                            block = 1
+                        Else
+                            block = 2
+                        End
+                        @block++
+                        @block++
+                    End
+                    Semaphore.Release InUse
+                    Return ptr
+                End
+                @block++
+                @block++
+            End
+            @block = 2
+            If block == 0 Then
+                ptr = GlobalMemory.AllocKiB(MultiThreading.KernelThread, 1)
+                block = #ptr
+            Else
+                #block = block
+            End
+        End
+        Semaphore.Release InUse
+    End
+
+
+    Public Sub SetBytes(ptr as PtrByteArray, value as UInt8, len as UInt16)
+        asm "cld"
+        asm "mov ax, [bp+8]"
+        asm "mov es, ax"
+        asm "mov di, [bp+6]"
+        asm "mov ax, [bp+10]"
+        asm "mov cx, [bp+12]"
+        asm "rep stosb"
+    End
+
+    Public Sub SetWords(ptr as PtrByteArray, value as UInt8, len as UInt16)
+        asm "cld"
+        asm "mov ax, [bp+8]"
+        asm "mov es, ax"
+        asm "mov di, [bp+6]"
+        asm "mov ax, [bp+10]"
+        asm "mov cx, [bp+12]"
+        asm "rep stosw"
+    End
+
+    Public Sub Copy(dest as PtrByteArray, orig as PtrByteArray, len as UInt16)
+        asm "cld"
+        asm "push ds"
+        asm "push si"
+        asm "mov ax, [bp+8]"
+        asm "mov es, ax"
+        asm "mov di, [bp+6]"
+        asm "mov ax, [bp+12]"
+        asm "mov ds, ax"
+        asm "mov si, [bp+10]"
+        asm "mov cx, [bp+14]"
+        asm "rep movsb"
+        asm "pop si"
+        asm "pop ds"
+    End
+End
