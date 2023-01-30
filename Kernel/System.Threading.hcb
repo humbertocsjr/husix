@@ -233,6 +233,8 @@ Module Thread
 
     ' Uso interno
     Sub EndThread()
+        Dim t as Thread
+        t = Current()
         t.Active = 0
         t.Suspended = 1
         While 1 Thread.Yield

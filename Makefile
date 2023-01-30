@@ -101,6 +101,12 @@ discos:
 	@dd if=Boot/Boot720.bin of=img.img bs=1024 count=1 conv=notrunc status=none
 	@$(MAKE) discos_copia
 	@mv -f img.img Distro/720TEST.img
+	@echo -= 1200 KiB Floppy Disk =-
+	@dd if=/dev/zero of=img.img bs=1024 count=360 status=none
+	@minixfs mkfs img.img -1 -n 30 -s 360
+	@dd if=Boot/Boot1200.bin of=img.img bs=1024 count=1 conv=notrunc status=none
+	@$(MAKE) discos_copia
+	@mv -f img.img Distro/1200TEST.img
 	@echo -= 360 KiB Floppy Disk =-
 	@dd if=/dev/zero of=img.img bs=1024 count=360 status=none
 	@minixfs mkfs img.img -1 -n 30 -s 360
