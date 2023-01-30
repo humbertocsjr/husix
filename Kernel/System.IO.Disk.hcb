@@ -12,9 +12,17 @@ Structure Block2KiB
     Spacing 2048
 End
 
+Structure CHSAddress
+    Dim Cylinder as UInt16
+    Dim Head as UInt16
+    Dim Sector as UInt16
+End
+
 Structure DiskInfo
+    Spacing 33 ' Nome 32 bytes de texto e 1 de cabecalho
+    Dim Name as PtrByteArray
     Dim InternalId as UInt16
-    Dim Cilinders as UInt16
+    Dim Cylinders as UInt16
     Dim Heads as UInt16
     Dim Sectors as UInt16
     Dim BlockSize as UInt16
@@ -29,19 +37,32 @@ Module Disk
         List.Initialize Disks, SizeOf(DiskInfo)
     End
     
-    Public Function RegisterNew(internalId as UInt16, cilinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
+    Public Function RegisterNew(name as String, internalId as UInt16, Cylinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
         Dim info as DiskInfo 
         Dim ptr as PtrByteArray
         ptr = List.Add(Disks)
         #info = #ptr
         @info = @ptr
+        info.Name = info ' Nome é alocado nos primeiros 33 bytes
         info.InternalId = internalId
-        info.Cilinders = cilinders
+        info.Cylinders = Cylinders
         info.Heads = heads
         info.Sectors = sectors
         info.ReadBlock = AddressOf(GenericReadBlock)
         info.WriteBlock = AddressOf(GenericWriteBlock)
-        Return ptr
+        ptr = 32 ' Tamanho do nome
+        String.Copy info.Name, ""
+        String.Copy info.Name, name
+        Return info
+    End
+
+    Public Sub ConvertToCHS(out as CHSAddress, d as DiskInfo, addressLow as UInt16, addressHigh as UInt16)
+        Dim sectors as UInt16
+        If addressHigh <> 0 Then Throw OutOfBoundsError
+        sectors = d.Sectors * d.Heads
+        out.Cylinder = addressLow / sectors
+        out.Head = (addressLow mod sectors) / d.Sectors
+        out.Sector = ((addressLow mod sectors) mod d.Sectors) + 1
     End
 
     Sub GenericReadBlock(info as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
@@ -50,5 +71,38 @@ Module Disk
 
     Sub GenericWriteBlock(info as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
         Throw NotImplementedError
+    End
+
+    Function Exist(name as String) as UInt16
+        Dim i as UInt16
+        For i = 1 to List.Count(Disks)
+            Dim d as DiskInfo
+            d = List.Item(Disks, i)
+            If String.Equals(d.Name, name) Then Return 1
+        End
+        Return 0
+    End
+
+    Function GetBlockSize(name as String) as UInt16
+        Dim i as UInt16
+        For i = 1 to List.Count(Disks)
+            Dim d as DiskInfo
+            d = List.Item(Disks, i)
+            If String.Equals(d.Name, name) Then Return d.BlockSize
+        End
+        Throw NotFoundError
+    End
+
+    Sub ReadBlock(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        Dim i as UInt16
+        For i = 1 to List.Count(Disks)
+            Dim d as DiskInfo
+            d = List.Item(Disks, i)
+            If String.Equals(d.Name, name) Then 
+                d.ReadBlock.Invoke data, addressLow, addressHigh
+                Return
+            End
+        End
+        Throw NotFoundError
     End
 End

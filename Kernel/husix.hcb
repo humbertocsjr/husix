@@ -47,6 +47,16 @@ Module Program
         
         ConfigDefault.Initialize
 
+        Dim disk as String
+        disk = "Floppy0_360"
+        Console.Write "Mounting "
+        Console.Write disk
+        If Disk.Exist(disk) Then Throw NotFoundError
+        Dim block as Block512B
+        'Disk.ReadBlock disk, block, 0, 0
+        Console.WriteLine ". [ OK ]"
+
+
         While 1
             Console.WriteChar 13
             Console.WriteUInt16 Clock.Minute

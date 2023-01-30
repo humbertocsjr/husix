@@ -3,7 +3,7 @@ ConstSetoresPorTrilha: equ 18
 %include "Inicial.asm"
 
 ; Argumentos Extras
-db "_1440 DebugSerial=Serial1 Video=EGA", 13, 0
+db "0_1440", 13, 0
 
 FimArgumento:
 Tam_Argumento: equ $-Argumento-2
