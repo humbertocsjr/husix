@@ -7,6 +7,21 @@ Por enquanto estou montando o framework que está embutido no Kernel, já é boo
 
 # Requisitos mínimos
 
+- IBM PC 5150 ou Compatível
+- 256 KiB de RAM
+- Leitor de Disquete de 360 KiB
+- Placa de Vídeo CGA
+
+# Recomendável
+
+- IBM PC 5160 ou Compatível
+- 512 KiB de RAM
+- Leitor de Disquete de 360 KiB
+- Disco Rígido de 10 MiB
+- Placa de Vídeo VGA
+
+# Requisitos mínimos para Desenvolvimento
+
 - Linux / Windows com WSL (Estou desenvolvendo em LinuxMint)
 - [MinixFS Tool](https://github.com/humbertocsjr/minixfs)
     - Deve ser compilado com os comandos:
