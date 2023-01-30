@@ -78,7 +78,9 @@ Module Disk
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo
             d = List.Item(Disks, i)
-            If String.Equals(d.Name, name) Then Return 1
+            If String.Equals(d.Name, name) Then 
+                Return 0xffff
+            End
         End
         Return 0
     End

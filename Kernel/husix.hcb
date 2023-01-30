@@ -51,9 +51,11 @@ Module Program
         disk = "Floppy0_360"
         Console.Write "Mounting "
         Console.Write disk
-        'If Not Disk.Exist(disk) Then Throw NotFoundError
+        If Disk.Exist(disk) == 0 Then 
+            FatalError "[ DISK NOT FOUND ]", disk, 0
+        End
         Dim block as Block512B
-        'Disk.ReadBlock disk, block, 0, 0
+        Disk.ReadBlock disk, block, 0, 0
         Console.WriteLine ". [ OK ]"
 
 

@@ -32,15 +32,7 @@ Module FloppyDisk
     Dim StatusRegister0 as UInt16
 
     Public Sub Initialize
-       Dim t as Thread
-       t = Thread.RequestNew()
-       ' Inicia a tarefa Main com 2 KiB de Pilha
-       Thread.Start t, 2, AddressOf(Main)
-    End
-
-    ' Tarefa responsável por monitorar o Controlador de disquete
-    Sub Main()
-        Dim i as UInt16
+        Dim t as Thread
         FloppyA360  = Disk.RegisterNew("Floppy0_360", 0, 40, 2, 9, 512)
         FloppyA360.ReadBlock = AddressOf(ReadBlock)
         FloppyA360.WriteBlock = AddressOf(WriteBlock)
@@ -65,6 +57,14 @@ Module FloppyDisk
         FloppyB1440 = Disk.RegisterNew("Floppy1_1440", 1, 80, 2, 18, 512)
         FloppyB1440.ReadBlock = AddressOf(ReadBlock)
         FloppyB1440.WriteBlock = AddressOf(WriteBlock)
+        t = Thread.RequestNew()
+        ' Inicia a tarefa Main com 2 KiB de Pilha
+        Thread.Start t, 2, AddressOf(Main)
+    End
+
+    ' Tarefa responsável por monitorar o Controlador de disquete
+    Sub Main()
+        Dim i as UInt16
         IO.RegisterHandler 14, AddressOf(FloppyInt)
         InitDMA
         Reset

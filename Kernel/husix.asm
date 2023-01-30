@@ -978,7 +978,7 @@ call _os_stackcheck
 ;     ---=== husix.hcb:18:13 ===---
 ;     ---=== husix.hcb:19:13 ===---
 ;     ---=== husix.hcb:50:13 ===---
-;     ---=== husix.hcb:55:13 ===---
+;     ---=== husix.hcb:57:13 ===---
 ;     ---=== husix.hcb:20:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 10
@@ -1349,10 +1349,10 @@ push cs
 call _console_write
 add sp, 4
 ;     ---=== husix.hcb:54:9 ===---
+;     ---=== husix.hcb:54:29 ===---
 ;     ---=== husix.hcb:54:12 ===---
-;     ---=== husix.hcb:54:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:54:27 ===---
+;     ---=== husix.hcb:54:23 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-12+2]
 pop es
@@ -1362,7 +1362,14 @@ push di
 push cs
 call _disk_exist
 add sp, 4
-not ax
+push ax
+;     ---=== husix.hcb:54:32 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO124
+jmp ROTULO125
 ROTULO124:
 mov ax, 65535
 jmp ROTULO126
@@ -1373,30 +1380,50 @@ cmp ax, 0
 jne ROTULO122
 jmp ROTULO123
 ROTULO122:
-;     ---=== husix.hcb:54:44 ===---
-mov ax, _program
-mov [bp+-8], ax
-mov ax, 54
-mov [bp+-10], ax
-mov ax, 5
-cs jmp word [_os_trycode]
-ROTULO123:
-;     ---=== husix.hcb:56:9 ===---
+;     ---=== husix.hcb:55:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:56:40 ===---
+;     ---=== husix.hcb:55:52 ===---
 xor ax, ax
 push ax
-;     ---=== husix.hcb:56:37 ===---
+;     ---=== husix.hcb:55:46 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-12+2]
+pop es
+mov di, [bp+-12]
+push es
+push di
+;     ---=== husix.hcb:55:24 ===---
+push cs
+pop es
+mov di, ROTULO128
+jmp ROTULO127
+ROTULO128:
+db 18
+db 91,32,68,73,83,75,32,78,79,84,32,70,79,85,78,68,32,93
+times 1 db 0
+ROTULO127:
+push es
+push di
+push cs
+call _program_fatalerror
+add sp, 10
+ROTULO123:
+;     ---=== husix.hcb:58:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== husix.hcb:58:40 ===---
 xor ax, ax
 push ax
-;     ---=== husix.hcb:56:30 ===---
+;     ---=== husix.hcb:58:37 ===---
+xor ax, ax
+push ax
+;     ---=== husix.hcb:58:30 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 push es
 push di
-;     ---=== husix.hcb:56:24 ===---
+;     ---=== husix.hcb:58:24 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-12+2]
 pop es
@@ -1406,119 +1433,119 @@ push di
 push cs
 call _disk_readblock
 add sp, 12
-;     ---=== husix.hcb:57:9 ===---
+;     ---=== husix.hcb:59:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:57:27 ===---
+;     ---=== husix.hcb:59:27 ===---
 push cs
 pop es
-mov di, ROTULO128
-jmp ROTULO127
-ROTULO128:
+mov di, ROTULO130
+jmp ROTULO129
+ROTULO130:
 db 8
 db 46,32,91,32,79,75,32,93
 times 1 db 0
-ROTULO127:
+ROTULO129:
 push es
 push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:60:9 ===---
-ROTULO129:
-;     ---=== husix.hcb:60:15 ===---
+;     ---=== husix.hcb:62:9 ===---
+ROTULO131:
+;     ---=== husix.hcb:62:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO130
-jmp ROTULO131
-ROTULO130:
-;     ---=== husix.hcb:61:13 ===---
+jne ROTULO132
+jmp ROTULO133
+ROTULO132:
+;     ---=== husix.hcb:63:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:61:31 ===---
+;     ---=== husix.hcb:63:31 ===---
 mov ax, 13
 push ax
 push cs
 call _console_writechar
 add sp, 2
-;     ---=== husix.hcb:62:13 ===---
+;     ---=== husix.hcb:64:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:62:33 ===---
+;     ---=== husix.hcb:64:33 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_clock_minute]
 push ax
 push cs
 call _console_writeuint16
 add sp, 2
-;     ---=== husix.hcb:63:13 ===---
+;     ---=== husix.hcb:65:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:63:27 ===---
+;     ---=== husix.hcb:65:27 ===---
 push cs
 pop es
-mov di, ROTULO133
-jmp ROTULO132
-ROTULO133:
+mov di, ROTULO135
+jmp ROTULO134
+ROTULO135:
 db 1
 db 58
 times 1 db 0
-ROTULO132:
+ROTULO134:
 push es
 push di
 push cs
 call _console_write
 add sp, 4
-;     ---=== husix.hcb:64:13 ===---
+;     ---=== husix.hcb:66:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:64:33 ===---
+;     ---=== husix.hcb:66:33 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_clock_second]
 push ax
 push cs
 call _console_writeuint16
 add sp, 2
-;     ---=== husix.hcb:65:13 ===---
+;     ---=== husix.hcb:67:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO129
-ROTULO131:
+jmp ROTULO131
+ROTULO133:
 ROTULO91:
 mov sp, bp
 pop bp
 FIM_program_main:
 retf
-;     ---=== husix.hcb:69:16 ===---
+;     ---=== husix.hcb:71:16 ===---
 _program_fatalerror:
 push bp
 mov bp, sp
 ; ARG: msg TAM: 4 POS: BP+6 
 ; ARG: file TAM: 4 POS: BP+10 
 ; ARG: line TAM: 2 POS: BP+14 
-;     ---=== husix.hcb:69:27 ===---
-;     ---=== husix.hcb:69:42 ===---
-;     ---=== husix.hcb:69:58 ===---
-;     ---=== husix.hcb:70:9 ===---
+;     ---=== husix.hcb:71:27 ===---
+;     ---=== husix.hcb:71:42 ===---
+;     ---=== husix.hcb:71:58 ===---
+;     ---=== husix.hcb:72:9 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _console_mode80x25x4
-;     ---=== husix.hcb:71:9 ===---
+;     ---=== husix.hcb:73:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:71:27 ===---
+;     ---=== husix.hcb:73:27 ===---
 push cs
 pop es
-mov di, ROTULO136
-jmp ROTULO135
-ROTULO136:
+mov di, ROTULO138
+jmp ROTULO137
+ROTULO138:
 db 12
 db 70,65,84,65,76,32,69,82,82,79,82,58
 times 1 db 0
-ROTULO135:
+ROTULO137:
 push es
 push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:72:9 ===---
+;     ---=== husix.hcb:74:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:72:23 ===---
+;     ---=== husix.hcb:74:23 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -1528,35 +1555,9 @@ push di
 push cs
 call _console_write
 add sp, 4
-;     ---=== husix.hcb:73:9 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:73:23 ===---
-push cs
-pop es
-mov di, ROTULO138
-jmp ROTULO137
-ROTULO138:
-db 1
-db 58
-times 1 db 0
-ROTULO137:
-push es
-push di
-push cs
-call _console_write
-add sp, 4
-;     ---=== husix.hcb:74:9 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:74:29 ===---
-; ACAO LEITURA - Le variavel
-mov ax, [bp+14]
-push ax
-push cs
-call _console_writeuint16
-add sp, 2
 ;     ---=== husix.hcb:75:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:75:27 ===---
+;     ---=== husix.hcb:75:23 ===---
 push cs
 pop es
 mov di, ROTULO140
@@ -1569,20 +1570,17 @@ ROTULO139:
 push es
 push di
 push cs
-call _console_writeline
+call _console_write
 add sp, 4
 ;     ---=== husix.hcb:76:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:76:27 ===---
-; ACAO LEITURA - Le ponteiro
-push word [bp+6+2]
-pop es
-mov di, [bp+6]
-push es
-push di
+;     ---=== husix.hcb:76:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
 push cs
-call _console_writeline
-add sp, 4
+call _console_writeuint16
+add sp, 2
 ;     ---=== husix.hcb:77:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== husix.hcb:77:27 ===---
@@ -1591,7 +1589,8 @@ pop es
 mov di, ROTULO142
 jmp ROTULO141
 ROTULO142:
-db 0
+db 1
+db 58
 times 1 db 0
 ROTULO141:
 push es
@@ -1602,13 +1601,24 @@ add sp, 4
 ;     ---=== husix.hcb:78:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== husix.hcb:78:27 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _console_writeline
+add sp, 4
+;     ---=== husix.hcb:79:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== husix.hcb:79:27 ===---
 push cs
 pop es
 mov di, ROTULO144
 jmp ROTULO143
 ROTULO144:
-db 15
-db 60,83,89,83,84,69,77,32,72,65,76,84,69,68,62
+db 0
 times 1 db 0
 ROTULO143:
 push es
@@ -1616,21 +1626,38 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:79:9 ===---
+;     ---=== husix.hcb:80:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== husix.hcb:80:27 ===---
+push cs
+pop es
+mov di, ROTULO146
+jmp ROTULO145
+ROTULO146:
+db 15
+db 60,83,89,83,84,69,77,32,72,65,76,84,69,68,62
+times 1 db 0
 ROTULO145:
-;     ---=== husix.hcb:79:15 ===---
+push es
+push di
+push cs
+call _console_writeline
+add sp, 4
+;     ---=== husix.hcb:81:9 ===---
+ROTULO147:
+;     ---=== husix.hcb:81:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO146
-jmp ROTULO147
-ROTULO146:
-;     ---=== husix.hcb:80:17 ===---
+jne ROTULO148
+jmp ROTULO149
+ROTULO148:
+;     ---=== husix.hcb:82:17 ===---
 cli
-;     ---=== husix.hcb:81:17 ===---
+;     ---=== husix.hcb:83:17 ===---
 hlt
-jmp ROTULO145
-ROTULO147:
-ROTULO134:
+jmp ROTULO147
+ROTULO149:
+ROTULO136:
 mov sp, bp
 pop bp
 FIM_program_fatalerror:
@@ -1674,13 +1701,13 @@ es mov [di+4], ax
 ;     ---=== Version.hcb:17:23 ===---
 push cs
 pop es
-mov di, ROTULO150
-jmp ROTULO149
-ROTULO150:
+mov di, ROTULO152
+jmp ROTULO151
+ROTULO152:
 db 4
 db 65,108,102,97
 times 1 db 0
-ROTULO149:
+ROTULO151:
 push es
 push di
 push word [bp+6+2]
@@ -1689,7 +1716,7 @@ mov di, [bp+6]
 es pop word [di+6]
 es pop word [di+6+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO148:
+ROTULO150:
 mov sp, bp
 pop bp
 FIM_husixversion_getversion:
@@ -1707,7 +1734,7 @@ _console_mode80x25x4:
 mov ax, 3
 ;     ---=== System.IO.Console.hcb:8:13 ===---
 int 0x10
-ROTULO151:
+ROTULO153:
 FIM_console_mode80x25x4:
 retf
 ;     ---=== System.IO.Console.hcb:11:21 ===---
@@ -1717,8 +1744,8 @@ _console_readchar:
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _os_consolereadchar
-jmp ROTULO152
-ROTULO152:
+jmp ROTULO154
+ROTULO154:
 FIM_console_readchar:
 retf
 ;     ---=== System.IO.Console.hcb:15:16 ===---
@@ -1756,13 +1783,13 @@ mov word [bp+-4], 0
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
 ;     ---=== System.IO.Console.hcb:23:9 ===---
-ROTULO154:
+ROTULO156:
 ;     ---=== System.IO.Console.hcb:23:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO155
-jmp ROTULO156
-ROTULO155:
+jne ROTULO157
+jmp ROTULO158
+ROTULO157:
 ;     ---=== System.IO.Console.hcb:24:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.IO.Console.hcb:24:17 ===---
@@ -1781,21 +1808,21 @@ mov ax, 13
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO159
+je ROTULO161
+jmp ROTULO162
+ROTULO161:
+mov ax, 65535
+jmp ROTULO163
+ROTULO162:
+xor ax, ax
+ROTULO163:
+cmp ax, 0
+jne ROTULO159
 jmp ROTULO160
 ROTULO159:
-mov ax, 65535
-jmp ROTULO161
-ROTULO160:
-xor ax, ax
-ROTULO161:
-cmp ax, 0
-jne ROTULO157
-jmp ROTULO158
-ROTULO157:
 ;     ---=== System.IO.Console.hcb:25:34 ===---
 jmp done
-ROTULO158:
+ROTULO160:
 ;     ---=== System.IO.Console.hcb:26:13 ===---
 ;     ---=== System.IO.Console.hcb:26:18 ===---
 ;     ---=== System.IO.Console.hcb:26:16 ===---
@@ -1807,21 +1834,21 @@ mov ax, 10
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO164
+je ROTULO166
+jmp ROTULO167
+ROTULO166:
+mov ax, 65535
+jmp ROTULO168
+ROTULO167:
+xor ax, ax
+ROTULO168:
+cmp ax, 0
+jne ROTULO164
 jmp ROTULO165
 ROTULO164:
-mov ax, 65535
-jmp ROTULO166
-ROTULO165:
-xor ax, ax
-ROTULO166:
-cmp ax, 0
-jne ROTULO162
-jmp ROTULO163
-ROTULO162:
 ;     ---=== System.IO.Console.hcb:26:34 ===---
 jmp done
-ROTULO163:
+ROTULO165:
 ;     ---=== System.IO.Console.hcb:27:13 ===---
 ;     ---=== System.IO.Console.hcb:27:18 ===---
 ;     ---=== System.IO.Console.hcb:27:16 ===---
@@ -1833,18 +1860,18 @@ mov ax, 9
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO169
+je ROTULO171
+jmp ROTULO172
+ROTULO171:
+mov ax, 65535
+jmp ROTULO173
+ROTULO172:
+xor ax, ax
+ROTULO173:
+cmp ax, 0
+jne ROTULO169
 jmp ROTULO170
 ROTULO169:
-mov ax, 65535
-jmp ROTULO171
-ROTULO170:
-xor ax, ax
-ROTULO171:
-cmp ax, 0
-jne ROTULO167
-jmp ROTULO168
-ROTULO167:
 ;     ---=== System.IO.Console.hcb:28:17 ===---
 ;     ---=== System.IO.Console.hcb:28:24 ===---
 ;     ---=== System.IO.Console.hcb:28:20 ===---
@@ -1856,18 +1883,18 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO174
+ja ROTULO176
+jmp ROTULO177
+ROTULO176:
+mov ax, 65535
+jmp ROTULO178
+ROTULO177:
+xor ax, ax
+ROTULO178:
+cmp ax, 0
+jne ROTULO174
 jmp ROTULO175
 ROTULO174:
-mov ax, 65535
-jmp ROTULO176
-ROTULO175:
-xor ax, ax
-ROTULO176:
-cmp ax, 0
-jne ROTULO172
-jmp ROTULO173
-ROTULO172:
 ;     ---=== System.IO.Console.hcb:29:21 ===---
 ; ACAO DEC - Decrementa variavel
 dec word [bp+-6]
@@ -1904,9 +1931,9 @@ push ax
 push cs
 call _console_writechar
 add sp, 2
-ROTULO173:
-jmp ROTULO177
-ROTULO168:
+ROTULO175:
+jmp ROTULO179
+ROTULO170:
 ;     ---=== System.IO.Console.hcb:37:17 ===---
 ;     ---=== System.IO.Console.hcb:37:24 ===---
 ;     ---=== System.IO.Console.hcb:37:20 ===---
@@ -1919,18 +1946,18 @@ mov ax, [bp+-2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO180
+jb ROTULO182
+jmp ROTULO183
+ROTULO182:
+mov ax, 65535
+jmp ROTULO184
+ROTULO183:
+xor ax, ax
+ROTULO184:
+cmp ax, 0
+jne ROTULO180
 jmp ROTULO181
 ROTULO180:
-mov ax, 65535
-jmp ROTULO182
-ROTULO181:
-xor ax, ax
-ROTULO182:
-cmp ax, 0
-jne ROTULO178
-jmp ROTULO179
-ROTULO178:
 ;     ---=== System.IO.Console.hcb:38:21 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Console.hcb:38:39 ===---
@@ -1955,10 +1982,10 @@ inc word [bp+-6]
 ;     ---=== System.IO.Console.hcb:41:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
+ROTULO181:
 ROTULO179:
-ROTULO177:
-jmp ROTULO154
-ROTULO156:
+jmp ROTULO156
+ROTULO158:
 ;     ---=== System.IO.Console.hcb:45:9 ===---
 done:
 ;     ---=== System.IO.Console.hcb:46:9 ===---
@@ -1967,7 +1994,7 @@ push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov byte [di+0], 0
-ROTULO153:
+ROTULO155:
 mov sp, bp
 pop bp
 FIM_console_readline:
@@ -1987,7 +2014,7 @@ push ax
 push cs
 call _os_consolewritechar
 add sp, 2
-ROTULO183:
+ROTULO185:
 mov sp, bp
 pop bp
 FIM_console_writechar:
@@ -2002,7 +2029,7 @@ mov bp, sp
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
 ;     ---=== System.IO.Console.hcb:56:9 ===---
-ROTULO185:
+ROTULO187:
 ;     ---=== System.IO.Console.hcb:56:19 ===---
 ;     ---=== System.IO.Console.hcb:56:15 ===---
 ; ACAO LEITURA - Le ponteiro
@@ -2017,18 +2044,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO188
+ja ROTULO190
+jmp ROTULO191
+ROTULO190:
+mov ax, 65535
+jmp ROTULO192
+ROTULO191:
+xor ax, ax
+ROTULO192:
+cmp ax, 0
+jne ROTULO188
 jmp ROTULO189
 ROTULO188:
-mov ax, 65535
-jmp ROTULO190
-ROTULO189:
-xor ax, ax
-ROTULO190:
-cmp ax, 0
-jne ROTULO186
-jmp ROTULO187
-ROTULO186:
 ;     ---=== System.IO.Console.hcb:57:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Console.hcb:57:23 ===---
@@ -2047,9 +2074,9 @@ add sp, 2
 ;     ---=== System.IO.Console.hcb:58:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-jmp ROTULO185
-ROTULO187:
-ROTULO184:
+jmp ROTULO187
+ROTULO189:
+ROTULO186:
 mov sp, bp
 pop bp
 FIM_console_write:
@@ -2088,7 +2115,7 @@ push ax
 push cs
 call _console_writechar
 add sp, 2
-ROTULO191:
+ROTULO193:
 mov sp, bp
 pop bp
 FIM_console_writeline:
@@ -2116,7 +2143,7 @@ push ax
 ;     ---=== System.IO.Console.hcb:71:27 ===---
 mov ax, 10
 cmp ax, 0
-jne ROTULO193
+jne ROTULO195
 ;     ---=== System.IO.Console.hcb:71:27 ===---
 mov ax, _console
 mov [bp+-8], ax
@@ -2124,7 +2151,7 @@ mov ax, 71
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO193:
+ROTULO195:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -2141,7 +2168,7 @@ push ax
 ;     ---=== System.IO.Console.hcb:72:26 ===---
 mov ax, 10
 cmp ax, 0
-jne ROTULO194
+jne ROTULO196
 ;     ---=== System.IO.Console.hcb:72:26 ===---
 mov ax, _console
 mov [bp+-8], ax
@@ -2149,7 +2176,7 @@ mov ax, 72
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO194:
+ROTULO196:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -2166,18 +2193,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO197
+ja ROTULO199
+jmp ROTULO200
+ROTULO199:
+mov ax, 65535
+jmp ROTULO201
+ROTULO200:
+xor ax, ax
+ROTULO201:
+cmp ax, 0
+jne ROTULO197
 jmp ROTULO198
 ROTULO197:
-mov ax, 65535
-jmp ROTULO199
-ROTULO198:
-xor ax, ax
-ROTULO199:
-cmp ax, 0
-jne ROTULO195
-jmp ROTULO196
-ROTULO195:
 ;     ---=== System.IO.Console.hcb:73:26 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Console.hcb:73:38 ===---
@@ -2187,7 +2214,7 @@ push ax
 push cs
 call _console_writeuint16
 add sp, 2
-ROTULO196:
+ROTULO198:
 ;     ---=== System.IO.Console.hcb:74:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Console.hcb:74:22 ===---
@@ -2203,7 +2230,7 @@ push ax
 push cs
 call _console_writechar
 add sp, 2
-ROTULO192:
+ROTULO194:
 mov sp, bp
 pop bp
 FIM_console_writeuint16:
@@ -2225,18 +2252,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-jl ROTULO203
+jl ROTULO205
+jmp ROTULO206
+ROTULO205:
+mov ax, 65535
+jmp ROTULO207
+ROTULO206:
+xor ax, ax
+ROTULO207:
+cmp ax, 0
+jne ROTULO203
 jmp ROTULO204
 ROTULO203:
-mov ax, 65535
-jmp ROTULO205
-ROTULO204:
-xor ax, ax
-ROTULO205:
-cmp ax, 0
-jne ROTULO201
-jmp ROTULO202
-ROTULO201:
 ;     ---=== System.IO.Console.hcb:79:17 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.IO.Console.hcb:79:23 ===---
@@ -2249,7 +2276,7 @@ xor ax, ax
 pop bx
 sub ax, bx
 mov [bp+6], ax
-ROTULO202:
+ROTULO204:
 ;     ---=== System.IO.Console.hcb:81:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Console.hcb:81:21 ===---
@@ -2259,7 +2286,7 @@ push ax
 push cs
 call _console_writeuint16
 add sp, 2
-ROTULO200:
+ROTULO202:
 mov sp, bp
 pop bp
 FIM_console_writeint16:
@@ -2279,7 +2306,7 @@ push ax
 push cs
 call _console_writeuint16
 add sp, 2
-ROTULO206:
+ROTULO208:
 mov sp, bp
 pop bp
 FIM_console_writeuint8:
@@ -2299,7 +2326,7 @@ push ax
 push cs
 call _console_writeint16
 add sp, 2
-ROTULO207:
+ROTULO209:
 mov sp, bp
 pop bp
 FIM_console_writeint8:
@@ -2332,23 +2359,23 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO211
+jb ROTULO213
+jmp ROTULO214
+ROTULO213:
+mov ax, 65535
+jmp ROTULO215
+ROTULO214:
+xor ax, ax
+ROTULO215:
+cmp ax, 0
+jne ROTULO211
 jmp ROTULO212
 ROTULO211:
-mov ax, 65535
-jmp ROTULO213
-ROTULO212:
-xor ax, ax
-ROTULO213:
-cmp ax, 0
-jne ROTULO209
-jmp ROTULO210
-ROTULO209:
 ;     ---=== System.Text.hcb:4:25 ===---
 ;     ---=== System.Text.hcb:4:32 ===---
 mov ax, 1
-jmp ROTULO208
-ROTULO210:
+jmp ROTULO210
+ROTULO212:
 ;     ---=== System.Text.hcb:5:9 ===---
 ;     ---=== System.Text.hcb:5:22 ===---
 ;     ---=== System.Text.hcb:5:14 ===---
@@ -2362,16 +2389,16 @@ mov ax, 194
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO219
-jmp ROTULO220
-ROTULO219:
-mov ax, 65535
-jmp ROTULO221
-ROTULO220:
-xor ax, ax
+jae ROTULO221
+jmp ROTULO222
 ROTULO221:
+mov ax, 65535
+jmp ROTULO223
+ROTULO222:
+xor ax, ax
+ROTULO223:
 cmp ax, 0
-je ROTULO217
+je ROTULO219
 ;     ---=== System.Text.hcb:5:32 ===---
 ;     ---=== System.Text.hcb:5:30 ===---
 ; ACAO LEITURA - Le ponteiro
@@ -2383,31 +2410,31 @@ mov ax, 223
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO222
-jmp ROTULO223
-ROTULO222:
-mov ax, 65535
-jmp ROTULO224
-ROTULO223:
-xor ax, ax
+jbe ROTULO224
+jmp ROTULO225
 ROTULO224:
-cmp ax, 0
-je ROTULO217
-ROTULO216:
 mov ax, 65535
-jmp ROTULO218
-ROTULO217:
+jmp ROTULO226
+ROTULO225:
 xor ax, ax
-ROTULO218:
+ROTULO226:
 cmp ax, 0
-jne ROTULO214
-jmp ROTULO215
-ROTULO214:
+je ROTULO219
+ROTULO218:
+mov ax, 65535
+jmp ROTULO220
+ROTULO219:
+xor ax, ax
+ROTULO220:
+cmp ax, 0
+jne ROTULO216
+jmp ROTULO217
+ROTULO216:
 ;     ---=== System.Text.hcb:5:45 ===---
 ;     ---=== System.Text.hcb:5:52 ===---
 mov ax, 2
-jmp ROTULO208
-ROTULO215:
+jmp ROTULO210
+ROTULO217:
 ;     ---=== System.Text.hcb:6:9 ===---
 ;     ---=== System.Text.hcb:6:22 ===---
 ;     ---=== System.Text.hcb:6:14 ===---
@@ -2421,16 +2448,16 @@ mov ax, 224
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO230
-jmp ROTULO231
-ROTULO230:
-mov ax, 65535
-jmp ROTULO232
-ROTULO231:
-xor ax, ax
+jae ROTULO232
+jmp ROTULO233
 ROTULO232:
+mov ax, 65535
+jmp ROTULO234
+ROTULO233:
+xor ax, ax
+ROTULO234:
 cmp ax, 0
-je ROTULO228
+je ROTULO230
 ;     ---=== System.Text.hcb:6:32 ===---
 ;     ---=== System.Text.hcb:6:30 ===---
 ; ACAO LEITURA - Le ponteiro
@@ -2442,31 +2469,31 @@ mov ax, 239
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO233
-jmp ROTULO234
-ROTULO233:
-mov ax, 65535
-jmp ROTULO235
-ROTULO234:
-xor ax, ax
+jbe ROTULO235
+jmp ROTULO236
 ROTULO235:
-cmp ax, 0
-je ROTULO228
-ROTULO227:
 mov ax, 65535
-jmp ROTULO229
-ROTULO228:
+jmp ROTULO237
+ROTULO236:
 xor ax, ax
-ROTULO229:
+ROTULO237:
 cmp ax, 0
-jne ROTULO225
-jmp ROTULO226
-ROTULO225:
+je ROTULO230
+ROTULO229:
+mov ax, 65535
+jmp ROTULO231
+ROTULO230:
+xor ax, ax
+ROTULO231:
+cmp ax, 0
+jne ROTULO227
+jmp ROTULO228
+ROTULO227:
 ;     ---=== System.Text.hcb:6:45 ===---
 ;     ---=== System.Text.hcb:6:52 ===---
 mov ax, 3
-jmp ROTULO208
-ROTULO226:
+jmp ROTULO210
+ROTULO228:
 ;     ---=== System.Text.hcb:7:9 ===---
 ;     ---=== System.Text.hcb:7:22 ===---
 ;     ---=== System.Text.hcb:7:14 ===---
@@ -2480,16 +2507,16 @@ mov ax, 240
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO241
-jmp ROTULO242
-ROTULO241:
-mov ax, 65535
-jmp ROTULO243
-ROTULO242:
-xor ax, ax
+jae ROTULO243
+jmp ROTULO244
 ROTULO243:
+mov ax, 65535
+jmp ROTULO245
+ROTULO244:
+xor ax, ax
+ROTULO245:
 cmp ax, 0
-je ROTULO239
+je ROTULO241
 ;     ---=== System.Text.hcb:7:32 ===---
 ;     ---=== System.Text.hcb:7:30 ===---
 ; ACAO LEITURA - Le ponteiro
@@ -2501,36 +2528,36 @@ mov ax, 255
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO244
-jmp ROTULO245
-ROTULO244:
-mov ax, 65535
-jmp ROTULO246
-ROTULO245:
-xor ax, ax
+jbe ROTULO246
+jmp ROTULO247
 ROTULO246:
-cmp ax, 0
-je ROTULO239
-ROTULO238:
 mov ax, 65535
-jmp ROTULO240
-ROTULO239:
+jmp ROTULO248
+ROTULO247:
 xor ax, ax
-ROTULO240:
+ROTULO248:
 cmp ax, 0
-jne ROTULO236
-jmp ROTULO237
-ROTULO236:
+je ROTULO241
+ROTULO240:
+mov ax, 65535
+jmp ROTULO242
+ROTULO241:
+xor ax, ax
+ROTULO242:
+cmp ax, 0
+jne ROTULO238
+jmp ROTULO239
+ROTULO238:
 ;     ---=== System.Text.hcb:7:45 ===---
 ;     ---=== System.Text.hcb:7:52 ===---
 mov ax, 4
-jmp ROTULO208
-ROTULO237:
+jmp ROTULO210
+ROTULO239:
 ;     ---=== System.Text.hcb:8:9 ===---
 ;     ---=== System.Text.hcb:8:16 ===---
 mov ax, 1
-jmp ROTULO208
-ROTULO208:
+jmp ROTULO210
+ROTULO210:
 mov sp, bp
 pop bp
 FIM_utf8_charsize:
@@ -2556,25 +2583,25 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO250
+jb ROTULO252
+jmp ROTULO253
+ROTULO252:
+mov ax, 65535
+jmp ROTULO254
+ROTULO253:
+xor ax, ax
+ROTULO254:
+cmp ax, 0
+jne ROTULO250
 jmp ROTULO251
 ROTULO250:
-mov ax, 65535
-jmp ROTULO252
-ROTULO251:
-xor ax, ax
-ROTULO252:
-cmp ax, 0
-jne ROTULO248
-jmp ROTULO249
-ROTULO248:
 ;     ---=== System.Text.hcb:12:25 ===---
 ;     ---=== System.Text.hcb:12:32 ===---
 ; ACAO LEITURA - Le ponteiro
 xor ax, ax
 es mov al, [di+0]
-jmp ROTULO247
-ROTULO249:
+jmp ROTULO249
+ROTULO251:
 ;     ---=== System.Text.hcb:13:9 ===---
 ;     ---=== System.Text.hcb:13:14 ===---
 ;     ---=== System.Text.hcb:13:12 ===---
@@ -2587,18 +2614,18 @@ mov ax, 195
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO255
+je ROTULO257
+jmp ROTULO258
+ROTULO257:
+mov ax, 65535
+jmp ROTULO259
+ROTULO258:
+xor ax, ax
+ROTULO259:
+cmp ax, 0
+jne ROTULO255
 jmp ROTULO256
 ROTULO255:
-mov ax, 65535
-jmp ROTULO257
-ROTULO256:
-xor ax, ax
-ROTULO257:
-cmp ax, 0
-jne ROTULO253
-jmp ROTULO254
-ROTULO253:
 ;     ---=== System.Text.hcb:14:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
@@ -2617,23 +2644,23 @@ mov ax, 135
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO260
+je ROTULO262
+jmp ROTULO263
+ROTULO262:
+mov ax, 65535
+jmp ROTULO264
+ROTULO263:
+xor ax, ax
+ROTULO264:
+cmp ax, 0
+jne ROTULO260
 jmp ROTULO261
 ROTULO260:
-mov ax, 65535
-jmp ROTULO262
-ROTULO261:
-xor ax, ax
-ROTULO262:
-cmp ax, 0
-jne ROTULO258
-jmp ROTULO259
-ROTULO258:
 ;     ---=== System.Text.hcb:15:31 ===---
 ;     ---=== System.Text.hcb:15:38 ===---
 mov ax, 128
-jmp ROTULO247
-ROTULO259:
+jmp ROTULO249
+ROTULO261:
 ;     ---=== System.Text.hcb:16:13 ===---
 ;     ---=== System.Text.hcb:16:18 ===---
 ;     ---=== System.Text.hcb:16:16 ===---
@@ -2646,23 +2673,23 @@ mov ax, 167
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO265
+je ROTULO267
+jmp ROTULO268
+ROTULO267:
+mov ax, 65535
+jmp ROTULO269
+ROTULO268:
+xor ax, ax
+ROTULO269:
+cmp ax, 0
+jne ROTULO265
 jmp ROTULO266
 ROTULO265:
-mov ax, 65535
-jmp ROTULO267
-ROTULO266:
-xor ax, ax
-ROTULO267:
-cmp ax, 0
-jne ROTULO263
-jmp ROTULO264
-ROTULO263:
 ;     ---=== System.Text.hcb:16:31 ===---
 ;     ---=== System.Text.hcb:16:38 ===---
 mov ax, 135
-jmp ROTULO247
-ROTULO264:
+jmp ROTULO249
+ROTULO266:
 ;     ---=== System.Text.hcb:17:13 ===---
 ;     ---=== System.Text.hcb:17:18 ===---
 ;     ---=== System.Text.hcb:17:16 ===---
@@ -2675,23 +2702,23 @@ mov ax, 131
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO270
+je ROTULO272
+jmp ROTULO273
+ROTULO272:
+mov ax, 65535
+jmp ROTULO274
+ROTULO273:
+xor ax, ax
+ROTULO274:
+cmp ax, 0
+jne ROTULO270
 jmp ROTULO271
 ROTULO270:
-mov ax, 65535
-jmp ROTULO272
-ROTULO271:
-xor ax, ax
-ROTULO272:
-cmp ax, 0
-jne ROTULO268
-jmp ROTULO269
-ROTULO268:
 ;     ---=== System.Text.hcb:17:31 ===---
 ;     ---=== System.Text.hcb:17:38 ===---
 mov ax, 65
-jmp ROTULO247
-ROTULO269:
+jmp ROTULO249
+ROTULO271:
 ;     ---=== System.Text.hcb:18:13 ===---
 ;     ---=== System.Text.hcb:18:18 ===---
 ;     ---=== System.Text.hcb:18:16 ===---
@@ -2704,23 +2731,23 @@ mov ax, 163
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO275
+je ROTULO277
+jmp ROTULO278
+ROTULO277:
+mov ax, 65535
+jmp ROTULO279
+ROTULO278:
+xor ax, ax
+ROTULO279:
+cmp ax, 0
+jne ROTULO275
 jmp ROTULO276
 ROTULO275:
-mov ax, 65535
-jmp ROTULO277
-ROTULO276:
-xor ax, ax
-ROTULO277:
-cmp ax, 0
-jne ROTULO273
-jmp ROTULO274
-ROTULO273:
 ;     ---=== System.Text.hcb:18:31 ===---
 ;     ---=== System.Text.hcb:18:38 ===---
 mov ax, 97
-jmp ROTULO247
-ROTULO274:
+jmp ROTULO249
+ROTULO276:
 ;     ---=== System.Text.hcb:19:13 ===---
 ;     ---=== System.Text.hcb:19:18 ===---
 ;     ---=== System.Text.hcb:19:16 ===---
@@ -2733,23 +2760,23 @@ mov ax, 147
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO280
+je ROTULO282
+jmp ROTULO283
+ROTULO282:
+mov ax, 65535
+jmp ROTULO284
+ROTULO283:
+xor ax, ax
+ROTULO284:
+cmp ax, 0
+jne ROTULO280
 jmp ROTULO281
 ROTULO280:
-mov ax, 65535
-jmp ROTULO282
-ROTULO281:
-xor ax, ax
-ROTULO282:
-cmp ax, 0
-jne ROTULO278
-jmp ROTULO279
-ROTULO278:
 ;     ---=== System.Text.hcb:19:31 ===---
 ;     ---=== System.Text.hcb:19:38 ===---
 mov ax, 79
-jmp ROTULO247
-ROTULO279:
+jmp ROTULO249
+ROTULO281:
 ;     ---=== System.Text.hcb:20:13 ===---
 ;     ---=== System.Text.hcb:20:18 ===---
 ;     ---=== System.Text.hcb:20:16 ===---
@@ -2762,24 +2789,24 @@ mov ax, 179
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO285
+je ROTULO287
+jmp ROTULO288
+ROTULO287:
+mov ax, 65535
+jmp ROTULO289
+ROTULO288:
+xor ax, ax
+ROTULO289:
+cmp ax, 0
+jne ROTULO285
 jmp ROTULO286
 ROTULO285:
-mov ax, 65535
-jmp ROTULO287
-ROTULO286:
-xor ax, ax
-ROTULO287:
-cmp ax, 0
-jne ROTULO283
-jmp ROTULO284
-ROTULO283:
 ;     ---=== System.Text.hcb:20:31 ===---
 ;     ---=== System.Text.hcb:20:38 ===---
 mov ax, 162
-jmp ROTULO247
-ROTULO284:
-ROTULO254:
+jmp ROTULO249
+ROTULO286:
+ROTULO256:
 ;     ---=== System.Text.hcb:22:9 ===---
 ;     ---=== System.Text.hcb:22:14 ===---
 ;     ---=== System.Text.hcb:22:12 ===---
@@ -2792,18 +2819,18 @@ mov ax, 226
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO290
+je ROTULO292
+jmp ROTULO293
+ROTULO292:
+mov ax, 65535
+jmp ROTULO294
+ROTULO293:
+xor ax, ax
+ROTULO294:
+cmp ax, 0
+jne ROTULO290
 jmp ROTULO291
 ROTULO290:
-mov ax, 65535
-jmp ROTULO292
-ROTULO291:
-xor ax, ax
-ROTULO292:
-cmp ax, 0
-jne ROTULO288
-jmp ROTULO289
-ROTULO288:
 ;     ---=== System.Text.hcb:23:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
@@ -2822,18 +2849,18 @@ mov ax, 152
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO295
+je ROTULO297
+jmp ROTULO298
+ROTULO297:
+mov ax, 65535
+jmp ROTULO299
+ROTULO298:
+xor ax, ax
+ROTULO299:
+cmp ax, 0
+jne ROTULO295
 jmp ROTULO296
 ROTULO295:
-mov ax, 65535
-jmp ROTULO297
-ROTULO296:
-xor ax, ax
-ROTULO297:
-cmp ax, 0
-jne ROTULO293
-jmp ROTULO294
-ROTULO293:
 ;     ---=== System.Text.hcb:25:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
@@ -2852,23 +2879,23 @@ mov ax, 186
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO300
+je ROTULO302
+jmp ROTULO303
+ROTULO302:
+mov ax, 65535
+jmp ROTULO304
+ROTULO303:
+xor ax, ax
+ROTULO304:
+cmp ax, 0
+jne ROTULO300
 jmp ROTULO301
 ROTULO300:
-mov ax, 65535
-jmp ROTULO302
-ROTULO301:
-xor ax, ax
-ROTULO302:
-cmp ax, 0
-jne ROTULO298
-jmp ROTULO299
-ROTULO298:
 ;     ---=== System.Text.hcb:26:35 ===---
 ;     ---=== System.Text.hcb:26:42 ===---
 mov ax, 1
-jmp ROTULO247
-ROTULO299:
+jmp ROTULO249
+ROTULO301:
 ;     ---=== System.Text.hcb:27:17 ===---
 ;     ---=== System.Text.hcb:27:22 ===---
 ;     ---=== System.Text.hcb:27:20 ===---
@@ -2881,24 +2908,24 @@ mov ax, 187
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO305
+je ROTULO307
+jmp ROTULO308
+ROTULO307:
+mov ax, 65535
+jmp ROTULO309
+ROTULO308:
+xor ax, ax
+ROTULO309:
+cmp ax, 0
+jne ROTULO305
 jmp ROTULO306
 ROTULO305:
-mov ax, 65535
-jmp ROTULO307
-ROTULO306:
-xor ax, ax
-ROTULO307:
-cmp ax, 0
-jne ROTULO303
-jmp ROTULO304
-ROTULO303:
 ;     ---=== System.Text.hcb:27:35 ===---
 ;     ---=== System.Text.hcb:27:42 ===---
 mov ax, 2
-jmp ROTULO247
-ROTULO304:
-ROTULO294:
+jmp ROTULO249
+ROTULO306:
+ROTULO296:
 ;     ---=== System.Text.hcb:29:13 ===---
 ;     ---=== System.Text.hcb:29:18 ===---
 ;     ---=== System.Text.hcb:29:16 ===---
@@ -2911,18 +2938,18 @@ mov ax, 153
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO310
+je ROTULO312
+jmp ROTULO313
+ROTULO312:
+mov ax, 65535
+jmp ROTULO314
+ROTULO313:
+xor ax, ax
+ROTULO314:
+cmp ax, 0
+jne ROTULO310
 jmp ROTULO311
 ROTULO310:
-mov ax, 65535
-jmp ROTULO312
-ROTULO311:
-xor ax, ax
-ROTULO312:
-cmp ax, 0
-jne ROTULO308
-jmp ROTULO309
-ROTULO308:
 ;     ---=== System.Text.hcb:30:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
@@ -2941,23 +2968,23 @@ mov ax, 165
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO315
+je ROTULO317
+jmp ROTULO318
+ROTULO317:
+mov ax, 65535
+jmp ROTULO319
+ROTULO318:
+xor ax, ax
+ROTULO319:
+cmp ax, 0
+jne ROTULO315
 jmp ROTULO316
 ROTULO315:
-mov ax, 65535
-jmp ROTULO317
-ROTULO316:
-xor ax, ax
-ROTULO317:
-cmp ax, 0
-jne ROTULO313
-jmp ROTULO314
-ROTULO313:
 ;     ---=== System.Text.hcb:31:35 ===---
 ;     ---=== System.Text.hcb:31:42 ===---
 mov ax, 3
-jmp ROTULO247
-ROTULO314:
+jmp ROTULO249
+ROTULO316:
 ;     ---=== System.Text.hcb:32:17 ===---
 ;     ---=== System.Text.hcb:32:22 ===---
 ;     ---=== System.Text.hcb:32:20 ===---
@@ -2970,23 +2997,23 @@ mov ax, 166
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO320
+je ROTULO322
+jmp ROTULO323
+ROTULO322:
+mov ax, 65535
+jmp ROTULO324
+ROTULO323:
+xor ax, ax
+ROTULO324:
+cmp ax, 0
+jne ROTULO320
 jmp ROTULO321
 ROTULO320:
-mov ax, 65535
-jmp ROTULO322
-ROTULO321:
-xor ax, ax
-ROTULO322:
-cmp ax, 0
-jne ROTULO318
-jmp ROTULO319
-ROTULO318:
 ;     ---=== System.Text.hcb:32:35 ===---
 ;     ---=== System.Text.hcb:32:42 ===---
 mov ax, 4
-jmp ROTULO247
-ROTULO319:
+jmp ROTULO249
+ROTULO321:
 ;     ---=== System.Text.hcb:33:17 ===---
 ;     ---=== System.Text.hcb:33:22 ===---
 ;     ---=== System.Text.hcb:33:20 ===---
@@ -2999,23 +3026,23 @@ mov ax, 163
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO325
+je ROTULO327
+jmp ROTULO328
+ROTULO327:
+mov ax, 65535
+jmp ROTULO329
+ROTULO328:
+xor ax, ax
+ROTULO329:
+cmp ax, 0
+jne ROTULO325
 jmp ROTULO326
 ROTULO325:
-mov ax, 65535
-jmp ROTULO327
-ROTULO326:
-xor ax, ax
-ROTULO327:
-cmp ax, 0
-jne ROTULO323
-jmp ROTULO324
-ROTULO323:
 ;     ---=== System.Text.hcb:33:35 ===---
 ;     ---=== System.Text.hcb:33:42 ===---
 mov ax, 5
-jmp ROTULO247
-ROTULO324:
+jmp ROTULO249
+ROTULO326:
 ;     ---=== System.Text.hcb:34:17 ===---
 ;     ---=== System.Text.hcb:34:22 ===---
 ;     ---=== System.Text.hcb:34:20 ===---
@@ -3028,30 +3055,30 @@ mov ax, 160
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO330
+je ROTULO332
+jmp ROTULO333
+ROTULO332:
+mov ax, 65535
+jmp ROTULO334
+ROTULO333:
+xor ax, ax
+ROTULO334:
+cmp ax, 0
+jne ROTULO330
 jmp ROTULO331
 ROTULO330:
-mov ax, 65535
-jmp ROTULO332
-ROTULO331:
-xor ax, ax
-ROTULO332:
-cmp ax, 0
-jne ROTULO328
-jmp ROTULO329
-ROTULO328:
 ;     ---=== System.Text.hcb:34:35 ===---
 ;     ---=== System.Text.hcb:34:42 ===---
 mov ax, 6
-jmp ROTULO247
-ROTULO329:
-ROTULO309:
-ROTULO289:
+jmp ROTULO249
+ROTULO331:
+ROTULO311:
+ROTULO291:
 ;     ---=== System.Text.hcb:37:9 ===---
 ;     ---=== System.Text.hcb:37:16 ===---
 mov ax, 63
-jmp ROTULO247
-ROTULO247:
+jmp ROTULO249
+ROTULO249:
 mov sp, bp
 pop bp
 FIM_utf8_convertchartocp437:
@@ -3095,7 +3122,7 @@ pop es
 cs mov di, [_multithreading_kernelthread]
 es mov [di+0], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO333:
+ROTULO335:
 FIM_multithreading_preinitialize:
 retf
 ;     ---=== System.Threading.hcb:71:16 ===---
@@ -3135,7 +3162,7 @@ cs mov [_multithreading_list], di
 ;     ---=== System.Threading.hcb:76:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO335:
+ROTULO337:
 ;     ---=== System.Threading.hcb:76:22 ===---
 ;     ---=== System.Threading.hcb:76:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -3146,18 +3173,18 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO338
+jbe ROTULO340
+jmp ROTULO341
+ROTULO340:
+mov ax, 65535
+jmp ROTULO342
+ROTULO341:
+xor ax, ax
+ROTULO342:
+cmp ax, 0
+jne ROTULO338
 jmp ROTULO339
 ROTULO338:
-mov ax, 65535
-jmp ROTULO340
-ROTULO339:
-xor ax, ax
-ROTULO340:
-cmp ax, 0
-jne ROTULO336
-jmp ROTULO337
-ROTULO336:
 ;     ---=== System.Threading.hcb:77:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Threading.hcb:77:19 ===---
@@ -3245,18 +3272,18 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO343
+je ROTULO345
+jmp ROTULO346
+ROTULO345:
+mov ax, 65535
+jmp ROTULO347
+ROTULO346:
+xor ax, ax
+ROTULO347:
+cmp ax, 0
+jne ROTULO343
 jmp ROTULO344
 ROTULO343:
-mov ax, 65535
-jmp ROTULO345
-ROTULO344:
-xor ax, ax
-ROTULO345:
-cmp ax, 0
-jne ROTULO341
-jmp ROTULO342
-ROTULO341:
 ;     ---=== System.Threading.hcb:86:18 ===---
 ; ACAO STRUCTURE - Define Segmento/desvio de estrutura
 ; ACAO GRAVACAO - Grava segmento em variavel
@@ -3285,12 +3312,12 @@ cs mov [_multithreading_current+2], ax
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 cs mov [_multithreading_current], ax
-ROTULO342:
+ROTULO344:
 ;     ---=== System.Threading.hcb:76:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO335
-ROTULO337:
+jmp ROTULO337
+ROTULO339:
 ;     ---=== System.Threading.hcb:92:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Threading.hcb:92:37 ===---
@@ -3335,7 +3362,7 @@ push ax
 push cs
 call _io_registerhandler
 add sp, 6
-ROTULO334:
+ROTULO336:
 mov sp, bp
 pop bp
 FIM_multithreading_initialize:
@@ -3419,20 +3446,20 @@ mov [bp+4], ax
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
 es mov ax, [di+4]
 cmp ax, 0
-jne ROTULO347
-jmp ROTULO348
-ROTULO347:
+jne ROTULO349
+jmp ROTULO350
+ROTULO349:
 ;     ---=== System.Threading.hcb:111:40 ===---
 jmp find_next
-ROTULO348:
+ROTULO350:
 ;     ---=== System.Threading.hcb:112:9 ===---
 ;     ---=== System.Threading.hcb:112:12 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
 es mov ax, [di+6]
 cmp ax, 0
-jne ROTULO349
-jmp ROTULO350
-ROTULO349:
+jne ROTULO351
+jmp ROTULO352
+ROTULO351:
 ;     ---=== System.Threading.hcb:113:13 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Threading.hcb:113:32 ===---
@@ -3482,8 +3509,8 @@ mov es, ax
 mov ds, ax
 ;     ---=== System.Threading.hcb:130:17 ===---
 jmp FIM_multithreading_int81
-ROTULO350:
-ROTULO346:
+ROTULO352:
+ROTULO348:
 mov sp, bp
 pop bp
 pop ax
@@ -3530,7 +3557,7 @@ add sp, 4
 ;     ---=== System.Threading.hcb:140:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
-ROTULO352:
+ROTULO354:
 ;     ---=== System.Threading.hcb:140:22 ===---
 ;     ---=== System.Threading.hcb:140:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -3541,18 +3568,18 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO355
+jbe ROTULO357
+jmp ROTULO358
+ROTULO357:
+mov ax, 65535
+jmp ROTULO359
+ROTULO358:
+xor ax, ax
+ROTULO359:
+cmp ax, 0
+jne ROTULO355
 jmp ROTULO356
 ROTULO355:
-mov ax, 65535
-jmp ROTULO357
-ROTULO356:
-xor ax, ax
-ROTULO357:
-cmp ax, 0
-jne ROTULO353
-jmp ROTULO354
-ROTULO353:
 ;     ---=== System.Threading.hcb:141:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Threading.hcb:141:17 ===---
@@ -3578,18 +3605,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO360
+je ROTULO362
+jmp ROTULO363
+ROTULO362:
+mov ax, 65535
+jmp ROTULO364
+ROTULO363:
+xor ax, ax
+ROTULO364:
+cmp ax, 0
+jne ROTULO360
 jmp ROTULO361
 ROTULO360:
-mov ax, 65535
-jmp ROTULO362
-ROTULO361:
-xor ax, ax
-ROTULO362:
-cmp ax, 0
-jne ROTULO358
-jmp ROTULO359
-ROTULO358:
 ;     ---=== System.Threading.hcb:143:17 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Threading.hcb:143:28 ===---
@@ -3626,13 +3653,13 @@ add sp, 4
 push word [bp+-8+2]
 pop es
 mov di, [bp+-8]
-jmp ROTULO351
-ROTULO359:
+jmp ROTULO353
+ROTULO361:
 ;     ---=== System.Threading.hcb:140:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO352
-ROTULO354:
+jmp ROTULO354
+ROTULO356:
 ;     ---=== System.Threading.hcb:150:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Threading.hcb:150:27 ===---
@@ -3652,7 +3679,7 @@ mov ax, 151
 mov [bp+-10], ax
 mov ax, 9
 cs jmp word [_os_trycode]
-ROTULO351:
+ROTULO353:
 mov sp, bp
 pop bp
 FIM_multithreading_requestnew:
@@ -3682,18 +3709,18 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO366
+jae ROTULO368
+jmp ROTULO369
+ROTULO368:
+mov ax, 65535
+jmp ROTULO370
+ROTULO369:
+xor ax, ax
+ROTULO370:
+cmp ax, 0
+jne ROTULO366
 jmp ROTULO367
 ROTULO366:
-mov ax, 65535
-jmp ROTULO368
-ROTULO367:
-xor ax, ax
-ROTULO368:
-cmp ax, 0
-jne ROTULO364
-jmp ROTULO365
-ROTULO364:
 ;     ---=== System.Threading.hcb:158:32 ===---
 mov ax, _multithreading
 mov [bp+-8], ax
@@ -3701,7 +3728,7 @@ mov ax, 158
 mov [bp+-10], ax
 mov ax, 5
 cs jmp word [_os_trycode]
-ROTULO365:
+ROTULO367:
 ;     ---=== System.Threading.hcb:159:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Threading.hcb:159:15 ===---
@@ -3738,8 +3765,8 @@ mov [bp+-4], ax
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
-jmp ROTULO363
-ROTULO363:
+jmp ROTULO365
+ROTULO365:
 mov sp, bp
 pop bp
 FIM_multithreading_item:
@@ -3766,7 +3793,7 @@ mov word [bp+-12], 0
 ;     ---=== System.Threading.hcb:171:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
-ROTULO370:
+ROTULO372:
 ;     ---=== System.Threading.hcb:171:22 ===---
 ;     ---=== System.Threading.hcb:171:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -3777,18 +3804,18 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO373
+jbe ROTULO375
+jmp ROTULO376
+ROTULO375:
+mov ax, 65535
+jmp ROTULO377
+ROTULO376:
+xor ax, ax
+ROTULO377:
+cmp ax, 0
+jne ROTULO373
 jmp ROTULO374
 ROTULO373:
-mov ax, 65535
-jmp ROTULO375
-ROTULO374:
-xor ax, ax
-ROTULO375:
-cmp ax, 0
-jne ROTULO371
-jmp ROTULO372
-ROTULO371:
 ;     ---=== System.Threading.hcb:172:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Threading.hcb:172:19 ===---
@@ -3831,33 +3858,33 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
+jne ROTULO380
+jmp ROTULO381
+ROTULO380:
+mov ax, 65535
+jmp ROTULO382
+ROTULO381:
+xor ax, ax
+ROTULO382:
+cmp ax, 0
 jne ROTULO378
 jmp ROTULO379
 ROTULO378:
-mov ax, 65535
-jmp ROTULO380
-ROTULO379:
-xor ax, ax
-ROTULO380:
-cmp ax, 0
-jne ROTULO376
-jmp ROTULO377
-ROTULO376:
 ;     ---=== System.Threading.hcb:175:35 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-12]
-ROTULO377:
+ROTULO379:
 ;     ---=== System.Threading.hcb:171:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO370
-ROTULO372:
+jmp ROTULO372
+ROTULO374:
 ;     ---=== System.Threading.hcb:177:9 ===---
 ;     ---=== System.Threading.hcb:177:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-12]
-jmp ROTULO369
-ROTULO369:
+jmp ROTULO371
+ROTULO371:
 mov sp, bp
 pop bp
 FIM_multithreading_count:
@@ -3889,14 +3916,14 @@ mov [bp+-2], ax
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO382
-jmp ROTULO383
-ROTULO382:
+jne ROTULO384
+jmp ROTULO385
+ROTULO384:
 ;     ---=== System.Threading.hcb:186:24 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _multithreading_suspend
-ROTULO383:
+ROTULO385:
 ;     ---=== System.Threading.hcb:187:10 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
 ;     ---=== System.Threading.hcb:187:18 ===---
@@ -3989,15 +4016,15 @@ es pop word [di+18+2]
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO384
-jmp ROTULO385
-ROTULO384:
+jne ROTULO386
+jmp ROTULO387
+ROTULO386:
 ;     ---=== System.Threading.hcb:195:24 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _multithreading_resume
-ROTULO385:
-ROTULO381:
+ROTULO387:
+ROTULO383:
 mov sp, bp
 pop bp
 FIM_multithreading_startthread:
@@ -4008,8 +4035,8 @@ _multithreading_isactive:
 ;     ---=== System.Threading.hcb:200:16 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_multithreading_active]
-jmp ROTULO386
-ROTULO386:
+jmp ROTULO388
+ROTULO388:
 FIM_multithreading_isactive:
 retf
 ;     ---=== System.Threading.hcb:204:16 ===---
@@ -4017,7 +4044,7 @@ _multithreading_suspend:
 ;     ---=== System.Threading.hcb:205:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_multithreading_active], 0
-ROTULO387:
+ROTULO389:
 FIM_multithreading_suspend:
 retf
 ;     ---=== System.Threading.hcb:209:16 ===---
@@ -4025,7 +4052,7 @@ _multithreading_resume:
 ;     ---=== System.Threading.hcb:210:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_multithreading_active], 1
-ROTULO388:
+ROTULO390:
 FIM_multithreading_resume:
 retf
 ; MODULO FIM: multithreading
@@ -4097,7 +4124,7 @@ es mov [di+10], ax
 xor ax, ax
 es mov [di+2], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO389:
+ROTULO391:
 mov sp, bp
 pop bp
 FIM_list_initialize:
@@ -4133,22 +4160,22 @@ mov ax, 64
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO393
+jbe ROTULO395
+jmp ROTULO396
+ROTULO395:
+mov ax, 65535
+jmp ROTULO397
+ROTULO396:
+xor ax, ax
+ROTULO397:
+cmp ax, 0
+jne ROTULO393
 jmp ROTULO394
 ROTULO393:
-mov ax, 65535
-jmp ROTULO395
-ROTULO394:
-xor ax, ax
-ROTULO395:
-cmp ax, 0
-jne ROTULO391
-jmp ROTULO392
-ROTULO391:
 ;     ---=== System.Collections.hcb:33:34 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 15
-ROTULO392:
+ROTULO394:
 ;     ---=== System.Collections.hcb:34:9 ===---
 ;     ---=== System.Collections.hcb:34:23 ===---
 ;     ---=== System.Collections.hcb:34:12 ===---
@@ -4160,22 +4187,22 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO398
+jbe ROTULO400
+jmp ROTULO401
+ROTULO400:
+mov ax, 65535
+jmp ROTULO402
+ROTULO401:
+xor ax, ax
+ROTULO402:
+cmp ax, 0
+jne ROTULO398
 jmp ROTULO399
 ROTULO398:
-mov ax, 65535
-jmp ROTULO400
-ROTULO399:
-xor ax, ax
-ROTULO400:
-cmp ax, 0
-jne ROTULO396
-jmp ROTULO397
-ROTULO396:
 ;     ---=== System.Collections.hcb:34:35 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 7
-ROTULO397:
+ROTULO399:
 ;     ---=== System.Collections.hcb:35:9 ===---
 ;     ---=== System.Collections.hcb:35:23 ===---
 ;     ---=== System.Collections.hcb:35:12 ===---
@@ -4187,22 +4214,22 @@ mov ax, 512
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO403
+jbe ROTULO405
+jmp ROTULO406
+ROTULO405:
+mov ax, 65535
+jmp ROTULO407
+ROTULO406:
+xor ax, ax
+ROTULO407:
+cmp ax, 0
+jne ROTULO403
 jmp ROTULO404
 ROTULO403:
-mov ax, 65535
-jmp ROTULO405
-ROTULO404:
-xor ax, ax
-ROTULO405:
-cmp ax, 0
-jne ROTULO401
-jmp ROTULO402
-ROTULO401:
 ;     ---=== System.Collections.hcb:35:35 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 3
-ROTULO402:
+ROTULO404:
 ;     ---=== System.Collections.hcb:36:9 ===---
 ;     ---=== System.Collections.hcb:36:23 ===---
 ;     ---=== System.Collections.hcb:36:12 ===---
@@ -4214,22 +4241,22 @@ mov ax, 512
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO408
+ja ROTULO410
+jmp ROTULO411
+ROTULO410:
+mov ax, 65535
+jmp ROTULO412
+ROTULO411:
+xor ax, ax
+ROTULO412:
+cmp ax, 0
+jne ROTULO408
 jmp ROTULO409
 ROTULO408:
-mov ax, 65535
-jmp ROTULO410
-ROTULO409:
-xor ax, ax
-ROTULO410:
-cmp ax, 0
-jne ROTULO406
-jmp ROTULO407
-ROTULO406:
 ;     ---=== System.Collections.hcb:36:34 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO407:
+ROTULO409:
 ;     ---=== System.Collections.hcb:37:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:37:15 ===---
@@ -4322,8 +4349,8 @@ es pop word [di+0+2]
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
-jmp ROTULO390
-ROTULO390:
+jmp ROTULO392
+ROTULO392:
 mov sp, bp
 pop bp
 FIM_list_allocblock:
@@ -4404,7 +4431,7 @@ push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
 es mov [di+0], ax
-ROTULO411:
+ROTULO413:
 mov sp, bp
 pop bp
 FIM_list_setid:
@@ -4481,8 +4508,8 @@ push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
 es mov ax, [di+0]
-jmp ROTULO412
-ROTULO412:
+jmp ROTULO414
+ROTULO414:
 mov sp, bp
 pop bp
 FIM_list_getid:
@@ -4564,8 +4591,8 @@ mov [bp+-4], ax
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
-jmp ROTULO413
-ROTULO413:
+jmp ROTULO415
+ROTULO415:
 mov sp, bp
 pop bp
 FIM_list_getptr:
@@ -4583,8 +4610,8 @@ push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov ax, [di+2]
-jmp ROTULO414
-ROTULO414:
+jmp ROTULO416
+ROTULO416:
 mov sp, bp
 pop bp
 FIM_list_count:
@@ -4617,18 +4644,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO418
+je ROTULO420
+jmp ROTULO421
+ROTULO420:
+mov ax, 65535
+jmp ROTULO422
+ROTULO421:
+xor ax, ax
+ROTULO422:
+cmp ax, 0
+jne ROTULO418
 jmp ROTULO419
 ROTULO418:
-mov ax, 65535
-jmp ROTULO420
-ROTULO419:
-xor ax, ax
-ROTULO420:
-cmp ax, 0
-jne ROTULO416
-jmp ROTULO417
-ROTULO416:
 ;     ---=== System.Collections.hcb:76:31 ===---
 mov ax, _list
 mov [bp+-8], ax
@@ -4636,7 +4663,7 @@ mov ax, 76
 mov [bp+-10], ax
 mov ax, 5
 cs jmp word [_os_trycode]
-ROTULO417:
+ROTULO419:
 ;     ---=== System.Collections.hcb:77:9 ===---
 ;     ---=== System.Collections.hcb:77:15 ===---
 ;     ---=== System.Collections.hcb:77:12 ===---
@@ -4652,18 +4679,18 @@ es mov ax, [di+2]
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO423
+ja ROTULO425
+jmp ROTULO426
+ROTULO425:
+mov ax, 65535
+jmp ROTULO427
+ROTULO426:
+xor ax, ax
+ROTULO427:
+cmp ax, 0
+jne ROTULO423
 jmp ROTULO424
 ROTULO423:
-mov ax, 65535
-jmp ROTULO425
-ROTULO424:
-xor ax, ax
-ROTULO425:
-cmp ax, 0
-jne ROTULO421
-jmp ROTULO422
-ROTULO421:
 ;     ---=== System.Collections.hcb:77:36 ===---
 mov ax, _list
 mov [bp+-8], ax
@@ -4671,7 +4698,7 @@ mov ax, 77
 mov [bp+-10], ax
 mov ax, 5
 cs jmp word [_os_trycode]
-ROTULO422:
+ROTULO424:
 ;     ---=== System.Collections.hcb:78:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:78:15 ===---
@@ -4703,7 +4730,7 @@ mov word [bp+-8+2], ax
 ;     ---=== System.Collections.hcb:82:28 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
-ROTULO426:
+ROTULO428:
 ;     ---=== System.Collections.hcb:82:28 ===---
 ;     ---=== System.Collections.hcb:82:28 ===---
 ; ACAO LEITURA - Le variavel
@@ -4718,18 +4745,18 @@ es mov ax, [di+4]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO429
+jbe ROTULO431
+jmp ROTULO432
+ROTULO431:
+mov ax, 65535
+jmp ROTULO433
+ROTULO432:
+xor ax, ax
+ROTULO433:
+cmp ax, 0
+jne ROTULO429
 jmp ROTULO430
 ROTULO429:
-mov ax, 65535
-jmp ROTULO431
-ROTULO430:
-xor ax, ax
-ROTULO431:
-cmp ax, 0
-jne ROTULO427
-jmp ROTULO428
-ROTULO427:
 ;     ---=== System.Collections.hcb:83:13 ===---
 ;     ---=== System.Collections.hcb:83:35 ===---
 ;     ---=== System.Collections.hcb:83:16 ===---
@@ -4759,18 +4786,18 @@ mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO434
+je ROTULO436
+jmp ROTULO437
+ROTULO436:
+mov ax, 65535
+jmp ROTULO438
+ROTULO437:
+xor ax, ax
+ROTULO438:
+cmp ax, 0
+jne ROTULO434
 jmp ROTULO435
 ROTULO434:
-mov ax, 65535
-jmp ROTULO436
-ROTULO435:
-xor ax, ax
-ROTULO436:
-cmp ax, 0
-jne ROTULO432
-jmp ROTULO433
-ROTULO432:
 ;     ---=== System.Collections.hcb:84:17 ===---
 ;     ---=== System.Collections.hcb:84:24 ===---
 ; ACAO CHAMADA - Chama rotina
@@ -4795,13 +4822,13 @@ push di
 push cs
 call _list_getptr
 add sp, 10
-jmp ROTULO415
-ROTULO433:
+jmp ROTULO417
+ROTULO435:
 ;     ---=== System.Collections.hcb:82:28 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO426
-ROTULO428:
+jmp ROTULO428
+ROTULO430:
 ;     ---=== System.Collections.hcb:87:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:87:15 ===---
@@ -4827,18 +4854,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO439
+je ROTULO441
+jmp ROTULO442
+ROTULO441:
+mov ax, 65535
+jmp ROTULO443
+ROTULO442:
+xor ax, ax
+ROTULO443:
+cmp ax, 0
+jne ROTULO439
 jmp ROTULO440
 ROTULO439:
-mov ax, 65535
-jmp ROTULO441
-ROTULO440:
-xor ax, ax
-ROTULO441:
-cmp ax, 0
-jne ROTULO437
-jmp ROTULO438
-ROTULO437:
 ;     ---=== System.Collections.hcb:89:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:89:19 ===---
@@ -4868,10 +4895,10 @@ mov di, [bp+-8]
 es pop word [di+0]
 es pop word [di+0+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO438:
+ROTULO440:
 ;     ---=== System.Collections.hcb:92:14 ===---
 jmp list_find_in_block_item
-ROTULO415:
+ROTULO417:
 mov sp, bp
 pop bp
 FIM_list_item:
@@ -4891,7 +4918,7 @@ mov ax, 96
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO442:
+ROTULO444:
 mov sp, bp
 pop bp
 FIM_list_insert:
@@ -4911,7 +4938,7 @@ mov ax, 100
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO443:
+ROTULO445:
 mov sp, bp
 pop bp
 FIM_list_removeat:
@@ -4931,7 +4958,7 @@ mov ax, 104
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO444:
+ROTULO446:
 mov sp, bp
 pop bp
 FIM_list_remove:
@@ -4965,18 +4992,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO448
+je ROTULO450
+jmp ROTULO451
+ROTULO450:
+mov ax, 65535
+jmp ROTULO452
+ROTULO451:
+xor ax, ax
+ROTULO452:
+cmp ax, 0
+jne ROTULO448
 jmp ROTULO449
 ROTULO448:
-mov ax, 65535
-jmp ROTULO450
-ROTULO449:
-xor ax, ax
-ROTULO450:
-cmp ax, 0
-jne ROTULO446
-jmp ROTULO447
-ROTULO446:
 ;     ---=== System.Collections.hcb:112:13 ===---
 ;     ---=== System.Collections.hcb:112:27 ===---
 ;     ---=== System.Collections.hcb:112:16 ===---
@@ -4988,25 +5015,25 @@ mov ax, 64
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO453
+jb ROTULO455
+jmp ROTULO456
+ROTULO455:
+mov ax, 65535
+jmp ROTULO457
+ROTULO456:
+xor ax, ax
+ROTULO457:
+cmp ax, 0
+jne ROTULO453
 jmp ROTULO454
 ROTULO453:
-mov ax, 65535
-jmp ROTULO455
-ROTULO454:
-xor ax, ax
-ROTULO455:
-cmp ax, 0
-jne ROTULO451
-jmp ROTULO452
-ROTULO451:
 ;     ---=== System.Collections.hcb:112:37 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Collections.hcb:112:50 ===---
 mov ax, 5
 es mov [di+0], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO452:
+ROTULO454:
 ;     ---=== System.Collections.hcb:113:13 ===---
 ;     ---=== System.Collections.hcb:113:27 ===---
 ;     ---=== System.Collections.hcb:113:16 ===---
@@ -5018,25 +5045,25 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO458
+jb ROTULO460
+jmp ROTULO461
+ROTULO460:
+mov ax, 65535
+jmp ROTULO462
+ROTULO461:
+xor ax, ax
+ROTULO462:
+cmp ax, 0
+jne ROTULO458
 jmp ROTULO459
 ROTULO458:
-mov ax, 65535
-jmp ROTULO460
-ROTULO459:
-xor ax, ax
-ROTULO460:
-cmp ax, 0
-jne ROTULO456
-jmp ROTULO457
-ROTULO456:
 ;     ---=== System.Collections.hcb:113:38 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Collections.hcb:113:51 ===---
 mov ax, 4
 es mov [di+0], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO457:
+ROTULO459:
 ;     ---=== System.Collections.hcb:114:13 ===---
 ;     ---=== System.Collections.hcb:114:27 ===---
 ;     ---=== System.Collections.hcb:114:16 ===---
@@ -5048,25 +5075,25 @@ mov ax, 128
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO463
+jae ROTULO465
+jmp ROTULO466
+ROTULO465:
+mov ax, 65535
+jmp ROTULO467
+ROTULO466:
+xor ax, ax
+ROTULO467:
+cmp ax, 0
+jne ROTULO463
 jmp ROTULO464
 ROTULO463:
-mov ax, 65535
-jmp ROTULO465
-ROTULO464:
-xor ax, ax
-ROTULO465:
-cmp ax, 0
-jne ROTULO461
-jmp ROTULO462
-ROTULO461:
 ;     ---=== System.Collections.hcb:114:39 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Collections.hcb:114:52 ===---
 mov ax, 1
 es mov [di+0], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO462:
+ROTULO464:
 ;     ---=== System.Collections.hcb:115:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:115:19 ===---
@@ -5148,7 +5175,7 @@ add sp, 12
 ;     ---=== System.Collections.hcb:122:32 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 2
-ROTULO466:
+ROTULO468:
 ;     ---=== System.Collections.hcb:122:32 ===---
 ;     ---=== System.Collections.hcb:122:32 ===---
 ; ACAO LEITURA - Le variavel
@@ -5163,18 +5190,18 @@ es mov ax, [di+4]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO469
+jbe ROTULO471
+jmp ROTULO472
+ROTULO471:
+mov ax, 65535
+jmp ROTULO473
+ROTULO472:
+xor ax, ax
+ROTULO473:
+cmp ax, 0
+jne ROTULO469
 jmp ROTULO470
 ROTULO469:
-mov ax, 65535
-jmp ROTULO471
-ROTULO470:
-xor ax, ax
-ROTULO471:
-cmp ax, 0
-jne ROTULO467
-jmp ROTULO468
-ROTULO467:
 ;     ---=== System.Collections.hcb:123:17 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Collections.hcb:123:36 ===---
@@ -5201,8 +5228,8 @@ add sp, 12
 ;     ---=== System.Collections.hcb:122:32 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO466
-ROTULO468:
+jmp ROTULO468
+ROTULO470:
 ;     ---=== System.Collections.hcb:125:13 ===---
 ;     ---=== System.Collections.hcb:125:20 ===---
 ; ACAO CHAMADA - Chama rotina
@@ -5226,9 +5253,9 @@ push di
 push cs
 call _list_getptr
 add sp, 10
-jmp ROTULO445
-jmp ROTULO472
-ROTULO447:
+jmp ROTULO447
+jmp ROTULO474
+ROTULO449:
 ;     ---=== System.Collections.hcb:127:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:127:19 ===---
@@ -5263,7 +5290,7 @@ mov word [bp+-8+2], ax
 ;     ---=== System.Collections.hcb:131:32 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
-ROTULO473:
+ROTULO475:
 ;     ---=== System.Collections.hcb:131:32 ===---
 ;     ---=== System.Collections.hcb:131:32 ===---
 ; ACAO LEITURA - Le variavel
@@ -5278,18 +5305,18 @@ es mov ax, [di+4]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO476
+jbe ROTULO478
+jmp ROTULO479
+ROTULO478:
+mov ax, 65535
+jmp ROTULO480
+ROTULO479:
+xor ax, ax
+ROTULO480:
+cmp ax, 0
+jne ROTULO476
 jmp ROTULO477
 ROTULO476:
-mov ax, 65535
-jmp ROTULO478
-ROTULO477:
-xor ax, ax
-ROTULO478:
-cmp ax, 0
-jne ROTULO474
-jmp ROTULO475
-ROTULO474:
 ;     ---=== System.Collections.hcb:132:17 ===---
 ;     ---=== System.Collections.hcb:132:39 ===---
 ;     ---=== System.Collections.hcb:132:20 ===---
@@ -5318,18 +5345,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO481
+je ROTULO483
+jmp ROTULO484
+ROTULO483:
+mov ax, 65535
+jmp ROTULO485
+ROTULO484:
+xor ax, ax
+ROTULO485:
+cmp ax, 0
+jne ROTULO481
 jmp ROTULO482
 ROTULO481:
-mov ax, 65535
-jmp ROTULO483
-ROTULO482:
-xor ax, ax
-ROTULO483:
-cmp ax, 0
-jne ROTULO479
-jmp ROTULO480
-ROTULO479:
 ;     ---=== System.Collections.hcb:133:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== System.Collections.hcb:133:41 ===---
@@ -5397,13 +5424,13 @@ push di
 push cs
 call _list_getptr
 add sp, 10
-jmp ROTULO445
-ROTULO480:
+jmp ROTULO447
+ROTULO482:
 ;     ---=== System.Collections.hcb:131:32 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO473
-ROTULO475:
+jmp ROTULO475
+ROTULO477:
 ;     ---=== System.Collections.hcb:138:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:138:19 ===---
@@ -5429,18 +5456,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO486
+je ROTULO488
+jmp ROTULO489
+ROTULO488:
+mov ax, 65535
+jmp ROTULO490
+ROTULO489:
+xor ax, ax
+ROTULO490:
+cmp ax, 0
+jne ROTULO486
 jmp ROTULO487
 ROTULO486:
-mov ax, 65535
-jmp ROTULO488
-ROTULO487:
-xor ax, ax
-ROTULO488:
-cmp ax, 0
-jne ROTULO484
-jmp ROTULO485
-ROTULO484:
 ;     ---=== System.Collections.hcb:140:17 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Collections.hcb:140:23 ===---
@@ -5470,11 +5497,11 @@ mov di, [bp+-8]
 es pop word [di+0]
 es pop word [di+0+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO485:
+ROTULO487:
 ;     ---=== System.Collections.hcb:143:18 ===---
 jmp list_find_in_block_add
-ROTULO472:
-ROTULO445:
+ROTULO474:
+ROTULO447:
 mov sp, bp
 pop bp
 FIM_list_add:
@@ -5529,7 +5556,7 @@ push di
 push cs
 call _semaphore_initialize
 add sp, 6
-ROTULO489:
+ROTULO491:
 FIM_memory_initialize:
 retf
 ;     ---=== System.Memory.hcb:115:21 ===---
@@ -5567,7 +5594,7 @@ push ax
 ;     ---=== System.Memory.hcb:124:25 ===---
 mov ax, 64
 cmp ax, 0
-jne ROTULO491
+jne ROTULO493
 ;     ---=== System.Memory.hcb:124:25 ===---
 mov ax, _memory
 mov [bp+-8], ax
@@ -5575,7 +5602,7 @@ mov ax, 124
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO491:
+ROTULO493:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -5590,7 +5617,7 @@ push ax
 ;     ---=== System.Memory.hcb:125:21 ===---
 mov ax, 64
 cmp ax, 0
-jne ROTULO494
+jne ROTULO496
 ;     ---=== System.Memory.hcb:125:21 ===---
 mov ax, _memory
 mov [bp+-8], ax
@@ -5598,20 +5625,20 @@ mov ax, 125
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO494:
+ROTULO496:
 mov bx, ax
 pop ax
 xor dx, dx
 div bx
 mov ax, dx
 cmp ax, 0
-jne ROTULO492
-jmp ROTULO493
-ROTULO492:
+jne ROTULO494
+jmp ROTULO495
+ROTULO494:
 ;     ---=== System.Memory.hcb:125:29 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-ROTULO493:
+ROTULO495:
 ;     ---=== System.Memory.hcb:126:9 ===---
 ;     ---=== System.Memory.hcb:126:19 ===---
 ;     ---=== System.Memory.hcb:126:12 ===---
@@ -5623,18 +5650,18 @@ mov ax, 10
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO497
+ja ROTULO499
+jmp ROTULO500
+ROTULO499:
+mov ax, 65535
+jmp ROTULO501
+ROTULO500:
+xor ax, ax
+ROTULO501:
+cmp ax, 0
+jne ROTULO497
 jmp ROTULO498
 ROTULO497:
-mov ax, 65535
-jmp ROTULO499
-ROTULO498:
-xor ax, ax
-ROTULO499:
-cmp ax, 0
-jne ROTULO495
-jmp ROTULO496
-ROTULO495:
 ;     ---=== System.Memory.hcb:127:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.Memory.hcb:127:34 ===---
@@ -5649,7 +5676,7 @@ push ax
 ;     ---=== System.Memory.hcb:127:28 ===---
 mov ax, 1024
 cmp ax, 0
-jne ROTULO500
+jne ROTULO502
 ;     ---=== System.Memory.hcb:127:28 ===---
 mov ax, _memory
 mov [bp+-8], ax
@@ -5657,7 +5684,7 @@ mov ax, 127
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO500:
+ROTULO502:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -5674,7 +5701,7 @@ push ax
 ;     ---=== System.Memory.hcb:128:25 ===---
 mov ax, 1024
 cmp ax, 0
-jne ROTULO503
+jne ROTULO505
 ;     ---=== System.Memory.hcb:128:25 ===---
 mov ax, _memory
 mov [bp+-8], ax
@@ -5682,20 +5709,20 @@ mov ax, 128
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO503:
+ROTULO505:
 mov bx, ax
 pop ax
 xor dx, dx
 div bx
 mov ax, dx
 cmp ax, 0
-jne ROTULO501
-jmp ROTULO502
-ROTULO501:
+jne ROTULO503
+jmp ROTULO504
+ROTULO503:
 ;     ---=== System.Memory.hcb:128:35 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
-ROTULO502:
+ROTULO504:
 ;     ---=== System.Memory.hcb:129:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Memory.hcb:129:19 ===---
@@ -5729,8 +5756,8 @@ mov word [bp+-12], 16
 push word [bp+-12+2]
 pop es
 mov di, [bp+-12]
-jmp ROTULO490
-ROTULO496:
+jmp ROTULO492
+ROTULO498:
 ;     ---=== System.Memory.hcb:134:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:134:27 ===---
@@ -5760,13 +5787,13 @@ push es
 pop word [bp+-16+2]
 mov [bp+-16], di
 ;     ---=== System.Memory.hcb:138:9 ===---
-ROTULO504:
+ROTULO506:
 ;     ---=== System.Memory.hcb:138:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO505
-jmp ROTULO506
-ROTULO505:
+jne ROTULO507
+jmp ROTULO508
+ROTULO507:
 ;     ---=== System.Memory.hcb:139:14 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-16], 4
@@ -5774,7 +5801,7 @@ mov word [bp+-16], 4
 ;     ---=== System.Memory.hcb:140:26 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
-ROTULO507:
+ROTULO509:
 ;     ---=== System.Memory.hcb:140:26 ===---
 ;     ---=== System.Memory.hcb:140:26 ===---
 ; ACAO LEITURA - Le variavel
@@ -5785,26 +5812,26 @@ mov ax, 15
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO510
+jbe ROTULO512
+jmp ROTULO513
+ROTULO512:
+mov ax, 65535
+jmp ROTULO514
+ROTULO513:
+xor ax, ax
+ROTULO514:
+cmp ax, 0
+jne ROTULO510
 jmp ROTULO511
 ROTULO510:
-mov ax, 65535
-jmp ROTULO512
-ROTULO511:
-xor ax, ax
-ROTULO512:
-cmp ax, 0
-jne ROTULO508
-jmp ROTULO509
-ROTULO508:
 ;     ---=== System.Memory.hcb:141:17 ===---
 ;     ---=== System.Memory.hcb:141:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 cmp ax, 0
-jne ROTULO513
-jmp ROTULO514
-ROTULO513:
+jne ROTULO515
+jmp ROTULO516
+ROTULO515:
 ;     ---=== System.Memory.hcb:142:21 ===---
 ;     ---=== System.Memory.hcb:142:30 ===---
 ;     ---=== System.Memory.hcb:142:24 ===---
@@ -5819,29 +5846,29 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO517
+je ROTULO519
+jmp ROTULO520
+ROTULO519:
+mov ax, 65535
+jmp ROTULO521
+ROTULO520:
+xor ax, ax
+ROTULO521:
+cmp ax, 0
+jne ROTULO517
 jmp ROTULO518
 ROTULO517:
-mov ax, 65535
-jmp ROTULO519
-ROTULO518:
-xor ax, ax
-ROTULO519:
-cmp ax, 0
-jne ROTULO515
-jmp ROTULO516
-ROTULO515:
 ;     ---=== System.Memory.hcb:143:25 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-18]
-jmp ROTULO520
-ROTULO516:
+jmp ROTULO522
+ROTULO518:
 ;     ---=== System.Memory.hcb:145:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 0
-ROTULO520:
-jmp ROTULO521
-ROTULO514:
+ROTULO522:
+jmp ROTULO523
+ROTULO516:
 ;     ---=== System.Memory.hcb:148:21 ===---
 ;     ---=== System.Memory.hcb:148:30 ===---
 ;     ---=== System.Memory.hcb:148:24 ===---
@@ -5856,18 +5883,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO524
+je ROTULO526
+jmp ROTULO527
+ROTULO526:
+mov ax, 65535
+jmp ROTULO528
+ROTULO527:
+xor ax, ax
+ROTULO528:
+cmp ax, 0
+jne ROTULO524
 jmp ROTULO525
 ROTULO524:
-mov ax, 65535
-jmp ROTULO526
-ROTULO525:
-xor ax, ax
-ROTULO526:
-cmp ax, 0
-jne ROTULO522
-jmp ROTULO523
-ROTULO522:
 ;     ---=== System.Memory.hcb:149:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-18], 1
@@ -5886,8 +5913,8 @@ mov [bp+-6], ax
 ;     ---=== System.Memory.hcb:151:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 1
+ROTULO525:
 ROTULO523:
-ROTULO521:
 ;     ---=== System.Memory.hcb:154:17 ===---
 ;     ---=== System.Memory.hcb:154:24 ===---
 ;     ---=== System.Memory.hcb:154:20 ===---
@@ -5900,18 +5927,18 @@ mov ax, [bp+-2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO529
+jae ROTULO531
+jmp ROTULO532
+ROTULO531:
+mov ax, 65535
+jmp ROTULO533
+ROTULO532:
+xor ax, ax
+ROTULO533:
+cmp ax, 0
+jne ROTULO529
 jmp ROTULO530
 ROTULO529:
-mov ax, 65535
-jmp ROTULO531
-ROTULO530:
-xor ax, ax
-ROTULO531:
-cmp ax, 0
-jne ROTULO527
-jmp ROTULO528
-ROTULO527:
 ;     ---=== System.Memory.hcb:155:22 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
 ;     ---=== System.Memory.hcb:155:29 ===---
@@ -5977,7 +6004,7 @@ mov [bp+-16], ax
 ;     ---=== System.Memory.hcb:159:34 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
-ROTULO532:
+ROTULO534:
 ;     ---=== System.Memory.hcb:159:34 ===---
 ;     ---=== System.Memory.hcb:159:34 ===---
 ; ACAO LEITURA - Le variavel
@@ -5989,18 +6016,18 @@ mov ax, [bp+-2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO535
+jbe ROTULO537
+jmp ROTULO538
+ROTULO537:
+mov ax, 65535
+jmp ROTULO539
+ROTULO538:
+xor ax, ax
+ROTULO539:
+cmp ax, 0
+jne ROTULO535
 jmp ROTULO536
 ROTULO535:
-mov ax, 65535
-jmp ROTULO537
-ROTULO536:
-xor ax, ax
-ROTULO537:
-cmp ax, 0
-jne ROTULO533
-jmp ROTULO534
-ROTULO533:
 ;     ---=== System.Memory.hcb:160:25 ===---
 ;     ---=== System.Memory.hcb:160:30 ===---
 ;     ---=== System.Memory.hcb:160:28 ===---
@@ -6012,33 +6039,33 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO540
+je ROTULO542
+jmp ROTULO543
+ROTULO542:
+mov ax, 65535
+jmp ROTULO544
+ROTULO543:
+xor ax, ax
+ROTULO544:
+cmp ax, 0
+jne ROTULO540
 jmp ROTULO541
 ROTULO540:
-mov ax, 65535
-jmp ROTULO542
-ROTULO541:
-xor ax, ax
-ROTULO542:
-cmp ax, 0
-jne ROTULO538
-jmp ROTULO539
-ROTULO538:
 ;     ---=== System.Memory.hcb:161:29 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov word [di+0], 1
-jmp ROTULO543
-ROTULO539:
+jmp ROTULO545
+ROTULO541:
 ;     ---=== System.Memory.hcb:163:29 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov word [di+0], 2
-ROTULO543:
+ROTULO545:
 ;     ---=== System.Memory.hcb:165:26 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
@@ -6048,8 +6075,8 @@ inc word [bp+-16]
 ;     ---=== System.Memory.hcb:159:34 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
-jmp ROTULO532
-ROTULO534:
+jmp ROTULO534
+ROTULO536:
 ;     ---=== System.Memory.hcb:168:21 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:168:39 ===---
@@ -6068,8 +6095,8 @@ add sp, 4
 push word [bp+-12+2]
 pop es
 mov di, [bp+-12]
-jmp ROTULO490
-ROTULO528:
+jmp ROTULO492
+ROTULO530:
 ;     ---=== System.Memory.hcb:171:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
@@ -6079,8 +6106,8 @@ inc word [bp+-16]
 ;     ---=== System.Memory.hcb:140:26 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
-jmp ROTULO507
-ROTULO509:
+jmp ROTULO509
+ROTULO511:
 ;     ---=== System.Memory.hcb:174:14 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-16], 2
@@ -6098,18 +6125,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO546
+je ROTULO548
+jmp ROTULO549
+ROTULO548:
+mov ax, 65535
+jmp ROTULO550
+ROTULO549:
+xor ax, ax
+ROTULO550:
+cmp ax, 0
+jne ROTULO546
 jmp ROTULO547
 ROTULO546:
-mov ax, 65535
-jmp ROTULO548
-ROTULO547:
-xor ax, ax
-ROTULO548:
-cmp ax, 0
-jne ROTULO544
-jmp ROTULO545
-ROTULO544:
 ;     ---=== System.Memory.hcb:176:17 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Memory.hcb:176:23 ===---
@@ -6139,8 +6166,8 @@ push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov [di+0], ax
-jmp ROTULO549
-ROTULO545:
+jmp ROTULO551
+ROTULO547:
 ;     ---=== System.Memory.hcb:179:18 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
 ;     ---=== System.Memory.hcb:179:26 ===---
@@ -6150,9 +6177,9 @@ pop es
 mov di, [bp+-16]
 es mov ax, [di+0]
 mov word [bp+-16+2], ax
-ROTULO549:
-jmp ROTULO504
-ROTULO506:
+ROTULO551:
+jmp ROTULO506
+ROTULO508:
 ;     ---=== System.Memory.hcb:182:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:182:27 ===---
@@ -6165,7 +6192,7 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-ROTULO490:
+ROTULO492:
 mov sp, bp
 pop bp
 FIM_memory_alloc:
@@ -6194,7 +6221,7 @@ mov ax, [bp+10]
 mov cx, [bp+12]
 ;     ---=== System.Memory.hcb:193:13 ===---
 rep stosb
-ROTULO550:
+ROTULO552:
 mov sp, bp
 pop bp
 FIM_memory_setbytes:
@@ -6223,7 +6250,7 @@ mov ax, [bp+10]
 mov cx, [bp+12]
 ;     ---=== System.Memory.hcb:203:13 ===---
 rep stosw
-ROTULO551:
+ROTULO553:
 mov sp, bp
 pop bp
 FIM_memory_setwords:
@@ -6264,7 +6291,7 @@ rep movsb
 pop si
 ;     ---=== System.Memory.hcb:219:13 ===---
 pop ds
-ROTULO552:
+ROTULO554:
 mov sp, bp
 pop bp
 FIM_memory_copy:
@@ -6341,7 +6368,7 @@ mov [bp+-2], ax
 ;     ---=== System.Memory.hcb:20:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
-ROTULO554:
+ROTULO556:
 ;     ---=== System.Memory.hcb:20:22 ===---
 ;     ---=== System.Memory.hcb:20:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -6353,18 +6380,18 @@ cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO557
+jbe ROTULO559
+jmp ROTULO560
+ROTULO559:
+mov ax, 65535
+jmp ROTULO561
+ROTULO560:
+xor ax, ax
+ROTULO561:
+cmp ax, 0
+jne ROTULO557
 jmp ROTULO558
 ROTULO557:
-mov ax, 65535
-jmp ROTULO559
-ROTULO558:
-xor ax, ax
-ROTULO559:
-cmp ax, 0
-jne ROTULO555
-jmp ROTULO556
-ROTULO555:
 ;     ---=== System.Memory.hcb:21:13 ===---
 ;     ---=== System.Memory.hcb:21:18 ===---
 ;     ---=== System.Memory.hcb:21:16 ===---
@@ -6377,41 +6404,41 @@ mov ax, [bp+-2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO562
+jb ROTULO564
+jmp ROTULO565
+ROTULO564:
+mov ax, 65535
+jmp ROTULO566
+ROTULO565:
+xor ax, ax
+ROTULO566:
+cmp ax, 0
+jne ROTULO562
 jmp ROTULO563
 ROTULO562:
-mov ax, 65535
-jmp ROTULO564
-ROTULO563:
-xor ax, ax
-ROTULO564:
-cmp ax, 0
-jne ROTULO560
-jmp ROTULO561
-ROTULO560:
 ;     ---=== System.Memory.hcb:21:33 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
 cs mov di, [_globalmemory_mapptr]
 es mov byte [di+0], 129
-jmp ROTULO565
-ROTULO561:
+jmp ROTULO567
+ROTULO563:
 ;     ---=== System.Memory.hcb:21:51 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
 cs mov di, [_globalmemory_mapptr]
 es mov byte [di+0], 0
-ROTULO565:
+ROTULO567:
 ;     ---=== System.Memory.hcb:22:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
 ;     ---=== System.Memory.hcb:20:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
-jmp ROTULO554
-ROTULO556:
+jmp ROTULO556
+ROTULO558:
 ;     ---=== System.Memory.hcb:24:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:24:37 ===---
@@ -6427,7 +6454,7 @@ push di
 push cs
 call _semaphore_initialize
 add sp, 6
-ROTULO553:
+ROTULO555:
 mov sp, bp
 pop bp
 FIM_globalmemory_initialize:
@@ -6473,18 +6500,18 @@ mov ax, 127
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO569
+ja ROTULO571
+jmp ROTULO572
+ROTULO571:
+mov ax, 65535
+jmp ROTULO573
+ROTULO572:
+xor ax, ax
+ROTULO573:
+cmp ax, 0
+jne ROTULO569
 jmp ROTULO570
 ROTULO569:
-mov ax, 65535
-jmp ROTULO571
-ROTULO570:
-xor ax, ax
-ROTULO571:
-cmp ax, 0
-jne ROTULO567
-jmp ROTULO568
-ROTULO567:
 ;     ---=== System.Memory.hcb:35:34 ===---
 mov ax, _globalmemory
 mov [bp+-8], ax
@@ -6492,7 +6519,7 @@ mov ax, 35
 mov [bp+-10], ax
 mov ax, 4
 cs jmp word [_os_trycode]
-ROTULO568:
+ROTULO570:
 ;     ---=== System.Memory.hcb:36:9 ===---
 ;     ---=== System.Memory.hcb:36:20 ===---
 ;     ---=== System.Memory.hcb:36:12 ===---
@@ -6504,18 +6531,18 @@ mov ax, 64
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO574
+ja ROTULO576
+jmp ROTULO577
+ROTULO576:
+mov ax, 65535
+jmp ROTULO578
+ROTULO577:
+xor ax, ax
+ROTULO578:
+cmp ax, 0
+jne ROTULO574
 jmp ROTULO575
 ROTULO574:
-mov ax, 65535
-jmp ROTULO576
-ROTULO575:
-xor ax, ax
-ROTULO576:
-cmp ax, 0
-jne ROTULO572
-jmp ROTULO573
-ROTULO572:
 ;     ---=== System.Memory.hcb:36:36 ===---
 mov ax, _globalmemory
 mov [bp+-8], ax
@@ -6523,7 +6550,7 @@ mov ax, 36
 mov [bp+-10], ax
 mov ax, 12
 cs jmp word [_os_trycode]
-ROTULO573:
+ROTULO575:
 ;     ---=== System.Memory.hcb:37:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
@@ -6549,7 +6576,7 @@ mov word [bp+-10], 0
 ;     ---=== System.Memory.hcb:41:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
-ROTULO577:
+ROTULO579:
 ;     ---=== System.Memory.hcb:41:22 ===---
 ;     ---=== System.Memory.hcb:41:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -6561,26 +6588,26 @@ cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO580
+jbe ROTULO582
+jmp ROTULO583
+ROTULO582:
+mov ax, 65535
+jmp ROTULO584
+ROTULO583:
+xor ax, ax
+ROTULO584:
+cmp ax, 0
+jne ROTULO580
 jmp ROTULO581
 ROTULO580:
-mov ax, 65535
-jmp ROTULO582
-ROTULO581:
-xor ax, ax
-ROTULO582:
-cmp ax, 0
-jne ROTULO578
-jmp ROTULO579
-ROTULO578:
 ;     ---=== System.Memory.hcb:42:13 ===---
 ;     ---=== System.Memory.hcb:42:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-12]
 cmp ax, 0
-jne ROTULO583
-jmp ROTULO584
-ROTULO583:
+jne ROTULO585
+jmp ROTULO586
+ROTULO585:
 ;     ---=== System.Memory.hcb:43:17 ===---
 ;     ---=== System.Memory.hcb:43:27 ===---
 ;     ---=== System.Memory.hcb:43:20 ===---
@@ -6596,29 +6623,29 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO587
+je ROTULO589
+jmp ROTULO590
+ROTULO589:
+mov ax, 65535
+jmp ROTULO591
+ROTULO590:
+xor ax, ax
+ROTULO591:
+cmp ax, 0
+jne ROTULO587
 jmp ROTULO588
 ROTULO587:
-mov ax, 65535
-jmp ROTULO589
-ROTULO588:
-xor ax, ax
-ROTULO589:
-cmp ax, 0
-jne ROTULO585
-jmp ROTULO586
-ROTULO585:
 ;     ---=== System.Memory.hcb:44:21 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
-jmp ROTULO590
-ROTULO586:
+jmp ROTULO592
+ROTULO588:
 ;     ---=== System.Memory.hcb:46:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
-ROTULO590:
-jmp ROTULO591
-ROTULO584:
+ROTULO592:
+jmp ROTULO593
+ROTULO586:
 ;     ---=== System.Memory.hcb:49:17 ===---
 ;     ---=== System.Memory.hcb:49:27 ===---
 ;     ---=== System.Memory.hcb:49:20 ===---
@@ -6634,18 +6661,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO594
+je ROTULO596
+jmp ROTULO597
+ROTULO596:
+mov ax, 65535
+jmp ROTULO598
+ROTULO597:
+xor ax, ax
+ROTULO598:
+cmp ax, 0
+jne ROTULO594
 jmp ROTULO595
 ROTULO594:
-mov ax, 65535
-jmp ROTULO596
-ROTULO595:
-xor ax, ax
-ROTULO596:
-cmp ax, 0
-jne ROTULO592
-jmp ROTULO593
-ROTULO592:
 ;     ---=== System.Memory.hcb:50:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
@@ -6664,8 +6691,8 @@ mov [bp+-8], ax
 ;     ---=== System.Memory.hcb:52:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 1
+ROTULO595:
 ROTULO593:
-ROTULO591:
 ;     ---=== System.Memory.hcb:55:13 ===---
 ;     ---=== System.Memory.hcb:55:20 ===---
 ;     ---=== System.Memory.hcb:55:16 ===---
@@ -6678,18 +6705,18 @@ mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO599
+jae ROTULO601
+jmp ROTULO602
+ROTULO601:
+mov ax, 65535
+jmp ROTULO603
+ROTULO602:
+xor ax, ax
+ROTULO603:
+cmp ax, 0
+jne ROTULO599
 jmp ROTULO600
 ROTULO599:
-mov ax, 65535
-jmp ROTULO601
-ROTULO600:
-xor ax, ax
-ROTULO601:
-cmp ax, 0
-jne ROTULO597
-jmp ROTULO598
-ROTULO597:
 ;     ---=== System.Memory.hcb:56:18 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
 ;     ---=== System.Memory.hcb:56:30 ===---
@@ -6744,7 +6771,7 @@ cs mov [_globalmemory_mapptr], ax
 ;     ---=== System.Memory.hcb:59:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
-ROTULO602:
+ROTULO604:
 ;     ---=== System.Memory.hcb:59:30 ===---
 ;     ---=== System.Memory.hcb:59:30 ===---
 ; ACAO LEITURA - Le variavel
@@ -6756,18 +6783,18 @@ mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO605
+jbe ROTULO607
+jmp ROTULO608
+ROTULO607:
+mov ax, 65535
+jmp ROTULO609
+ROTULO608:
+xor ax, ax
+ROTULO609:
+cmp ax, 0
+jne ROTULO605
 jmp ROTULO606
 ROTULO605:
-mov ax, 65535
-jmp ROTULO607
-ROTULO606:
-xor ax, ax
-ROTULO607:
-cmp ax, 0
-jne ROTULO603
-jmp ROTULO604
-ROTULO603:
 ;     ---=== System.Memory.hcb:60:21 ===---
 ;     ---=== System.Memory.hcb:60:26 ===---
 ;     ---=== System.Memory.hcb:60:24 ===---
@@ -6779,18 +6806,18 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO610
+je ROTULO612
+jmp ROTULO613
+ROTULO612:
+mov ax, 65535
+jmp ROTULO614
+ROTULO613:
+xor ax, ax
+ROTULO614:
+cmp ax, 0
+jne ROTULO610
 jmp ROTULO611
 ROTULO610:
-mov ax, 65535
-jmp ROTULO612
-ROTULO611:
-xor ax, ax
-ROTULO612:
-cmp ax, 0
-jne ROTULO608
-jmp ROTULO609
-ROTULO608:
 ;     ---=== System.Memory.hcb:61:25 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Memory.hcb:61:39 ===---
@@ -6810,8 +6837,8 @@ cs push word [_globalmemory_mapptr+2]
 pop es
 cs mov di, [_globalmemory_mapptr]
 es mov [di+0], al
-jmp ROTULO616
-ROTULO609:
+jmp ROTULO618
+ROTULO611:
 ;     ---=== System.Memory.hcb:63:25 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.Memory.hcb:63:34 ===---
@@ -6824,15 +6851,15 @@ cs push word [_globalmemory_mapptr+2]
 pop es
 cs mov di, [_globalmemory_mapptr]
 es mov [di+0], al
-ROTULO616:
+ROTULO618:
 ;     ---=== System.Memory.hcb:65:22 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
 ;     ---=== System.Memory.hcb:59:30 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-6]
-jmp ROTULO602
-ROTULO604:
+jmp ROTULO604
+ROTULO606:
 ;     ---=== System.Memory.hcb:67:17 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:67:35 ===---
@@ -6851,16 +6878,16 @@ add sp, 4
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
-jmp ROTULO566
-ROTULO598:
+jmp ROTULO568
+ROTULO600:
 ;     ---=== System.Memory.hcb:70:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
 ;     ---=== System.Memory.hcb:41:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-6]
-jmp ROTULO577
-ROTULO579:
+jmp ROTULO579
+ROTULO581:
 ;     ---=== System.Memory.hcb:72:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:72:27 ===---
@@ -6880,7 +6907,7 @@ mov ax, 73
 mov [bp+-10], ax
 mov ax, 3
 cs jmp word [_os_trycode]
-ROTULO566:
+ROTULO568:
 mov sp, bp
 pop bp
 FIM_globalmemory_allockib:
@@ -6918,7 +6945,7 @@ cs mov word [_globalmemory_mapptr], 0
 ;     ---=== System.Memory.hcb:82:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 0
-ROTULO618:
+ROTULO620:
 ;     ---=== System.Memory.hcb:82:22 ===---
 ;     ---=== System.Memory.hcb:82:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -6930,18 +6957,18 @@ cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO621
+jbe ROTULO623
+jmp ROTULO624
+ROTULO623:
+mov ax, 65535
+jmp ROTULO625
+ROTULO624:
+xor ax, ax
+ROTULO625:
+cmp ax, 0
+jne ROTULO621
 jmp ROTULO622
 ROTULO621:
-mov ax, 65535
-jmp ROTULO623
-ROTULO622:
-xor ax, ax
-ROTULO623:
-cmp ax, 0
-jne ROTULO619
-jmp ROTULO620
-ROTULO619:
 ;     ---=== System.Memory.hcb:83:13 ===---
 ;     ---=== System.Memory.hcb:83:23 ===---
 ;     ---=== System.Memory.hcb:83:16 ===---
@@ -6957,30 +6984,30 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO626
+je ROTULO628
+jmp ROTULO629
+ROTULO628:
+mov ax, 65535
+jmp ROTULO630
+ROTULO629:
+xor ax, ax
+ROTULO630:
+cmp ax, 0
+jne ROTULO626
 jmp ROTULO627
 ROTULO626:
-mov ax, 65535
-jmp ROTULO628
-ROTULO627:
-xor ax, ax
-ROTULO628:
-cmp ax, 0
-jne ROTULO624
-jmp ROTULO625
-ROTULO624:
 ;     ---=== System.Memory.hcb:83:33 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-ROTULO625:
+ROTULO627:
 ;     ---=== System.Memory.hcb:84:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
 ;     ---=== System.Memory.hcb:82:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
-jmp ROTULO618
-ROTULO620:
+jmp ROTULO620
+ROTULO622:
 ;     ---=== System.Memory.hcb:86:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:86:27 ===---
@@ -6997,8 +7024,8 @@ add sp, 4
 ;     ---=== System.Memory.hcb:87:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
-jmp ROTULO617
-ROTULO617:
+jmp ROTULO619
+ROTULO619:
 mov sp, bp
 pop bp
 FIM_globalmemory_getavailkib:
@@ -7036,7 +7063,7 @@ cs mov word [_globalmemory_mapptr], 0
 ;     ---=== System.Memory.hcb:96:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 0
-ROTULO630:
+ROTULO632:
 ;     ---=== System.Memory.hcb:96:22 ===---
 ;     ---=== System.Memory.hcb:96:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -7048,18 +7075,18 @@ cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO633
+jbe ROTULO635
+jmp ROTULO636
+ROTULO635:
+mov ax, 65535
+jmp ROTULO637
+ROTULO636:
+xor ax, ax
+ROTULO637:
+cmp ax, 0
+jne ROTULO633
 jmp ROTULO634
 ROTULO633:
-mov ax, 65535
-jmp ROTULO635
-ROTULO634:
-xor ax, ax
-ROTULO635:
-cmp ax, 0
-jne ROTULO631
-jmp ROTULO632
-ROTULO631:
 ;     ---=== System.Memory.hcb:97:13 ===---
 ;     ---=== System.Memory.hcb:97:23 ===---
 ;     ---=== System.Memory.hcb:97:16 ===---
@@ -7075,30 +7102,30 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
+jne ROTULO640
+jmp ROTULO641
+ROTULO640:
+mov ax, 65535
+jmp ROTULO642
+ROTULO641:
+xor ax, ax
+ROTULO642:
+cmp ax, 0
 jne ROTULO638
 jmp ROTULO639
 ROTULO638:
-mov ax, 65535
-jmp ROTULO640
-ROTULO639:
-xor ax, ax
-ROTULO640:
-cmp ax, 0
-jne ROTULO636
-jmp ROTULO637
-ROTULO636:
 ;     ---=== System.Memory.hcb:97:33 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-ROTULO637:
+ROTULO639:
 ;     ---=== System.Memory.hcb:98:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
 ;     ---=== System.Memory.hcb:96:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
-jmp ROTULO630
-ROTULO632:
+jmp ROTULO632
+ROTULO634:
 ;     ---=== System.Memory.hcb:100:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.Memory.hcb:100:27 ===---
@@ -7115,8 +7142,8 @@ add sp, 4
 ;     ---=== System.Memory.hcb:101:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
-jmp ROTULO629
-ROTULO629:
+jmp ROTULO631
+ROTULO631:
 mov sp, bp
 pop bp
 FIM_globalmemory_getusedkib:
@@ -7152,7 +7179,7 @@ es mov [di+0], ax
 mov ax, [bp+10]
 es mov [di+2], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO641:
+ROTULO643:
 mov sp, bp
 pop bp
 FIM_semaphore_initialize:
@@ -7166,7 +7193,7 @@ mov bp, sp
 ;     ---=== System.Threading.hcb:34:9 ===---
 waiting:
 ;     ---=== System.Threading.hcb:35:9 ===---
-ROTULO643:
+ROTULO645:
 ;     ---=== System.Threading.hcb:35:23 ===---
 ;     ---=== System.Threading.hcb:35:15 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
@@ -7181,24 +7208,24 @@ es mov ax, [di+2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO646
+jae ROTULO648
+jmp ROTULO649
+ROTULO648:
+mov ax, 65535
+jmp ROTULO650
+ROTULO649:
+xor ax, ax
+ROTULO650:
+cmp ax, 0
+jne ROTULO646
 jmp ROTULO647
 ROTULO646:
-mov ax, 65535
-jmp ROTULO648
-ROTULO647:
-xor ax, ax
-ROTULO648:
-cmp ax, 0
-jne ROTULO644
-jmp ROTULO645
-ROTULO644:
 ;     ---=== System.Threading.hcb:36:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO643
-ROTULO645:
+jmp ROTULO645
+ROTULO647:
 ;     ---=== System.Threading.hcb:38:13 ===---
 pushf
 ;     ---=== System.Threading.hcb:39:13 ===---
@@ -7218,29 +7245,29 @@ es mov ax, [di+2]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO651
+jae ROTULO653
+jmp ROTULO654
+ROTULO653:
+mov ax, 65535
+jmp ROTULO655
+ROTULO654:
+xor ax, ax
+ROTULO655:
+cmp ax, 0
+jne ROTULO651
 jmp ROTULO652
 ROTULO651:
-mov ax, 65535
-jmp ROTULO653
-ROTULO652:
-xor ax, ax
-ROTULO653:
-cmp ax, 0
-jne ROTULO649
-jmp ROTULO650
-ROTULO649:
 ;     ---=== System.Threading.hcb:41:17 ===---
 popf
 ;     ---=== System.Threading.hcb:42:18 ===---
 jmp waiting
-ROTULO650:
+ROTULO652:
 ;     ---=== System.Threading.hcb:44:9 ===---
 ; ACAO STRUCTURE - Incremento de ponteiro
 es inc word [di+0]
 ;     ---=== System.Threading.hcb:45:13 ===---
 popf
-ROTULO642:
+ROTULO644:
 mov sp, bp
 pop bp
 FIM_semaphore_waitone:
@@ -7269,25 +7296,25 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO657
+ja ROTULO659
+jmp ROTULO660
+ROTULO659:
+mov ax, 65535
+jmp ROTULO661
+ROTULO660:
+xor ax, ax
+ROTULO661:
+cmp ax, 0
+jne ROTULO657
 jmp ROTULO658
 ROTULO657:
-mov ax, 65535
-jmp ROTULO659
-ROTULO658:
-xor ax, ax
-ROTULO659:
-cmp ax, 0
-jne ROTULO655
-jmp ROTULO656
-ROTULO655:
 ;     ---=== System.Threading.hcb:52:29 ===---
 ; ACAO STRUCTURE - Decremento de Ponteiro
 es dec word [di+0]
-ROTULO656:
+ROTULO658:
 ;     ---=== System.Threading.hcb:53:13 ===---
 popf
-ROTULO654:
+ROTULO656:
 mov sp, bp
 pop bp
 FIM_semaphore_release:
@@ -7306,8 +7333,8 @@ _thread_requestnew:
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _multithreading_requestnew
-jmp ROTULO660
-ROTULO660:
+jmp ROTULO662
+ROTULO662:
 FIM_thread_requestnew:
 retf
 ;     ---=== System.Threading.hcb:221:16 ===---
@@ -7419,7 +7446,7 @@ push di
 push cs
 call _multithreading_startthread
 add sp, 4
-ROTULO661:
+ROTULO663:
 mov sp, bp
 pop bp
 FIM_thread_start:
@@ -7455,20 +7482,20 @@ mov ax, 1
 es mov [di+4], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
 ;     ---=== System.Threading.hcb:240:9 ===---
-ROTULO663:
+ROTULO665:
 ;     ---=== System.Threading.hcb:240:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO664
-jmp ROTULO665
-ROTULO664:
+jne ROTULO666
+jmp ROTULO667
+ROTULO666:
 ;     ---=== System.Threading.hcb:240:17 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO663
-ROTULO665:
-ROTULO662:
+jmp ROTULO665
+ROTULO667:
+ROTULO664:
 mov sp, bp
 pop bp
 FIM_thread_endthread:
@@ -7494,7 +7521,7 @@ es mov [di+4], ax
 xor ax, ax
 es mov [di+2], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO666:
+ROTULO668:
 mov sp, bp
 pop bp
 FIM_thread_abort:
@@ -7507,8 +7534,8 @@ _thread_current:
 cs push word [_multithreading_current+2]
 pop es
 cs mov di, [_multithreading_current]
-jmp ROTULO667
-ROTULO667:
+jmp ROTULO669
+ROTULO669:
 FIM_thread_current:
 retf
 ;     ---=== System.Threading.hcb:255:16 ===---
@@ -7525,26 +7552,26 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO671
+je ROTULO673
+jmp ROTULO674
+ROTULO673:
+mov ax, 65535
+jmp ROTULO675
+ROTULO674:
+xor ax, ax
+ROTULO675:
+cmp ax, 0
+jne ROTULO671
 jmp ROTULO672
 ROTULO671:
-mov ax, 65535
-jmp ROTULO673
-ROTULO672:
-xor ax, ax
-ROTULO673:
-cmp ax, 0
-jne ROTULO669
-jmp ROTULO670
-ROTULO669:
 ;     ---=== System.Threading.hcb:256:48 ===---
 ;     ---=== System.Threading.hcb:256:53 ===---
 xor ax, ax
-jmp ROTULO668
-ROTULO670:
+jmp ROTULO670
+ROTULO672:
 ;     ---=== System.Threading.hcb:257:13 ===---
 int 0x81
-ROTULO668:
+ROTULO670:
 FIM_thread_yield:
 retf
 ;     ---=== System.Threading.hcb:261:16 ===---
@@ -7567,13 +7594,13 @@ call _os_stackcheck
 cs mov ax, [_clock_timermiliseconds]
 mov [bp+-2], ax
 ;     ---=== System.Threading.hcb:265:9 ===---
-ROTULO675:
+ROTULO677:
 ;     ---=== System.Threading.hcb:265:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO676
-jmp ROTULO677
-ROTULO676:
+jne ROTULO678
+jmp ROTULO679
+ROTULO678:
 ;     ---=== System.Threading.hcb:266:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.Threading.hcb:266:43 ===---
@@ -7599,30 +7626,30 @@ mov ax, [bp+6]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO680
+jae ROTULO682
+jmp ROTULO683
+ROTULO682:
+mov ax, 65535
+jmp ROTULO684
+ROTULO683:
+xor ax, ax
+ROTULO684:
+cmp ax, 0
+jne ROTULO680
 jmp ROTULO681
 ROTULO680:
-mov ax, 65535
-jmp ROTULO682
-ROTULO681:
-xor ax, ax
-ROTULO682:
-cmp ax, 0
-jne ROTULO678
-jmp ROTULO679
-ROTULO678:
 ;     ---=== System.Threading.hcb:267:41 ===---
 ;     ---=== System.Threading.hcb:267:46 ===---
 xor ax, ax
-jmp ROTULO674
-ROTULO679:
+jmp ROTULO676
+ROTULO681:
 ;     ---=== System.Threading.hcb:268:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO675
-ROTULO677:
-ROTULO674:
+jmp ROTULO677
+ROTULO679:
+ROTULO676:
 mov sp, bp
 pop bp
 FIM_thread_sleep:
@@ -7647,13 +7674,13 @@ call _os_stackcheck
 cs mov ax, [_clock_timerseconds]
 mov [bp+-2], ax
 ;     ---=== System.Threading.hcb:277:9 ===---
-ROTULO684:
+ROTULO686:
 ;     ---=== System.Threading.hcb:277:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO685
-jmp ROTULO686
-ROTULO685:
+jne ROTULO687
+jmp ROTULO688
+ROTULO687:
 ;     ---=== System.Threading.hcb:278:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.Threading.hcb:278:39 ===---
@@ -7679,30 +7706,30 @@ mov ax, [bp+6]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO689
+jae ROTULO691
+jmp ROTULO692
+ROTULO691:
+mov ax, 65535
+jmp ROTULO693
+ROTULO692:
+xor ax, ax
+ROTULO693:
+cmp ax, 0
+jne ROTULO689
 jmp ROTULO690
 ROTULO689:
-mov ax, 65535
-jmp ROTULO691
-ROTULO690:
-xor ax, ax
-ROTULO691:
-cmp ax, 0
-jne ROTULO687
-jmp ROTULO688
-ROTULO687:
 ;     ---=== System.Threading.hcb:279:37 ===---
 ;     ---=== System.Threading.hcb:279:42 ===---
 xor ax, ax
-jmp ROTULO683
-ROTULO688:
+jmp ROTULO685
+ROTULO690:
 ;     ---=== System.Threading.hcb:280:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO684
-ROTULO686:
-ROTULO683:
+jmp ROTULO686
+ROTULO688:
+ROTULO685:
 mov sp, bp
 pop bp
 FIM_thread_sleepseconds:
@@ -7767,7 +7794,7 @@ cs mov word [_clock_milisecond], 0
 ;     ---=== System.Timer.hcb:25:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_clock_timerseconds], 0
-ROTULO692:
+ROTULO694:
 FIM_clock_initialize:
 retf
 ;     ---=== System.Timer.hcb:28:16 ===---
@@ -7783,21 +7810,21 @@ mov ax, 24
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO696
+jb ROTULO698
+jmp ROTULO699
+ROTULO698:
+mov ax, 65535
+jmp ROTULO700
+ROTULO699:
+xor ax, ax
+ROTULO700:
+cmp ax, 0
+jne ROTULO696
 jmp ROTULO697
 ROTULO696:
-mov ax, 65535
-jmp ROTULO698
-ROTULO697:
-xor ax, ax
-ROTULO698:
-cmp ax, 0
-jne ROTULO694
-jmp ROTULO695
-ROTULO694:
 ;     ---=== System.Timer.hcb:29:32 ===---
 jmp end_ajust
-ROTULO695:
+ROTULO697:
 ;     ---=== System.Timer.hcb:30:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_clock_hour], 0
@@ -7815,21 +7842,21 @@ mov ax, 28
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO701
+jb ROTULO703
+jmp ROTULO704
+ROTULO703:
+mov ax, 65535
+jmp ROTULO705
+ROTULO704:
+xor ax, ax
+ROTULO705:
+cmp ax, 0
+jne ROTULO701
 jmp ROTULO702
 ROTULO701:
-mov ax, 65535
-jmp ROTULO703
-ROTULO702:
-xor ax, ax
-ROTULO703:
-cmp ax, 0
-jne ROTULO699
-jmp ROTULO700
-ROTULO699:
 ;     ---=== System.Timer.hcb:32:31 ===---
 jmp end_ajust
-ROTULO700:
+ROTULO702:
 ;     ---=== System.Timer.hcb:33:9 ===---
 ;     ---=== System.Timer.hcb:33:16 ===---
 ;     ---=== System.Timer.hcb:33:12 ===---
@@ -7841,21 +7868,21 @@ mov ax, 32
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO706
+jae ROTULO708
+jmp ROTULO709
+ROTULO708:
+mov ax, 65535
+jmp ROTULO710
+ROTULO709:
+xor ax, ax
+ROTULO710:
+cmp ax, 0
+jne ROTULO706
 jmp ROTULO707
 ROTULO706:
-mov ax, 65535
-jmp ROTULO708
-ROTULO707:
-xor ax, ax
-ROTULO708:
-cmp ax, 0
-jne ROTULO704
-jmp ROTULO705
-ROTULO704:
 ;     ---=== System.Timer.hcb:33:32 ===---
 jmp calc_month
-ROTULO705:
+ROTULO707:
 ;     ---=== System.Timer.hcb:34:9 ===---
 ;     ---=== System.Timer.hcb:34:18 ===---
 ;     ---=== System.Timer.hcb:34:12 ===---
@@ -7867,21 +7894,21 @@ mov ax, 2
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO711
+je ROTULO713
+jmp ROTULO714
+ROTULO713:
+mov ax, 65535
+jmp ROTULO715
+ROTULO714:
+xor ax, ax
+ROTULO715:
+cmp ax, 0
+jne ROTULO711
 jmp ROTULO712
 ROTULO711:
-mov ax, 65535
-jmp ROTULO713
-ROTULO712:
-xor ax, ax
-ROTULO713:
-cmp ax, 0
-jne ROTULO709
-jmp ROTULO710
-ROTULO709:
 ;     ---=== System.Timer.hcb:34:33 ===---
 jmp calc_month
-ROTULO710:
+ROTULO712:
 ;     ---=== System.Timer.hcb:35:9 ===---
 ;     ---=== System.Timer.hcb:35:16 ===---
 ;     ---=== System.Timer.hcb:35:12 ===---
@@ -7893,21 +7920,21 @@ mov ax, 30
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO716
+jb ROTULO718
+jmp ROTULO719
+ROTULO718:
+mov ax, 65535
+jmp ROTULO720
+ROTULO719:
+xor ax, ax
+ROTULO720:
+cmp ax, 0
+jne ROTULO716
 jmp ROTULO717
 ROTULO716:
-mov ax, 65535
-jmp ROTULO718
-ROTULO717:
-xor ax, ax
-ROTULO718:
-cmp ax, 0
-jne ROTULO714
-jmp ROTULO715
-ROTULO714:
 ;     ---=== System.Timer.hcb:35:31 ===---
 jmp end_ajust
-ROTULO715:
+ROTULO717:
 ;     ---=== System.Timer.hcb:36:9 ===---
 ;     ---=== System.Timer.hcb:36:18 ===---
 ;     ---=== System.Timer.hcb:36:12 ===---
@@ -7919,21 +7946,21 @@ mov ax, 4
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO721
+je ROTULO723
+jmp ROTULO724
+ROTULO723:
+mov ax, 65535
+jmp ROTULO725
+ROTULO724:
+xor ax, ax
+ROTULO725:
+cmp ax, 0
+jne ROTULO721
 jmp ROTULO722
 ROTULO721:
-mov ax, 65535
-jmp ROTULO723
-ROTULO722:
-xor ax, ax
-ROTULO723:
-cmp ax, 0
-jne ROTULO719
-jmp ROTULO720
-ROTULO719:
 ;     ---=== System.Timer.hcb:36:33 ===---
 jmp calc_month
-ROTULO720:
+ROTULO722:
 ;     ---=== System.Timer.hcb:37:9 ===---
 ;     ---=== System.Timer.hcb:37:18 ===---
 ;     ---=== System.Timer.hcb:37:12 ===---
@@ -7945,21 +7972,21 @@ mov ax, 6
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO726
+je ROTULO728
+jmp ROTULO729
+ROTULO728:
+mov ax, 65535
+jmp ROTULO730
+ROTULO729:
+xor ax, ax
+ROTULO730:
+cmp ax, 0
+jne ROTULO726
 jmp ROTULO727
 ROTULO726:
-mov ax, 65535
-jmp ROTULO728
-ROTULO727:
-xor ax, ax
-ROTULO728:
-cmp ax, 0
-jne ROTULO724
-jmp ROTULO725
-ROTULO724:
 ;     ---=== System.Timer.hcb:37:33 ===---
 jmp calc_month
-ROTULO725:
+ROTULO727:
 ;     ---=== System.Timer.hcb:38:9 ===---
 ;     ---=== System.Timer.hcb:38:18 ===---
 ;     ---=== System.Timer.hcb:38:12 ===---
@@ -7971,21 +7998,21 @@ mov ax, 9
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO731
+je ROTULO733
+jmp ROTULO734
+ROTULO733:
+mov ax, 65535
+jmp ROTULO735
+ROTULO734:
+xor ax, ax
+ROTULO735:
+cmp ax, 0
+jne ROTULO731
 jmp ROTULO732
 ROTULO731:
-mov ax, 65535
-jmp ROTULO733
-ROTULO732:
-xor ax, ax
-ROTULO733:
-cmp ax, 0
-jne ROTULO729
-jmp ROTULO730
-ROTULO729:
 ;     ---=== System.Timer.hcb:38:33 ===---
 jmp calc_month
-ROTULO730:
+ROTULO732:
 ;     ---=== System.Timer.hcb:39:9 ===---
 ;     ---=== System.Timer.hcb:39:18 ===---
 ;     ---=== System.Timer.hcb:39:12 ===---
@@ -7997,21 +8024,21 @@ mov ax, 11
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO736
+je ROTULO738
+jmp ROTULO739
+ROTULO738:
+mov ax, 65535
+jmp ROTULO740
+ROTULO739:
+xor ax, ax
+ROTULO740:
+cmp ax, 0
+jne ROTULO736
 jmp ROTULO737
 ROTULO736:
-mov ax, 65535
-jmp ROTULO738
-ROTULO737:
-xor ax, ax
-ROTULO738:
-cmp ax, 0
-jne ROTULO734
-jmp ROTULO735
-ROTULO734:
 ;     ---=== System.Timer.hcb:39:34 ===---
 jmp calc_month
-ROTULO735:
+ROTULO737:
 ;     ---=== System.Timer.hcb:40:14 ===---
 jmp end_ajust
 ;     ---=== System.Timer.hcb:41:9 ===---
@@ -8028,14 +8055,14 @@ mov ax, 13
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO744
-jmp ROTULO745
-ROTULO744:
-mov ax, 65535
-jmp ROTULO746
-ROTULO745:
-xor ax, ax
+ja ROTULO746
+jmp ROTULO747
 ROTULO746:
+mov ax, 65535
+jmp ROTULO748
+ROTULO747:
+xor ax, ax
+ROTULO748:
 push ax
 ;     ---=== System.Timer.hcb:42:35 ===---
 ;     ---=== System.Timer.hcb:42:29 ===---
@@ -8047,31 +8074,31 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO747
-jmp ROTULO748
-ROTULO747:
-mov ax, 65535
-jmp ROTULO749
-ROTULO748:
-xor ax, ax
+je ROTULO749
+jmp ROTULO750
 ROTULO749:
+mov ax, 65535
+jmp ROTULO751
+ROTULO750:
+xor ax, ax
+ROTULO751:
 mov bx, ax
 pop ax
 or ax, bx
 cmp ax, 0
-jne ROTULO739
-jmp ROTULO740
-ROTULO739:
+jne ROTULO741
+jmp ROTULO742
+ROTULO741:
 ;     ---=== System.Timer.hcb:43:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_clock_month], 1
 ;     ---=== System.Timer.hcb:44:13 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_clock_year]
-ROTULO740:
+ROTULO742:
 ;     ---=== System.Timer.hcb:46:9 ===---
 end_ajust:
-ROTULO693:
+ROTULO695:
 FIM_clock_autoajust:
 retf
 ; MODULO FIM: clock
@@ -8095,7 +8122,7 @@ mov dx, [bp+6]
 mov ax, [bp+8]
 ;     ---=== System.IO.hcb:7:13 ===---
 out dx, al
-ROTULO750:
+ROTULO752:
 mov sp, bp
 pop bp
 FIM_io_outputbyte:
@@ -8114,7 +8141,7 @@ mov dx, [bp+6]
 mov ax, [bp+8]
 ;     ---=== System.IO.hcb:13:13 ===---
 out dx, ax
-ROTULO751:
+ROTULO753:
 mov sp, bp
 pop bp
 FIM_io_outputword:
@@ -8131,7 +8158,7 @@ mov dx, [bp+6]
 xor ax, ax
 ;     ---=== System.IO.hcb:19:13 ===---
 in al, dx
-ROTULO752:
+ROTULO754:
 mov sp, bp
 pop bp
 FIM_io_inputbyte:
@@ -8146,7 +8173,7 @@ mov bp, sp
 mov dx, [bp+6]
 ;     ---=== System.IO.hcb:24:13 ===---
 in ax, dx
-ROTULO753:
+ROTULO755:
 mov sp, bp
 pop bp
 FIM_io_inputword:
@@ -8209,7 +8236,7 @@ mov di, [bp+-4]
 es mov [di+0], ax
 ;     ---=== System.IO.hcb:37:13 ===---
 popf
-ROTULO754:
+ROTULO756:
 mov sp, bp
 pop bp
 FIM_io_registerhandler:
@@ -8272,8 +8299,8 @@ mov word [bp+-8+2], ax
 push word [bp+-8+2]
 pop es
 mov di, [bp+-8]
-jmp ROTULO755
-ROTULO755:
+jmp ROTULO757
+ROTULO757:
 mov sp, bp
 pop bp
 FIM_io_gethandler:
@@ -8354,7 +8381,7 @@ sti
 pushf
 ;     ---=== System.Timer.hcb:65:13 ===---
 cs pop word [_systemtimer_defaultflags]
-ROTULO756:
+ROTULO758:
 mov sp, bp
 pop bp
 FIM_systemtimer_initialize:
@@ -8437,7 +8464,7 @@ call _clock_autoajust
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-ROTULO757:
+ROTULO759:
 pop ax
 pop bx
 mov ss, ax
@@ -8481,7 +8508,7 @@ push di
 push cs
 call _list_initialize
 add sp, 6
-ROTULO758:
+ROTULO760:
 FIM_disk_initialize:
 retf
 ;     ---=== System.IO.Disk.hcb:40:21 ===---
@@ -8617,12 +8644,12 @@ es mov byte [di+0], 32
 ;     ---=== System.IO.Disk.hcb:54:32 ===---
 push cs
 pop es
-mov di, ROTULO761
-jmp ROTULO760
-ROTULO761:
+mov di, ROTULO763
+jmp ROTULO762
+ROTULO763:
 db 0
 times 1 db 0
-ROTULO760:
+ROTULO762:
 push es
 push di
 ;     ---=== System.IO.Disk.hcb:54:21 ===---
@@ -8668,8 +8695,8 @@ add sp, 8
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
-jmp ROTULO759
-ROTULO759:
+jmp ROTULO761
+ROTULO761:
 mov sp, bp
 pop bp
 FIM_disk_registernew:
@@ -8702,18 +8729,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
+jne ROTULO767
+jmp ROTULO768
+ROTULO767:
+mov ax, 65535
+jmp ROTULO769
+ROTULO768:
+xor ax, ax
+ROTULO769:
+cmp ax, 0
 jne ROTULO765
 jmp ROTULO766
 ROTULO765:
-mov ax, 65535
-jmp ROTULO767
-ROTULO766:
-xor ax, ax
-ROTULO767:
-cmp ax, 0
-jne ROTULO763
-jmp ROTULO764
-ROTULO763:
 ;     ---=== System.IO.Disk.hcb:61:40 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8721,7 +8748,7 @@ mov ax, 61
 mov [bp+-10], ax
 mov ax, 4
 cs jmp word [_os_trycode]
-ROTULO764:
+ROTULO766:
 ;     ---=== System.IO.Disk.hcb:62:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 ;     ---=== System.IO.Disk.hcb:62:29 ===---
@@ -8749,7 +8776,7 @@ push ax
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO768
+jne ROTULO770
 ;     ---=== System.IO.Disk.hcb:63:37 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8757,7 +8784,7 @@ mov ax, 63
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO768:
+ROTULO770:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -8779,7 +8806,7 @@ push ax
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO769
+jne ROTULO771
 ;     ---=== System.IO.Disk.hcb:64:36 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8787,7 +8814,7 @@ mov ax, 64
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO769:
+ROTULO771:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -8801,7 +8828,7 @@ pop es
 mov di, [bp+10]
 es mov ax, [di+43]
 cmp ax, 0
-jne ROTULO770
+jne ROTULO772
 ;     ---=== System.IO.Disk.hcb:64:47 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8809,7 +8836,7 @@ mov ax, 64
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO770:
+ROTULO772:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -8835,7 +8862,7 @@ push ax
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO771
+jne ROTULO773
 ;     ---=== System.IO.Disk.hcb:65:39 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8843,7 +8870,7 @@ mov ax, 65
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO771:
+ROTULO773:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -8857,7 +8884,7 @@ pop es
 mov di, [bp+10]
 es mov ax, [di+43]
 cmp ax, 0
-jne ROTULO772
+jne ROTULO774
 ;     ---=== System.IO.Disk.hcb:65:52 ===---
 mov ax, _disk
 mov [bp+-8], ax
@@ -8865,7 +8892,7 @@ mov ax, 65
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
-ROTULO772:
+ROTULO774:
 mov bx, ax
 pop ax
 xor dx, dx
@@ -8878,7 +8905,7 @@ pop es
 mov di, [bp+6]
 es mov [di+4], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO762:
+ROTULO764:
 mov sp, bp
 pop bp
 FIM_disk_converttochs:
@@ -8902,7 +8929,7 @@ mov ax, 69
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO773:
+ROTULO775:
 mov sp, bp
 pop bp
 FIM_disk_genericreadblock:
@@ -8926,7 +8953,7 @@ mov ax, 73
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO774:
+ROTULO776:
 mov sp, bp
 pop bp
 FIM_disk_genericwriteblock:
@@ -8948,7 +8975,7 @@ call _os_stackcheck
 ;     ---=== System.IO.Disk.hcb:78:38 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO776:
+ROTULO778:
 ;     ---=== System.IO.Disk.hcb:78:38 ===---
 ;     ---=== System.IO.Disk.hcb:78:38 ===---
 ; ACAO LEITURA - Le variavel
@@ -8969,18 +8996,18 @@ add sp, 4
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO779
+jbe ROTULO781
+jmp ROTULO782
+ROTULO781:
+mov ax, 65535
+jmp ROTULO783
+ROTULO782:
+xor ax, ax
+ROTULO783:
+cmp ax, 0
+jne ROTULO779
 jmp ROTULO780
 ROTULO779:
-mov ax, 65535
-jmp ROTULO781
-ROTULO780:
-xor ax, ax
-ROTULO781:
-cmp ax, 0
-jne ROTULO777
-jmp ROTULO778
-ROTULO777:
 ;     ---=== System.IO.Disk.hcb:80:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
 ;     ---=== System.IO.Disk.hcb:80:17 ===---
@@ -9003,16 +9030,29 @@ push es
 pop word [bp+-6+2]
 mov [bp+-6], di
 ;     ---=== System.IO.Disk.hcb:81:13 ===---
-;     ---=== System.IO.Disk.hcb:81:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:81:38 ===---
+;     ---=== System.IO.Disk.hcb:81:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 33
+es push word [di+33+2]
+es push word [di+33]
+pop di
+pop es
+push es
+push di
+push cs
+call _console_writeline
+add sp, 4
+;     ---=== System.IO.Disk.hcb:82:13 ===---
+;     ---=== System.IO.Disk.hcb:82:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.hcb:82:38 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 push es
 push di
-;     ---=== System.IO.Disk.hcb:81:30 ===---
+;     ---=== System.IO.Disk.hcb:82:30 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 33
 push word [bp+-6+2]
 pop es
@@ -9027,29 +9067,29 @@ push cs
 call _string_equals
 add sp, 8
 cmp ax, 0
-jne ROTULO782
-jmp ROTULO783
-ROTULO782:
-;     ---=== System.IO.Disk.hcb:81:49 ===---
-;     ---=== System.IO.Disk.hcb:81:56 ===---
-mov ax, 1
-jmp ROTULO775
-ROTULO783:
+jne ROTULO784
+jmp ROTULO785
+ROTULO784:
+;     ---=== System.IO.Disk.hcb:83:17 ===---
+;     ---=== System.IO.Disk.hcb:83:24 ===---
+mov ax, 65535
+jmp ROTULO777
+ROTULO785:
 ;     ---=== System.IO.Disk.hcb:78:38 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO776
-ROTULO778:
-;     ---=== System.IO.Disk.hcb:83:9 ===---
-;     ---=== System.IO.Disk.hcb:83:16 ===---
+jmp ROTULO778
+ROTULO780:
+;     ---=== System.IO.Disk.hcb:86:9 ===---
+;     ---=== System.IO.Disk.hcb:86:16 ===---
 xor ax, ax
-jmp ROTULO775
-ROTULO775:
+jmp ROTULO777
+ROTULO777:
 mov sp, bp
 pop bp
 FIM_disk_exist:
 retf
-;     ---=== System.IO.Disk.hcb:86:14 ===---
+;     ---=== System.IO.Disk.hcb:89:14 ===---
 _disk_getblocksize:
 push bp
 mov bp, sp
@@ -9059,22 +9099,22 @@ call _os_stackcheck
 ; ARG: name TAM: 4 POS: BP+6 
 ; ARG: i TAM: 2 POS: BP--2 
 ; ARG: d TAM: 4 POS: BP--6 
-;     ---=== System.IO.Disk.hcb:86:27 ===---
-;     ---=== System.IO.Disk.hcb:87:13 ===---
-;     ---=== System.IO.Disk.hcb:89:17 ===---
-;     ---=== System.IO.Disk.hcb:88:38 ===---
-;     ---=== System.IO.Disk.hcb:88:38 ===---
+;     ---=== System.IO.Disk.hcb:89:27 ===---
+;     ---=== System.IO.Disk.hcb:90:13 ===---
+;     ---=== System.IO.Disk.hcb:92:17 ===---
+;     ---=== System.IO.Disk.hcb:91:38 ===---
+;     ---=== System.IO.Disk.hcb:91:38 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO785:
-;     ---=== System.IO.Disk.hcb:88:38 ===---
-;     ---=== System.IO.Disk.hcb:88:38 ===---
+ROTULO787:
+;     ---=== System.IO.Disk.hcb:91:38 ===---
+;     ---=== System.IO.Disk.hcb:91:38 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.IO.Disk.hcb:88:22 ===---
+;     ---=== System.IO.Disk.hcb:91:22 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:88:33 ===---
+;     ---=== System.IO.Disk.hcb:91:33 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_disk_disks+2]
 pop es
@@ -9087,27 +9127,27 @@ add sp, 4
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO788
+jbe ROTULO790
+jmp ROTULO791
+ROTULO790:
+mov ax, 65535
+jmp ROTULO792
+ROTULO791:
+xor ax, ax
+ROTULO792:
+cmp ax, 0
+jne ROTULO788
 jmp ROTULO789
 ROTULO788:
-mov ax, 65535
-jmp ROTULO790
-ROTULO789:
-xor ax, ax
-ROTULO790:
-cmp ax, 0
-jne ROTULO786
-jmp ROTULO787
-ROTULO786:
-;     ---=== System.IO.Disk.hcb:90:13 ===---
+;     ---=== System.IO.Disk.hcb:93:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.hcb:90:17 ===---
+;     ---=== System.IO.Disk.hcb:93:17 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:90:34 ===---
+;     ---=== System.IO.Disk.hcb:93:34 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.IO.Disk.hcb:90:27 ===---
+;     ---=== System.IO.Disk.hcb:93:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_disk_disks+2]
 pop es
@@ -9120,17 +9160,17 @@ add sp, 6
 push es
 pop word [bp+-6+2]
 mov [bp+-6], di
-;     ---=== System.IO.Disk.hcb:91:13 ===---
-;     ---=== System.IO.Disk.hcb:91:16 ===---
+;     ---=== System.IO.Disk.hcb:94:13 ===---
+;     ---=== System.IO.Disk.hcb:94:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:91:38 ===---
+;     ---=== System.IO.Disk.hcb:94:38 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 push es
 push di
-;     ---=== System.IO.Disk.hcb:91:30 ===---
+;     ---=== System.IO.Disk.hcb:94:30 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 33
 push word [bp+-6+2]
 pop es
@@ -9145,36 +9185,36 @@ push cs
 call _string_equals
 add sp, 8
 cmp ax, 0
-jne ROTULO791
-jmp ROTULO792
-ROTULO791:
-;     ---=== System.IO.Disk.hcb:91:49 ===---
-;     ---=== System.IO.Disk.hcb:91:56 ===---
+jne ROTULO793
+jmp ROTULO794
+ROTULO793:
+;     ---=== System.IO.Disk.hcb:94:49 ===---
+;     ---=== System.IO.Disk.hcb:94:56 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 45
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
 es mov ax, [di+45]
-jmp ROTULO784
-ROTULO792:
-;     ---=== System.IO.Disk.hcb:88:38 ===---
+jmp ROTULO786
+ROTULO794:
+;     ---=== System.IO.Disk.hcb:91:38 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO785
-ROTULO787:
-;     ---=== System.IO.Disk.hcb:93:15 ===---
+jmp ROTULO787
+ROTULO789:
+;     ---=== System.IO.Disk.hcb:96:15 ===---
 mov ax, _disk
 mov [bp+-8], ax
-mov ax, 93
+mov ax, 96
 mov [bp+-10], ax
 mov ax, 5
 cs jmp word [_os_trycode]
-ROTULO784:
+ROTULO786:
 mov sp, bp
 pop bp
 FIM_disk_getblocksize:
 retf
-;     ---=== System.IO.Disk.hcb:96:9 ===---
+;     ---=== System.IO.Disk.hcb:99:9 ===---
 _disk_readblock:
 push bp
 mov bp, sp
@@ -9187,25 +9227,25 @@ call _os_stackcheck
 ; ARG: addresshigh TAM: 2 POS: BP+16 
 ; ARG: i TAM: 2 POS: BP--2 
 ; ARG: d TAM: 4 POS: BP--6 
-;     ---=== System.IO.Disk.hcb:96:19 ===---
-;     ---=== System.IO.Disk.hcb:96:35 ===---
-;     ---=== System.IO.Disk.hcb:96:57 ===---
-;     ---=== System.IO.Disk.hcb:96:79 ===---
-;     ---=== System.IO.Disk.hcb:97:13 ===---
-;     ---=== System.IO.Disk.hcb:99:17 ===---
-;     ---=== System.IO.Disk.hcb:98:38 ===---
-;     ---=== System.IO.Disk.hcb:98:38 ===---
+;     ---=== System.IO.Disk.hcb:99:19 ===---
+;     ---=== System.IO.Disk.hcb:99:35 ===---
+;     ---=== System.IO.Disk.hcb:99:57 ===---
+;     ---=== System.IO.Disk.hcb:99:79 ===---
+;     ---=== System.IO.Disk.hcb:100:13 ===---
+;     ---=== System.IO.Disk.hcb:102:17 ===---
+;     ---=== System.IO.Disk.hcb:101:38 ===---
+;     ---=== System.IO.Disk.hcb:101:38 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO794:
-;     ---=== System.IO.Disk.hcb:98:38 ===---
-;     ---=== System.IO.Disk.hcb:98:38 ===---
+ROTULO796:
+;     ---=== System.IO.Disk.hcb:101:38 ===---
+;     ---=== System.IO.Disk.hcb:101:38 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.IO.Disk.hcb:98:22 ===---
+;     ---=== System.IO.Disk.hcb:101:22 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:98:33 ===---
+;     ---=== System.IO.Disk.hcb:101:33 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_disk_disks+2]
 pop es
@@ -9218,27 +9258,27 @@ add sp, 4
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO797
+jbe ROTULO799
+jmp ROTULO800
+ROTULO799:
+mov ax, 65535
+jmp ROTULO801
+ROTULO800:
+xor ax, ax
+ROTULO801:
+cmp ax, 0
+jne ROTULO797
 jmp ROTULO798
 ROTULO797:
-mov ax, 65535
-jmp ROTULO799
-ROTULO798:
-xor ax, ax
-ROTULO799:
-cmp ax, 0
-jne ROTULO795
-jmp ROTULO796
-ROTULO795:
-;     ---=== System.IO.Disk.hcb:100:13 ===---
+;     ---=== System.IO.Disk.hcb:103:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.hcb:100:17 ===---
+;     ---=== System.IO.Disk.hcb:103:17 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:100:34 ===---
+;     ---=== System.IO.Disk.hcb:103:34 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.IO.Disk.hcb:100:27 ===---
+;     ---=== System.IO.Disk.hcb:103:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_disk_disks+2]
 pop es
@@ -9251,17 +9291,17 @@ add sp, 6
 push es
 pop word [bp+-6+2]
 mov [bp+-6], di
-;     ---=== System.IO.Disk.hcb:101:13 ===---
-;     ---=== System.IO.Disk.hcb:101:16 ===---
+;     ---=== System.IO.Disk.hcb:104:13 ===---
+;     ---=== System.IO.Disk.hcb:104:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.hcb:101:38 ===---
+;     ---=== System.IO.Disk.hcb:104:38 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 push es
 push di
-;     ---=== System.IO.Disk.hcb:101:30 ===---
+;     ---=== System.IO.Disk.hcb:104:30 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 33
 push word [bp+-6+2]
 pop es
@@ -9276,27 +9316,27 @@ push cs
 call _string_equals
 add sp, 8
 cmp ax, 0
-jne ROTULO800
-jmp ROTULO801
-ROTULO800:
-;     ---=== System.IO.Disk.hcb:102:17 ===---
+jne ROTULO802
+jmp ROTULO803
+ROTULO802:
+;     ---=== System.IO.Disk.hcb:105:17 ===---
 ; ACAO CHAMADA - Chama indiretamente usando Invoke
-;     ---=== System.IO.Disk.hcb:102:54 ===---
+;     ---=== System.IO.Disk.hcb:105:54 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+16]
 push ax
-;     ---=== System.IO.Disk.hcb:102:42 ===---
+;     ---=== System.IO.Disk.hcb:105:42 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+14]
 push ax
-;     ---=== System.IO.Disk.hcb:102:36 ===---
+;     ---=== System.IO.Disk.hcb:105:36 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
 mov di, [bp+10]
 push es
 push di
-;     ---=== System.IO.Disk.hcb:102:17 ===---
+;     ---=== System.IO.Disk.hcb:105:17 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-6+2]
 pop es
@@ -9305,24 +9345,24 @@ push es
 push di
 es call far [di+47]
 add sp, 12
-;     ---=== System.IO.Disk.hcb:103:17 ===---
-;     ---=== System.IO.Disk.hcb:103:22 ===---
+;     ---=== System.IO.Disk.hcb:106:17 ===---
+;     ---=== System.IO.Disk.hcb:106:22 ===---
 xor ax, ax
-jmp ROTULO793
-ROTULO801:
-;     ---=== System.IO.Disk.hcb:98:38 ===---
+jmp ROTULO795
+ROTULO803:
+;     ---=== System.IO.Disk.hcb:101:38 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO794
-ROTULO796:
-;     ---=== System.IO.Disk.hcb:106:15 ===---
+jmp ROTULO796
+ROTULO798:
+;     ---=== System.IO.Disk.hcb:109:15 ===---
 mov ax, _disk
 mov [bp+-8], ax
-mov ax, 106
+mov ax, 109
 mov [bp+-10], ax
 mov ax, 5
 cs jmp word [_os_trycode]
-ROTULO793:
+ROTULO795:
 mov sp, bp
 pop bp
 FIM_disk_readblock:
@@ -9352,7 +9392,7 @@ mov word [bp+-2], 0
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
 ;     ---=== System.hcb:184:9 ===---
-ROTULO803:
+ROTULO805:
 ;     ---=== System.hcb:184:20 ===---
 ;     ---=== System.hcb:184:15 ===---
 ; ACAO LEITURA - Le ponteiro
@@ -9367,32 +9407,32 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO806
+ja ROTULO808
+jmp ROTULO809
+ROTULO808:
+mov ax, 65535
+jmp ROTULO810
+ROTULO809:
+xor ax, ax
+ROTULO810:
+cmp ax, 0
+jne ROTULO806
 jmp ROTULO807
 ROTULO806:
-mov ax, 65535
-jmp ROTULO808
-ROTULO807:
-xor ax, ax
-ROTULO808:
-cmp ax, 0
-jne ROTULO804
-jmp ROTULO805
-ROTULO804:
 ;     ---=== System.hcb:185:17 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
 ;     ---=== System.hcb:186:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-jmp ROTULO803
-ROTULO805:
+jmp ROTULO805
+ROTULO807:
 ;     ---=== System.hcb:188:9 ===---
 ;     ---=== System.hcb:188:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
-jmp ROTULO802
-ROTULO802:
+jmp ROTULO804
+ROTULO804:
 mov sp, bp
 pop bp
 FIM_string_length:
@@ -9405,10 +9445,16 @@ mov bp, sp
 ; ARG: txt2 TAM: 4 POS: BP+10 
 ;     ---=== System.hcb:191:28 ===---
 ;     ---=== System.hcb:191:50 ===---
-;     ---=== System.hcb:192:9 ===---
-ROTULO810:
-;     ---=== System.hcb:192:20 ===---
-;     ---=== System.hcb:192:15 ===---
+;     ---=== System.hcb:192:10 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+6]
+;     ---=== System.hcb:193:10 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+10]
+;     ---=== System.hcb:194:9 ===---
+ROTULO812:
+;     ---=== System.hcb:194:20 ===---
+;     ---=== System.hcb:194:15 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -9416,7 +9462,7 @@ mov di, [bp+6]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== System.hcb:192:23 ===---
+;     ---=== System.hcb:194:23 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -9426,21 +9472,21 @@ es mov al, [di+0]
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO813
+je ROTULO815
+jmp ROTULO816
+ROTULO815:
+mov ax, 65535
+jmp ROTULO817
+ROTULO816:
+xor ax, ax
+ROTULO817:
+cmp ax, 0
+jne ROTULO813
 jmp ROTULO814
 ROTULO813:
-mov ax, 65535
-jmp ROTULO815
-ROTULO814:
-xor ax, ax
-ROTULO815:
-cmp ax, 0
-jne ROTULO811
-jmp ROTULO812
-ROTULO811:
-;     ---=== System.hcb:193:13 ===---
-;     ---=== System.hcb:193:21 ===---
-;     ---=== System.hcb:193:16 ===---
+;     ---=== System.hcb:195:13 ===---
+;     ---=== System.hcb:195:21 ===---
+;     ---=== System.hcb:195:16 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -9448,46 +9494,46 @@ mov di, [bp+6]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== System.hcb:193:24 ===---
+;     ---=== System.hcb:195:24 ===---
 xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO818
+je ROTULO820
+jmp ROTULO821
+ROTULO820:
+mov ax, 65535
+jmp ROTULO822
+ROTULO821:
+xor ax, ax
+ROTULO822:
+cmp ax, 0
+jne ROTULO818
 jmp ROTULO819
 ROTULO818:
-mov ax, 65535
-jmp ROTULO820
-ROTULO819:
-xor ax, ax
-ROTULO820:
-cmp ax, 0
-jne ROTULO816
-jmp ROTULO817
-ROTULO816:
-;     ---=== System.hcb:193:31 ===---
-;     ---=== System.hcb:193:38 ===---
+;     ---=== System.hcb:195:31 ===---
+;     ---=== System.hcb:195:38 ===---
 mov ax, 1
-jmp ROTULO809
-ROTULO817:
-;     ---=== System.hcb:194:14 ===---
+jmp ROTULO811
+ROTULO819:
+;     ---=== System.hcb:196:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-;     ---=== System.hcb:195:14 ===---
+;     ---=== System.hcb:197:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+10]
-jmp ROTULO810
-ROTULO812:
-;     ---=== System.hcb:197:9 ===---
-;     ---=== System.hcb:197:16 ===---
+jmp ROTULO812
+ROTULO814:
+;     ---=== System.hcb:199:9 ===---
+;     ---=== System.hcb:199:16 ===---
 xor ax, ax
-jmp ROTULO809
-ROTULO809:
+jmp ROTULO811
+ROTULO811:
 mov sp, bp
 pop bp
 FIM_string_equals:
 retf
-;     ---=== System.hcb:200:21 ===---
+;     ---=== System.hcb:202:21 ===---
 _string_concat:
 push bp
 mov bp, sp
@@ -9501,18 +9547,18 @@ call _os_stackcheck
 ; ARG: len TAM: 2 POS: BP--6 
 ; ARG: i TAM: 2 POS: BP--8 
 ; ARG: tmp TAM: 2 POS: BP--10 
-;     ---=== System.hcb:200:28 ===---
-;     ---=== System.hcb:200:50 ===---
-;     ---=== System.hcb:201:13 ===---
-;     ---=== System.hcb:202:13 ===---
+;     ---=== System.hcb:202:28 ===---
+;     ---=== System.hcb:202:50 ===---
 ;     ---=== System.hcb:203:13 ===---
 ;     ---=== System.hcb:204:13 ===---
 ;     ---=== System.hcb:205:13 ===---
-;     ---=== System.hcb:206:9 ===---
+;     ---=== System.hcb:206:13 ===---
+;     ---=== System.hcb:207:13 ===---
+;     ---=== System.hcb:208:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:206:20 ===---
+;     ---=== System.hcb:208:20 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.hcb:206:34 ===---
+;     ---=== System.hcb:208:34 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -9523,9 +9569,9 @@ push cs
 call _string_length
 add sp, 4
 mov [bp+-2], ax
-;     ---=== System.hcb:207:9 ===---
+;     ---=== System.hcb:209:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:207:25 ===---
+;     ---=== System.hcb:209:25 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -9533,15 +9579,15 @@ mov di, [bp+6]
 xor ax, ax
 es mov al, [di+0]
 mov [bp+-4], ax
-;     ---=== System.hcb:208:9 ===---
+;     ---=== System.hcb:210:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:208:35 ===---
-;     ---=== System.hcb:208:37 ===---
+;     ---=== System.hcb:210:35 ===---
+;     ---=== System.hcb:210:37 ===---
 mov ax, 1
 push ax
-;     ---=== System.hcb:208:15 ===---
+;     ---=== System.hcb:210:15 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.hcb:208:29 ===---
+;     ---=== System.hcb:210:29 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -9554,18 +9600,18 @@ add sp, 4
 pop bx
 add ax, bx
 mov [bp+-6], ax
-;     ---=== System.hcb:209:9 ===---
-;     ---=== System.hcb:209:34 ===---
-;     ---=== System.hcb:209:29 ===---
-;     ---=== System.hcb:209:31 ===---
+;     ---=== System.hcb:211:9 ===---
+;     ---=== System.hcb:211:34 ===---
+;     ---=== System.hcb:211:29 ===---
+;     ---=== System.hcb:211:31 ===---
 mov ax, 1
 push ax
-;     ---=== System.hcb:209:17 ===---
-;     ---=== System.hcb:209:20 ===---
+;     ---=== System.hcb:211:17 ===---
+;     ---=== System.hcb:211:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.hcb:209:13 ===---
+;     ---=== System.hcb:211:13 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 pop bx
@@ -9573,44 +9619,44 @@ add ax, bx
 pop bx
 add ax, bx
 push ax
-;     ---=== System.hcb:209:37 ===---
+;     ---=== System.hcb:211:37 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO824
+ja ROTULO826
+jmp ROTULO827
+ROTULO826:
+mov ax, 65535
+jmp ROTULO828
+ROTULO827:
+xor ax, ax
+ROTULO828:
+cmp ax, 0
+jne ROTULO824
 jmp ROTULO825
 ROTULO824:
-mov ax, 65535
-jmp ROTULO826
-ROTULO825:
-xor ax, ax
-ROTULO826:
-cmp ax, 0
-jne ROTULO822
-jmp ROTULO823
-ROTULO822:
-;     ---=== System.hcb:209:62 ===---
+;     ---=== System.hcb:211:62 ===---
 mov ax, _string
 mov [bp+-8], ax
-mov ax, 209
+mov ax, 211
 mov [bp+-10], ax
 mov ax, 9
 cs jmp word [_os_trycode]
-ROTULO823:
-;     ---=== System.hcb:210:10 ===---
+ROTULO825:
+;     ---=== System.hcb:212:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:210:27 ===---
-;     ---=== System.hcb:210:29 ===---
+;     ---=== System.hcb:212:27 ===---
+;     ---=== System.hcb:212:29 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.hcb:210:23 ===---
-;     ---=== System.hcb:210:25 ===---
+;     ---=== System.hcb:212:23 ===---
+;     ---=== System.hcb:212:25 ===---
 mov ax, 1
 push ax
-;     ---=== System.hcb:210:18 ===---
+;     ---=== System.hcb:212:18 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 pop bx
@@ -9618,40 +9664,40 @@ add ax, bx
 pop bx
 add ax, bx
 mov [bp+6], ax
-;     ---=== System.hcb:211:10 ===---
+;     ---=== System.hcb:213:10 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+10]
-;     ---=== System.hcb:212:22 ===---
-;     ---=== System.hcb:212:22 ===---
+;     ---=== System.hcb:214:22 ===---
+;     ---=== System.hcb:214:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 1
-ROTULO827:
-;     ---=== System.hcb:212:22 ===---
-;     ---=== System.hcb:212:22 ===---
+ROTULO829:
+;     ---=== System.hcb:214:22 ===---
+;     ---=== System.hcb:214:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 push ax
-;     ---=== System.hcb:212:22 ===---
+;     ---=== System.hcb:214:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO830
+jbe ROTULO832
+jmp ROTULO833
+ROTULO832:
+mov ax, 65535
+jmp ROTULO834
+ROTULO833:
+xor ax, ax
+ROTULO834:
+cmp ax, 0
+jne ROTULO830
 jmp ROTULO831
 ROTULO830:
-mov ax, 65535
-jmp ROTULO832
-ROTULO831:
-xor ax, ax
-ROTULO832:
-cmp ax, 0
-jne ROTULO828
-jmp ROTULO829
-ROTULO828:
-;     ---=== System.hcb:213:13 ===---
+;     ---=== System.hcb:215:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:213:19 ===---
+;     ---=== System.hcb:215:19 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -9659,42 +9705,42 @@ mov di, [bp+10]
 xor ax, ax
 es mov al, [di+0]
 mov [bp+-10], ax
-;     ---=== System.hcb:214:13 ===---
+;     ---=== System.hcb:216:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.hcb:214:20 ===---
+;     ---=== System.hcb:216:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-10]
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov [di+0], al
-;     ---=== System.hcb:215:14 ===---
+;     ---=== System.hcb:217:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-;     ---=== System.hcb:216:14 ===---
+;     ---=== System.hcb:218:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+10]
-;     ---=== System.hcb:212:22 ===---
+;     ---=== System.hcb:214:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-8]
-jmp ROTULO827
-ROTULO829:
-;     ---=== System.hcb:218:9 ===---
+jmp ROTULO829
+ROTULO831:
+;     ---=== System.hcb:220:9 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov byte [di+0], 0
-;     ---=== System.hcb:219:9 ===---
-;     ---=== System.hcb:219:16 ===---
+;     ---=== System.hcb:221:9 ===---
+;     ---=== System.hcb:221:16 ===---
 mov ax, 1
-jmp ROTULO821
-ROTULO821:
+jmp ROTULO823
+ROTULO823:
 mov sp, bp
 pop bp
 FIM_string_concat:
 retf
-;     ---=== System.hcb:222:21 ===---
+;     ---=== System.hcb:224:21 ===---
 _string_copy:
 push bp
 mov bp, sp
@@ -9707,15 +9753,15 @@ call _os_stackcheck
 ; ARG: orig_len TAM: 2 POS: BP--4 
 ; ARG: i TAM: 2 POS: BP--6 
 ; ARG: tmp TAM: 2 POS: BP--8 
-;     ---=== System.hcb:222:26 ===---
-;     ---=== System.hcb:222:48 ===---
-;     ---=== System.hcb:223:13 ===---
-;     ---=== System.hcb:224:13 ===---
+;     ---=== System.hcb:224:26 ===---
+;     ---=== System.hcb:224:48 ===---
 ;     ---=== System.hcb:225:13 ===---
 ;     ---=== System.hcb:226:13 ===---
-;     ---=== System.hcb:227:9 ===---
+;     ---=== System.hcb:227:13 ===---
+;     ---=== System.hcb:228:13 ===---
+;     ---=== System.hcb:229:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:227:25 ===---
+;     ---=== System.hcb:229:25 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -9723,15 +9769,15 @@ mov di, [bp+6]
 xor ax, ax
 es mov al, [di+0]
 mov [bp+-2], ax
-;     ---=== System.hcb:228:9 ===---
+;     ---=== System.hcb:230:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:228:40 ===---
-;     ---=== System.hcb:228:42 ===---
+;     ---=== System.hcb:230:40 ===---
+;     ---=== System.hcb:230:42 ===---
 mov ax, 1
 push ax
-;     ---=== System.hcb:228:20 ===---
+;     ---=== System.hcb:230:20 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.hcb:228:34 ===---
+;     ---=== System.hcb:230:34 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -9744,29 +9790,29 @@ add sp, 4
 pop bx
 add ax, bx
 mov [bp+-4], ax
-;     ---=== System.hcb:229:10 ===---
+;     ---=== System.hcb:231:10 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-;     ---=== System.hcb:230:10 ===---
+;     ---=== System.hcb:232:10 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+10]
-;     ---=== System.hcb:231:9 ===---
+;     ---=== System.hcb:233:9 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov byte [di+0], 0
-;     ---=== System.hcb:232:9 ===---
-;     ---=== System.hcb:232:26 ===---
-;     ---=== System.hcb:232:12 ===---
+;     ---=== System.hcb:234:9 ===---
+;     ---=== System.hcb:234:26 ===---
+;     ---=== System.hcb:234:12 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== System.hcb:232:38 ===---
-;     ---=== System.hcb:232:40 ===---
+;     ---=== System.hcb:234:38 ===---
+;     ---=== System.hcb:234:40 ===---
 mov ax, 1
 push ax
-;     ---=== System.hcb:232:29 ===---
+;     ---=== System.hcb:234:29 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 pop bx
@@ -9774,57 +9820,57 @@ add ax, bx
 mov bx, ax
 pop ax
 cmp ax, bx
-jb ROTULO836
+jb ROTULO838
+jmp ROTULO839
+ROTULO838:
+mov ax, 65535
+jmp ROTULO840
+ROTULO839:
+xor ax, ax
+ROTULO840:
+cmp ax, 0
+jne ROTULO836
 jmp ROTULO837
 ROTULO836:
-mov ax, 65535
-jmp ROTULO838
-ROTULO837:
-xor ax, ax
-ROTULO838:
-cmp ax, 0
-jne ROTULO834
-jmp ROTULO835
-ROTULO834:
-;     ---=== System.hcb:232:54 ===---
+;     ---=== System.hcb:234:54 ===---
 mov ax, _string
 mov [bp+-8], ax
-mov ax, 232
+mov ax, 234
 mov [bp+-10], ax
 mov ax, 9
 cs jmp word [_os_trycode]
-ROTULO835:
-;     ---=== System.hcb:233:22 ===---
-;     ---=== System.hcb:233:22 ===---
+ROTULO837:
+;     ---=== System.hcb:235:22 ===---
+;     ---=== System.hcb:235:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
-ROTULO839:
-;     ---=== System.hcb:233:22 ===---
-;     ---=== System.hcb:233:22 ===---
+ROTULO841:
+;     ---=== System.hcb:235:22 ===---
+;     ---=== System.hcb:235:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 push ax
-;     ---=== System.hcb:233:22 ===---
+;     ---=== System.hcb:235:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO842
+jbe ROTULO844
+jmp ROTULO845
+ROTULO844:
+mov ax, 65535
+jmp ROTULO846
+ROTULO845:
+xor ax, ax
+ROTULO846:
+cmp ax, 0
+jne ROTULO842
 jmp ROTULO843
 ROTULO842:
-mov ax, 65535
-jmp ROTULO844
-ROTULO843:
-xor ax, ax
-ROTULO844:
-cmp ax, 0
-jne ROTULO840
-jmp ROTULO841
-ROTULO840:
-;     ---=== System.hcb:234:13 ===---
+;     ---=== System.hcb:236:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== System.hcb:234:19 ===---
+;     ---=== System.hcb:236:19 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -9832,37 +9878,37 @@ mov di, [bp+10]
 xor ax, ax
 es mov al, [di+0]
 mov [bp+-8], ax
-;     ---=== System.hcb:235:13 ===---
+;     ---=== System.hcb:237:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.hcb:235:20 ===---
+;     ---=== System.hcb:237:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov [di+0], al
-;     ---=== System.hcb:236:14 ===---
+;     ---=== System.hcb:238:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+10]
-;     ---=== System.hcb:237:14 ===---
+;     ---=== System.hcb:239:14 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+6]
-;     ---=== System.hcb:233:22 ===---
+;     ---=== System.hcb:235:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-6]
-jmp ROTULO839
-ROTULO841:
-;     ---=== System.hcb:239:9 ===---
+jmp ROTULO841
+ROTULO843:
+;     ---=== System.hcb:241:9 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov byte [di+0], 0
-;     ---=== System.hcb:240:9 ===---
-;     ---=== System.hcb:240:16 ===---
+;     ---=== System.hcb:242:9 ===---
+;     ---=== System.hcb:242:16 ===---
 mov ax, 1
-jmp ROTULO833
-ROTULO833:
+jmp ROTULO835
+ROTULO835:
 mov sp, bp
 pop bp
 FIM_string_copy:
@@ -9880,7 +9926,7 @@ _configdefault_initialize:
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _floppydisk_initialize
-ROTULO845:
+ROTULO847:
 FIM_configdefault_initialize:
 retf
 ; MODULO FIM: configdefault
@@ -9973,28 +10019,548 @@ sub sp, 4
 push cs
 call _os_stackcheck
 ; ARG: t TAM: 4 POS: BP--4 
-;     ---=== System.IO.Disk.Floppy.hcb:35:12 ===---
-;     ---=== System.IO.Disk.Floppy.hcb:36:8 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:35:13 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:36:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:36:12 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:36:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:36:68 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:36:65 ===---
+mov ax, 9
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:36:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:36:58 ===---
+mov ax, 40
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:36:55 ===---
+xor ax, ax
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:36:40 ===---
+push cs
+pop es
+mov di, ROTULO850
+jmp ROTULO849
+ROTULO850:
+db 11
+db 70,108,111,112,112,121,48,95,51,54,48
+times 1 db 0
+ROTULO849:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppya360+2]
+cs mov [_floppydisk_floppya360], di
+;     ---=== System.IO.Disk.Floppy.hcb:37:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:37:32 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppya360+2]
+pop es
+cs mov di, [_floppydisk_floppya360]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:38:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:38:33 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppya360+2]
+pop es
+cs mov di, [_floppydisk_floppya360]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:39:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:39:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:39:69 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:39:65 ===---
+mov ax, 18
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:39:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:39:58 ===---
+mov ax, 40
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:39:55 ===---
+xor ax, ax
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:39:40 ===---
+push cs
+pop es
+mov di, ROTULO852
+jmp ROTULO851
+ROTULO852:
+db 11
+db 70,108,111,112,112,121,48,95,55,50,48
+times 1 db 0
+ROTULO851:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppya720+2]
+cs mov [_floppydisk_floppya720], di
+;     ---=== System.IO.Disk.Floppy.hcb:40:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:40:32 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppya720+2]
+pop es
+cs mov di, [_floppydisk_floppya720]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:41:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:41:33 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppya720+2]
+pop es
+cs mov di, [_floppydisk_floppya720]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:42:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:42:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:42:70 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:42:66 ===---
+mov ax, 15
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:42:63 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:42:59 ===---
+mov ax, 80
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:42:56 ===---
+xor ax, ax
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:42:40 ===---
+push cs
+pop es
+mov di, ROTULO854
+jmp ROTULO853
+ROTULO854:
+db 12
+db 70,108,111,112,112,121,48,95,49,50,48,48
+times 1 db 0
+ROTULO853:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppya1200+2]
+cs mov [_floppydisk_floppya1200], di
+;     ---=== System.IO.Disk.Floppy.hcb:43:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:43:33 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppya1200+2]
+pop es
+cs mov di, [_floppydisk_floppya1200]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:44:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:44:34 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppya1200+2]
+pop es
+cs mov di, [_floppydisk_floppya1200]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:45:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:45:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:45:70 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:45:66 ===---
+mov ax, 18
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:45:63 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:45:59 ===---
+mov ax, 80
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:45:56 ===---
+xor ax, ax
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:45:40 ===---
+push cs
+pop es
+mov di, ROTULO856
+jmp ROTULO855
+ROTULO856:
+db 12
+db 70,108,111,112,112,121,48,95,49,52,52,48
+times 1 db 0
+ROTULO855:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppya1440+2]
+cs mov [_floppydisk_floppya1440], di
+;     ---=== System.IO.Disk.Floppy.hcb:46:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:46:33 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppya1440+2]
+pop es
+cs mov di, [_floppydisk_floppya1440]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:47:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:47:34 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppya1440+2]
+pop es
+cs mov di, [_floppydisk_floppya1440]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:48:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:48:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:48:68 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:48:65 ===---
+mov ax, 9
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:48:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:48:58 ===---
+mov ax, 40
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:48:55 ===---
+mov ax, 1
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:48:40 ===---
+push cs
+pop es
+mov di, ROTULO858
+jmp ROTULO857
+ROTULO858:
+db 11
+db 70,108,111,112,112,121,49,95,51,54,48
+times 1 db 0
+ROTULO857:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppyb360+2]
+cs mov [_floppydisk_floppyb360], di
+;     ---=== System.IO.Disk.Floppy.hcb:49:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:49:32 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppyb360+2]
+pop es
+cs mov di, [_floppydisk_floppyb360]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:50:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:50:33 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppyb360+2]
+pop es
+cs mov di, [_floppydisk_floppyb360]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:51:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:51:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:51:69 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:51:65 ===---
+mov ax, 18
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:51:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:51:58 ===---
+mov ax, 40
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:51:55 ===---
+mov ax, 1
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:51:40 ===---
+push cs
+pop es
+mov di, ROTULO860
+jmp ROTULO859
+ROTULO860:
+db 11
+db 70,108,111,112,112,121,49,95,55,50,48
+times 1 db 0
+ROTULO859:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppyb720+2]
+cs mov [_floppydisk_floppyb720], di
+;     ---=== System.IO.Disk.Floppy.hcb:52:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:52:32 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppyb720+2]
+pop es
+cs mov di, [_floppydisk_floppyb720]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:53:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:53:33 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppyb720+2]
+pop es
+cs mov di, [_floppydisk_floppyb720]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:54:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:54:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:54:70 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:54:66 ===---
+mov ax, 15
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:54:63 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:54:59 ===---
+mov ax, 80
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:54:56 ===---
+mov ax, 1
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:54:40 ===---
+push cs
+pop es
+mov di, ROTULO862
+jmp ROTULO861
+ROTULO862:
+db 12
+db 70,108,111,112,112,121,49,95,49,50,48,48
+times 1 db 0
+ROTULO861:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppyb1200+2]
+cs mov [_floppydisk_floppyb1200], di
+;     ---=== System.IO.Disk.Floppy.hcb:55:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:55:33 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppyb1200+2]
+pop es
+cs mov di, [_floppydisk_floppyb1200]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:56:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:56:34 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppyb1200+2]
+pop es
+cs mov di, [_floppydisk_floppyb1200]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:57:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:57:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.IO.Disk.Floppy.hcb:57:70 ===---
+mov ax, 512
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:57:66 ===---
+mov ax, 18
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:57:63 ===---
+mov ax, 2
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:57:59 ===---
+mov ax, 80
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:57:56 ===---
+mov ax, 1
+push ax
+;     ---=== System.IO.Disk.Floppy.hcb:57:40 ===---
+push cs
+pop es
+mov di, ROTULO864
+jmp ROTULO863
+ROTULO864:
+db 12
+db 70,108,111,112,112,121,49,95,49,52,52,48
+times 1 db 0
+ROTULO863:
+push es
+push di
+push cs
+call _disk_registernew
+add sp, 14
+push es
+cs pop word [_floppydisk_floppyb1440+2]
+cs mov [_floppydisk_floppyb1440], di
+;     ---=== System.IO.Disk.Floppy.hcb:58:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:58:33 ===---
+push cs
+pop es
+mov di, _floppydisk_readblock
+push es
+push di
+cs push word [_floppydisk_floppyb1440+2]
+pop es
+cs mov di, [_floppydisk_floppyb1440]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:59:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.IO.Disk.Floppy.hcb:59:34 ===---
+push cs
+pop es
+mov di, _floppydisk_writeblock
+push es
+push di
+cs push word [_floppydisk_floppyb1440+2]
+pop es
+cs mov di, [_floppydisk_floppyb1440]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:60:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.IO.Disk.Floppy.hcb:60:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_requestnew
 push es
 pop word [bp+-4+2]
 mov [bp+-4], di
-;     ---=== System.IO.Disk.Floppy.hcb:38:8 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:62:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:38:27 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:62:28 ===---
 push cs
 pop es
 mov di, _floppydisk_main
 push es
 push di
-;     ---=== System.IO.Disk.Floppy.hcb:38:24 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:62:25 ===---
 mov ax, 2
 push ax
-;     ---=== System.IO.Disk.Floppy.hcb:38:21 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:62:22 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-4+2]
 pop es
@@ -10004,12 +10570,12 @@ push di
 push cs
 call _thread_start
 add sp, 10
-ROTULO846:
+ROTULO848:
 mov sp, bp
 pop bp
 FIM_floppydisk_initialize:
 retf
-;     ---=== System.IO.Disk.Floppy.hcb:42:9 ===---
+;     ---=== System.IO.Disk.Floppy.hcb:66:9 ===---
 _floppydisk_main:
 push bp
 mov bp, sp
@@ -10017,527 +10583,7 @@ sub sp, 2
 push cs
 call _os_stackcheck
 ; ARG: i TAM: 2 POS: BP--2 
-;     ---=== System.IO.Disk.Floppy.hcb:43:13 ===---
-;     ---=== System.IO.Disk.Floppy.hcb:44:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:44:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:44:68 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:44:65 ===---
-mov ax, 9
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:44:62 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:44:58 ===---
-mov ax, 40
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:44:55 ===---
-xor ax, ax
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:44:40 ===---
-push cs
-pop es
-mov di, ROTULO849
-jmp ROTULO848
-ROTULO849:
-db 11
-db 70,108,111,112,112,121,48,95,51,54,48
-times 1 db 0
-ROTULO848:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppya360+2]
-cs mov [_floppydisk_floppya360], di
-;     ---=== System.IO.Disk.Floppy.hcb:45:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:45:32 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppya360+2]
-pop es
-cs mov di, [_floppydisk_floppya360]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:46:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:46:33 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppya360+2]
-pop es
-cs mov di, [_floppydisk_floppya360]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:47:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:47:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:47:69 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:47:65 ===---
-mov ax, 18
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:47:62 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:47:58 ===---
-mov ax, 40
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:47:55 ===---
-xor ax, ax
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:47:40 ===---
-push cs
-pop es
-mov di, ROTULO851
-jmp ROTULO850
-ROTULO851:
-db 11
-db 70,108,111,112,112,121,48,95,55,50,48
-times 1 db 0
-ROTULO850:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppya720+2]
-cs mov [_floppydisk_floppya720], di
-;     ---=== System.IO.Disk.Floppy.hcb:48:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:48:32 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppya720+2]
-pop es
-cs mov di, [_floppydisk_floppya720]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:49:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:49:33 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppya720+2]
-pop es
-cs mov di, [_floppydisk_floppya720]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:50:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:50:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:50:70 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:50:66 ===---
-mov ax, 15
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:50:63 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:50:59 ===---
-mov ax, 80
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:50:56 ===---
-xor ax, ax
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:50:40 ===---
-push cs
-pop es
-mov di, ROTULO853
-jmp ROTULO852
-ROTULO853:
-db 12
-db 70,108,111,112,112,121,48,95,49,50,48,48
-times 1 db 0
-ROTULO852:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppya1200+2]
-cs mov [_floppydisk_floppya1200], di
-;     ---=== System.IO.Disk.Floppy.hcb:51:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:51:33 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppya1200+2]
-pop es
-cs mov di, [_floppydisk_floppya1200]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:52:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:52:34 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppya1200+2]
-pop es
-cs mov di, [_floppydisk_floppya1200]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:53:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:53:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:53:70 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:53:66 ===---
-mov ax, 18
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:53:63 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:53:59 ===---
-mov ax, 80
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:53:56 ===---
-xor ax, ax
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:53:40 ===---
-push cs
-pop es
-mov di, ROTULO855
-jmp ROTULO854
-ROTULO855:
-db 12
-db 70,108,111,112,112,121,48,95,49,52,52,48
-times 1 db 0
-ROTULO854:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppya1440+2]
-cs mov [_floppydisk_floppya1440], di
-;     ---=== System.IO.Disk.Floppy.hcb:54:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:54:33 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppya1440+2]
-pop es
-cs mov di, [_floppydisk_floppya1440]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:55:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:55:34 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppya1440+2]
-pop es
-cs mov di, [_floppydisk_floppya1440]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:56:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:56:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:56:68 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:56:65 ===---
-mov ax, 9
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:56:62 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:56:58 ===---
-mov ax, 40
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:56:55 ===---
-mov ax, 1
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:56:40 ===---
-push cs
-pop es
-mov di, ROTULO857
-jmp ROTULO856
-ROTULO857:
-db 11
-db 70,108,111,112,112,121,49,95,51,54,48
-times 1 db 0
-ROTULO856:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppyb360+2]
-cs mov [_floppydisk_floppyb360], di
-;     ---=== System.IO.Disk.Floppy.hcb:57:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:57:32 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppyb360+2]
-pop es
-cs mov di, [_floppydisk_floppyb360]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:58:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:58:33 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppyb360+2]
-pop es
-cs mov di, [_floppydisk_floppyb360]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:59:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:59:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:59:69 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:59:65 ===---
-mov ax, 18
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:59:62 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:59:58 ===---
-mov ax, 40
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:59:55 ===---
-mov ax, 1
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:59:40 ===---
-push cs
-pop es
-mov di, ROTULO859
-jmp ROTULO858
-ROTULO859:
-db 11
-db 70,108,111,112,112,121,49,95,55,50,48
-times 1 db 0
-ROTULO858:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppyb720+2]
-cs mov [_floppydisk_floppyb720], di
-;     ---=== System.IO.Disk.Floppy.hcb:60:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:60:32 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppyb720+2]
-pop es
-cs mov di, [_floppydisk_floppyb720]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:61:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:61:33 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppyb720+2]
-pop es
-cs mov di, [_floppydisk_floppyb720]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:62:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:62:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:62:70 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:62:66 ===---
-mov ax, 15
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:62:63 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:62:59 ===---
-mov ax, 80
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:62:56 ===---
-mov ax, 1
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:62:40 ===---
-push cs
-pop es
-mov di, ROTULO861
-jmp ROTULO860
-ROTULO861:
-db 12
-db 70,108,111,112,112,121,49,95,49,50,48,48
-times 1 db 0
-ROTULO860:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppyb1200+2]
-cs mov [_floppydisk_floppyb1200], di
-;     ---=== System.IO.Disk.Floppy.hcb:63:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:63:33 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppyb1200+2]
-pop es
-cs mov di, [_floppydisk_floppyb1200]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:64:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:64:34 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppyb1200+2]
-pop es
-cs mov di, [_floppydisk_floppyb1200]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:65:9 ===---
-; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== System.IO.Disk.Floppy.hcb:65:23 ===---
-; ACAO CHAMADA - Chama rotina
-;     ---=== System.IO.Disk.Floppy.hcb:65:70 ===---
-mov ax, 512
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:65:66 ===---
-mov ax, 18
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:65:63 ===---
-mov ax, 2
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:65:59 ===---
-mov ax, 80
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:65:56 ===---
-mov ax, 1
-push ax
-;     ---=== System.IO.Disk.Floppy.hcb:65:40 ===---
-push cs
-pop es
-mov di, ROTULO863
-jmp ROTULO862
-ROTULO863:
-db 12
-db 70,108,111,112,112,121,49,95,49,52,52,48
-times 1 db 0
-ROTULO862:
-push es
-push di
-push cs
-call _disk_registernew
-add sp, 14
-push es
-cs pop word [_floppydisk_floppyb1440+2]
-cs mov [_floppydisk_floppyb1440], di
-;     ---=== System.IO.Disk.Floppy.hcb:66:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:66:33 ===---
-push cs
-pop es
-mov di, _floppydisk_readblock
-push es
-push di
-cs push word [_floppydisk_floppyb1440+2]
-pop es
-cs mov di, [_floppydisk_floppyb1440]
-es pop word [di+47]
-es pop word [di+47+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== System.IO.Disk.Floppy.hcb:67:9 ===---
-; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== System.IO.Disk.Floppy.hcb:67:34 ===---
-push cs
-pop es
-mov di, _floppydisk_writeblock
-push es
-push di
-cs push word [_floppydisk_floppyb1440+2]
-pop es
-cs mov di, [_floppydisk_floppyb1440]
-es pop word [di+51]
-es pop word [di+51+2]
-; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.IO.Disk.Floppy.hcb:67:13 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:68:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:68:32 ===---
@@ -10561,13 +10607,13 @@ call _floppydisk_initdma
 push cs
 call _floppydisk_reset
 ;     ---=== System.IO.Disk.Floppy.hcb:71:9 ===---
-ROTULO864:
+ROTULO866:
 ;     ---=== System.IO.Disk.Floppy.hcb:71:15 ===---
 mov ax, 1
 cmp ax, 0
-jne ROTULO865
-jmp ROTULO866
-ROTULO865:
+jne ROTULO867
+jmp ROTULO868
+ROTULO867:
 ;     ---=== System.IO.Disk.Floppy.hcb:72:13 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:72:30 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:72:16 ===---
@@ -10579,18 +10625,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO869
+ja ROTULO871
+jmp ROTULO872
+ROTULO871:
+mov ax, 65535
+jmp ROTULO873
+ROTULO872:
+xor ax, ax
+ROTULO873:
+cmp ax, 0
+jne ROTULO869
 jmp ROTULO870
 ROTULO869:
-mov ax, 65535
-jmp ROTULO871
-ROTULO870:
-xor ax, ax
-ROTULO871:
-cmp ax, 0
-jne ROTULO867
-jmp ROTULO868
-ROTULO867:
 ;     ---=== System.IO.Disk.Floppy.hcb:73:17 ===---
 ; ACAO DEC - Decrementa variavel
 cs dec word [_floppydisk_motor0counter]
@@ -10605,18 +10651,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO874
+je ROTULO876
+jmp ROTULO877
+ROTULO876:
+mov ax, 65535
+jmp ROTULO878
+ROTULO877:
+xor ax, ax
+ROTULO878:
+cmp ax, 0
+jne ROTULO874
 jmp ROTULO875
 ROTULO874:
-mov ax, 65535
-jmp ROTULO876
-ROTULO875:
-xor ax, ax
-ROTULO876:
-cmp ax, 0
-jne ROTULO872
-jmp ROTULO873
-ROTULO872:
 ;     ---=== System.IO.Disk.Floppy.hcb:75:21 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:75:31 ===---
@@ -10625,8 +10671,8 @@ push ax
 push cs
 call _floppydisk_stopmotor
 add sp, 2
-ROTULO873:
-ROTULO868:
+ROTULO875:
+ROTULO870:
 ;     ---=== System.IO.Disk.Floppy.hcb:78:13 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:78:30 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:78:16 ===---
@@ -10638,18 +10684,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-ja ROTULO879
+ja ROTULO881
+jmp ROTULO882
+ROTULO881:
+mov ax, 65535
+jmp ROTULO883
+ROTULO882:
+xor ax, ax
+ROTULO883:
+cmp ax, 0
+jne ROTULO879
 jmp ROTULO880
 ROTULO879:
-mov ax, 65535
-jmp ROTULO881
-ROTULO880:
-xor ax, ax
-ROTULO881:
-cmp ax, 0
-jne ROTULO877
-jmp ROTULO878
-ROTULO877:
 ;     ---=== System.IO.Disk.Floppy.hcb:79:17 ===---
 ; ACAO DEC - Decrementa variavel
 cs dec word [_floppydisk_motor1counter]
@@ -10664,18 +10710,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO884
+je ROTULO886
+jmp ROTULO887
+ROTULO886:
+mov ax, 65535
+jmp ROTULO888
+ROTULO887:
+xor ax, ax
+ROTULO888:
+cmp ax, 0
+jne ROTULO884
 jmp ROTULO885
 ROTULO884:
-mov ax, 65535
-jmp ROTULO886
-ROTULO885:
-xor ax, ax
-ROTULO886:
-cmp ax, 0
-jne ROTULO882
-jmp ROTULO883
-ROTULO882:
 ;     ---=== System.IO.Disk.Floppy.hcb:81:21 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:81:31 ===---
@@ -10684,8 +10730,8 @@ push ax
 push cs
 call _floppydisk_stopmotor
 add sp, 2
-ROTULO883:
-ROTULO878:
+ROTULO885:
+ROTULO880:
 ;     ---=== System.IO.Disk.Floppy.hcb:84:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:84:26 ===---
@@ -10694,9 +10740,9 @@ push ax
 push cs
 call _thread_sleep
 add sp, 2
-jmp ROTULO864
-ROTULO866:
-ROTULO847:
+jmp ROTULO866
+ROTULO868:
+ROTULO865:
 mov sp, bp
 pop bp
 FIM_floppydisk_main:
@@ -10728,7 +10774,7 @@ mov al, 0x20
 out 0x20, al
 ;     ---=== System.IO.Disk.Floppy.hcb:95:13 ===---
 sti
-ROTULO887:
+ROTULO889:
 pop ax
 pop bx
 mov ss, ax
@@ -10768,7 +10814,7 @@ add sp, 2
 ;     ---=== System.IO.Disk.Floppy.hcb:103:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO889:
+ROTULO891:
 ;     ---=== System.IO.Disk.Floppy.hcb:103:22 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:103:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -10779,18 +10825,18 @@ mov ax, 10
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO892
+jbe ROTULO894
+jmp ROTULO895
+ROTULO894:
+mov ax, 65535
+jmp ROTULO896
+ROTULO895:
+xor ax, ax
+ROTULO896:
+cmp ax, 0
+jne ROTULO892
 jmp ROTULO893
 ROTULO892:
-mov ax, 65535
-jmp ROTULO894
-ROTULO893:
-xor ax, ax
-ROTULO894:
-cmp ax, 0
-jne ROTULO890
-jmp ROTULO891
-ROTULO890:
 ;     ---=== System.IO.Disk.Floppy.hcb:104:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:104:22 ===---
@@ -10827,18 +10873,18 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO897
+je ROTULO899
+jmp ROTULO900
+ROTULO899:
+mov ax, 65535
+jmp ROTULO901
+ROTULO900:
+xor ax, ax
+ROTULO901:
+cmp ax, 0
+jne ROTULO897
 jmp ROTULO898
 ROTULO897:
-mov ax, 65535
-jmp ROTULO899
-ROTULO898:
-xor ax, ax
-ROTULO899:
-cmp ax, 0
-jne ROTULO895
-jmp ROTULO896
-ROTULO895:
 ;     ---=== System.IO.Disk.Floppy.hcb:109:17 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:109:27 ===---
@@ -10851,13 +10897,13 @@ add sp, 2
 ;     ---=== System.IO.Disk.Floppy.hcb:110:17 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:110:23 ===---
 xor ax, ax
-jmp ROTULO888
-ROTULO896:
+jmp ROTULO890
+ROTULO898:
 ;     ---=== System.IO.Disk.Floppy.hcb:103:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO889
-ROTULO891:
+jmp ROTULO891
+ROTULO893:
 ;     ---=== System.IO.Disk.Floppy.hcb:113:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:113:19 ===---
@@ -10874,7 +10920,7 @@ mov ax, 114
 mov [bp+-10], ax
 mov ax, 10
 cs jmp word [_os_trycode]
-ROTULO888:
+ROTULO890:
 mov sp, bp
 pop bp
 FIM_floppydisk_calibrate:
@@ -11037,7 +11083,7 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO900:
+ROTULO902:
 FIM_floppydisk_initdma:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:129:9 ===---
@@ -11141,7 +11187,7 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO913:
+ROTULO915:
 FIM_floppydisk_writedor:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:133:9 ===---
@@ -11242,7 +11288,7 @@ mov bx, ax
 pop ax
 and ax, bx
 cs mov [_floppydisk_controllerrqm], ax
-ROTULO929:
+ROTULO931:
 mov sp, bp
 pop bp
 FIM_floppydisk_readmsr:
@@ -11265,7 +11311,7 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO948:
+ROTULO950:
 mov sp, bp
 pop bp
 FIM_floppydisk_writectrl:
@@ -11288,7 +11334,7 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO949:
+ROTULO951:
 mov sp, bp
 pop bp
 FIM_floppydisk_writefifo:
@@ -11304,8 +11350,8 @@ push ax
 push cs
 call _io_inputbyte
 add sp, 2
-jmp ROTULO950
-ROTULO950:
+jmp ROTULO952
+ROTULO952:
 FIM_floppydisk_readfifo:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:156:9 ===---
@@ -11323,7 +11369,7 @@ call _os_stackcheck
 ;     ---=== System.IO.Disk.Floppy.hcb:158:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO952:
+ROTULO954:
 ;     ---=== System.IO.Disk.Floppy.hcb:158:22 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:158:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -11334,18 +11380,18 @@ mov ax, 500
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO955
+jbe ROTULO957
+jmp ROTULO958
+ROTULO957:
+mov ax, 65535
+jmp ROTULO959
+ROTULO958:
+xor ax, ax
+ROTULO959:
+cmp ax, 0
+jne ROTULO955
 jmp ROTULO956
 ROTULO955:
-mov ax, 65535
-jmp ROTULO957
-ROTULO956:
-xor ax, ax
-ROTULO957:
-cmp ax, 0
-jne ROTULO953
-jmp ROTULO954
-ROTULO953:
 ;     ---=== System.IO.Disk.Floppy.hcb:159:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
@@ -11355,9 +11401,9 @@ call _floppydisk_readmsr
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_floppydisk_controllerrqm]
 cmp ax, 0
-jne ROTULO958
-jmp ROTULO959
-ROTULO958:
+jne ROTULO960
+jmp ROTULO961
+ROTULO960:
 ;     ---=== System.IO.Disk.Floppy.hcb:161:17 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:161:27 ===---
@@ -11370,14 +11416,14 @@ add sp, 2
 ;     ---=== System.IO.Disk.Floppy.hcb:162:17 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:162:22 ===---
 xor ax, ax
-jmp ROTULO951
-ROTULO959:
+jmp ROTULO953
+ROTULO961:
 ;     ---=== System.IO.Disk.Floppy.hcb:158:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO952
-ROTULO954:
-ROTULO951:
+jmp ROTULO954
+ROTULO956:
+ROTULO953:
 mov sp, bp
 pop bp
 FIM_floppydisk_writecmd:
@@ -11395,7 +11441,7 @@ call _os_stackcheck
 ;     ---=== System.IO.Disk.Floppy.hcb:169:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO961:
+ROTULO963:
 ;     ---=== System.IO.Disk.Floppy.hcb:169:22 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:169:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -11406,18 +11452,18 @@ mov ax, 500
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO964
+jbe ROTULO966
+jmp ROTULO967
+ROTULO966:
+mov ax, 65535
+jmp ROTULO968
+ROTULO967:
+xor ax, ax
+ROTULO968:
+cmp ax, 0
+jne ROTULO964
 jmp ROTULO965
 ROTULO964:
-mov ax, 65535
-jmp ROTULO966
-ROTULO965:
-xor ax, ax
-ROTULO966:
-cmp ax, 0
-jne ROTULO962
-jmp ROTULO963
-ROTULO962:
 ;     ---=== System.IO.Disk.Floppy.hcb:170:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
@@ -11427,26 +11473,26 @@ call _floppydisk_readmsr
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_floppydisk_controllerrqm]
 cmp ax, 0
-jne ROTULO967
-jmp ROTULO968
-ROTULO967:
+jne ROTULO969
+jmp ROTULO970
+ROTULO969:
 ;     ---=== System.IO.Disk.Floppy.hcb:172:17 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:172:24 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _floppydisk_readfifo
-jmp ROTULO960
-ROTULO968:
+jmp ROTULO962
+ROTULO970:
 ;     ---=== System.IO.Disk.Floppy.hcb:169:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO961
-ROTULO963:
+jmp ROTULO963
+ROTULO965:
 ;     ---=== System.IO.Disk.Floppy.hcb:175:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:175:16 ===---
 xor ax, ax
-jmp ROTULO960
-ROTULO960:
+jmp ROTULO962
+ROTULO962:
 mov sp, bp
 pop bp
 FIM_floppydisk_readdata:
@@ -11468,22 +11514,22 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO972
+je ROTULO974
+jmp ROTULO975
+ROTULO974:
+mov ax, 65535
+jmp ROTULO976
+ROTULO975:
+xor ax, ax
+ROTULO976:
+cmp ax, 0
+jne ROTULO972
 jmp ROTULO973
 ROTULO972:
-mov ax, 65535
-jmp ROTULO974
-ROTULO973:
-xor ax, ax
-ROTULO974:
-cmp ax, 0
-jne ROTULO970
-jmp ROTULO971
-ROTULO970:
 ;     ---=== System.IO.Disk.Floppy.hcb:180:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor0status], 0
-ROTULO971:
+ROTULO973:
 ;     ---=== System.IO.Disk.Floppy.hcb:182:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:182:18 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:182:12 ===---
@@ -11495,27 +11541,27 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO977
+je ROTULO979
+jmp ROTULO980
+ROTULO979:
+mov ax, 65535
+jmp ROTULO981
+ROTULO980:
+xor ax, ax
+ROTULO981:
+cmp ax, 0
+jne ROTULO977
 jmp ROTULO978
 ROTULO977:
-mov ax, 65535
-jmp ROTULO979
-ROTULO978:
-xor ax, ax
-ROTULO979:
-cmp ax, 0
-jne ROTULO975
-jmp ROTULO976
-ROTULO975:
 ;     ---=== System.IO.Disk.Floppy.hcb:183:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor1status], 0
-ROTULO976:
+ROTULO978:
 ;     ---=== System.IO.Disk.Floppy.hcb:185:9 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _floppydisk_writedor
-ROTULO969:
+ROTULO971:
 mov sp, bp
 pop bp
 FIM_floppydisk_stopmotor:
@@ -11546,16 +11592,16 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO986
-jmp ROTULO987
-ROTULO986:
-mov ax, 65535
-jmp ROTULO988
-ROTULO987:
-xor ax, ax
+je ROTULO988
+jmp ROTULO989
 ROTULO988:
+mov ax, 65535
+jmp ROTULO990
+ROTULO989:
+xor ax, ax
+ROTULO990:
 cmp ax, 0
-je ROTULO984
+je ROTULO986
 ;     ---=== System.IO.Disk.Floppy.hcb:191:47 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:191:34 ===---
 ; ACAO LEITURA - Le variavel
@@ -11566,30 +11612,30 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO989
-jmp ROTULO990
-ROTULO989:
-mov ax, 65535
-jmp ROTULO991
-ROTULO990:
-xor ax, ax
+je ROTULO991
+jmp ROTULO992
 ROTULO991:
-cmp ax, 0
-je ROTULO984
-ROTULO983:
 mov ax, 65535
-jmp ROTULO985
-ROTULO984:
+jmp ROTULO993
+ROTULO992:
 xor ax, ax
-ROTULO985:
+ROTULO993:
 cmp ax, 0
-jne ROTULO981
-jmp ROTULO982
-ROTULO981:
+je ROTULO986
+ROTULO985:
+mov ax, 65535
+jmp ROTULO987
+ROTULO986:
+xor ax, ax
+ROTULO987:
+cmp ax, 0
+jne ROTULO983
+jmp ROTULO984
+ROTULO983:
 ;     ---=== System.IO.Disk.Floppy.hcb:191:58 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO982:
+ROTULO984:
 ;     ---=== System.IO.Disk.Floppy.hcb:192:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:192:25 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:192:19 ===---
@@ -11602,16 +11648,16 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO997
-jmp ROTULO998
-ROTULO997:
-mov ax, 65535
-jmp ROTULO999
-ROTULO998:
-xor ax, ax
+je ROTULO999
+jmp ROTULO1000
 ROTULO999:
+mov ax, 65535
+jmp ROTULO1001
+ROTULO1000:
+xor ax, ax
+ROTULO1001:
 cmp ax, 0
-je ROTULO995
+je ROTULO997
 ;     ---=== System.IO.Disk.Floppy.hcb:192:47 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:192:34 ===---
 ; ACAO LEITURA - Le variavel
@@ -11622,30 +11668,30 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1000
-jmp ROTULO1001
-ROTULO1000:
-mov ax, 65535
-jmp ROTULO1002
-ROTULO1001:
-xor ax, ax
+je ROTULO1002
+jmp ROTULO1003
 ROTULO1002:
-cmp ax, 0
-je ROTULO995
-ROTULO994:
 mov ax, 65535
-jmp ROTULO996
-ROTULO995:
+jmp ROTULO1004
+ROTULO1003:
 xor ax, ax
-ROTULO996:
+ROTULO1004:
 cmp ax, 0
-jne ROTULO992
-jmp ROTULO993
-ROTULO992:
+je ROTULO997
+ROTULO996:
+mov ax, 65535
+jmp ROTULO998
+ROTULO997:
+xor ax, ax
+ROTULO998:
+cmp ax, 0
+jne ROTULO994
+jmp ROTULO995
+ROTULO994:
 ;     ---=== System.IO.Disk.Floppy.hcb:192:58 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO993:
+ROTULO995:
 ;     ---=== System.IO.Disk.Floppy.hcb:193:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:193:18 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:193:12 ===---
@@ -11657,25 +11703,25 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1005
+je ROTULO1007
+jmp ROTULO1008
+ROTULO1007:
+mov ax, 65535
+jmp ROTULO1009
+ROTULO1008:
+xor ax, ax
+ROTULO1009:
+cmp ax, 0
+jne ROTULO1005
 jmp ROTULO1006
 ROTULO1005:
-mov ax, 65535
-jmp ROTULO1007
-ROTULO1006:
-xor ax, ax
-ROTULO1007:
-cmp ax, 0
-jne ROTULO1003
-jmp ROTULO1004
-ROTULO1003:
 ;     ---=== System.IO.Disk.Floppy.hcb:194:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor0counter], 5
 ;     ---=== System.IO.Disk.Floppy.hcb:195:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor0status], 1
-ROTULO1004:
+ROTULO1006:
 ;     ---=== System.IO.Disk.Floppy.hcb:197:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:197:18 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:197:12 ===---
@@ -11687,25 +11733,25 @@ mov ax, 1
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1010
+je ROTULO1012
+jmp ROTULO1013
+ROTULO1012:
+mov ax, 65535
+jmp ROTULO1014
+ROTULO1013:
+xor ax, ax
+ROTULO1014:
+cmp ax, 0
+jne ROTULO1010
 jmp ROTULO1011
 ROTULO1010:
-mov ax, 65535
-jmp ROTULO1012
-ROTULO1011:
-xor ax, ax
-ROTULO1012:
-cmp ax, 0
-jne ROTULO1008
-jmp ROTULO1009
-ROTULO1008:
 ;     ---=== System.IO.Disk.Floppy.hcb:198:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor1counter], 5
 ;     ---=== System.IO.Disk.Floppy.hcb:199:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_motor1status], 1
-ROTULO1009:
+ROTULO1011:
 ;     ---=== System.IO.Disk.Floppy.hcb:201:9 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
@@ -11715,9 +11761,9 @@ call _floppydisk_writedor
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 cmp ax, 0
-jne ROTULO1013
-jmp ROTULO1014
-ROTULO1013:
+jne ROTULO1015
+jmp ROTULO1016
+ROTULO1015:
 ;     ---=== System.IO.Disk.Floppy.hcb:202:22 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:202:35 ===---
@@ -11726,8 +11772,8 @@ push ax
 push cs
 call _thread_sleep
 add sp, 2
-ROTULO1014:
-ROTULO980:
+ROTULO1016:
+ROTULO982:
 mov sp, bp
 pop bp
 FIM_floppydisk_startmotor:
@@ -11769,7 +11815,7 @@ call _floppydisk_waitirq
 ;     ---=== System.IO.Disk.Floppy.hcb:212:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
-ROTULO1016:
+ROTULO1018:
 ;     ---=== System.IO.Disk.Floppy.hcb:212:22 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:212:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -11780,18 +11826,18 @@ mov ax, 3
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO1019
+jbe ROTULO1021
+jmp ROTULO1022
+ROTULO1021:
+mov ax, 65535
+jmp ROTULO1023
+ROTULO1022:
+xor ax, ax
+ROTULO1023:
+cmp ax, 0
+jne ROTULO1019
 jmp ROTULO1020
 ROTULO1019:
-mov ax, 65535
-jmp ROTULO1021
-ROTULO1020:
-xor ax, ax
-ROTULO1021:
-cmp ax, 0
-jne ROTULO1017
-jmp ROTULO1018
-ROTULO1017:
 ;     ---=== System.IO.Disk.Floppy.hcb:213:13 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
@@ -11799,8 +11845,8 @@ call _floppydisk_checkinterrupt
 ;     ---=== System.IO.Disk.Floppy.hcb:212:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-12]
-jmp ROTULO1016
-ROTULO1018:
+jmp ROTULO1018
+ROTULO1020:
 ;     ---=== System.IO.Disk.Floppy.hcb:215:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:215:19 ===---
@@ -11837,7 +11883,7 @@ mov ax, bp
 cs mov [_os_trybase], ax
 mov ax, sp
 cs mov [_os_trystack], ax
-mov ax, ROTULO1022
+mov ax, ROTULO1024
 cs mov [_os_trycode], ax
 ;     ---=== System.IO.Disk.Floppy.hcb:218:13 ===---
 ; ACAO CHAMADA - Chama rotina
@@ -11847,8 +11893,8 @@ push ax
 push cs
 call _floppydisk_calibrate
 add sp, 2
-jmp ROTULO1023
-ROTULO1022:
+jmp ROTULO1025
+ROTULO1024:
 mov bx, ax
 mov ax, [bp+-10]
 push word [bp+-8+2]
@@ -11861,10 +11907,10 @@ pop word [bp+-8+2]
 mov [bp+-8], di
 mov [bp+-10], ax
 mov ax, bx
-jmp ROTULO1023
-ROTULO1025:
+jmp ROTULO1025
+ROTULO1027:
 cs jmp word [_os_tryfatal]
-ROTULO1023:
+ROTULO1025:
 mov ax, [bp+-6]
 cs mov [_os_trybase], ax
 mov ax, [bp+-4]
@@ -11882,7 +11928,7 @@ mov ax, bp
 cs mov [_os_trybase], ax
 mov ax, sp
 cs mov [_os_trystack], ax
-mov ax, ROTULO1026
+mov ax, ROTULO1028
 cs mov [_os_trycode], ax
 ;     ---=== System.IO.Disk.Floppy.hcb:222:13 ===---
 ; ACAO CHAMADA - Chama rotina
@@ -11892,8 +11938,8 @@ push ax
 push cs
 call _floppydisk_calibrate
 add sp, 2
-jmp ROTULO1027
-ROTULO1026:
+jmp ROTULO1029
+ROTULO1028:
 mov bx, ax
 mov ax, [bp+-10]
 push word [bp+-8+2]
@@ -11906,17 +11952,17 @@ pop word [bp+-8+2]
 mov [bp+-8], di
 mov [bp+-10], ax
 mov ax, bx
-jmp ROTULO1027
-ROTULO1029:
+jmp ROTULO1029
+ROTULO1031:
 cs jmp word [_os_tryfatal]
-ROTULO1027:
+ROTULO1029:
 mov ax, [bp+-6]
 cs mov [_os_trybase], ax
 mov ax, [bp+-4]
 cs mov [_os_trystack], ax
 mov ax, [bp+-2]
 cs mov [_os_trycode], ax
-ROTULO1015:
+ROTULO1017:
 mov sp, bp
 pop bp
 FIM_floppydisk_reset:
@@ -11945,7 +11991,7 @@ cs mov word [_floppydisk_motor1status], 0
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _floppydisk_writedor
-ROTULO1030:
+ROTULO1032:
 FIM_floppydisk_disable:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:237:9 ===---
@@ -11960,7 +12006,7 @@ cs mov word [_floppydisk_resetstatus], 1
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _floppydisk_writedor
-ROTULO1031:
+ROTULO1033:
 FIM_floppydisk_enable:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:243:9 ===---
@@ -11998,7 +12044,7 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO1032:
+ROTULO1034:
 FIM_floppydisk_dmaread:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:249:9 ===---
@@ -12036,13 +12082,13 @@ push ax
 push cs
 call _io_outputbyte
 add sp, 4
-ROTULO1033:
+ROTULO1035:
 FIM_floppydisk_dmawrite:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:255:9 ===---
 _floppydisk_waitirq:
 ;     ---=== System.IO.Disk.Floppy.hcb:256:9 ===---
-ROTULO1035:
+ROTULO1037:
 ;     ---=== System.IO.Disk.Floppy.hcb:256:25 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:256:15 ===---
 ; ACAO LEITURA - Le variavel
@@ -12053,28 +12099,28 @@ xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1038
+je ROTULO1040
+jmp ROTULO1041
+ROTULO1040:
+mov ax, 65535
+jmp ROTULO1042
+ROTULO1041:
+xor ax, ax
+ROTULO1042:
+cmp ax, 0
+jne ROTULO1038
 jmp ROTULO1039
 ROTULO1038:
-mov ax, 65535
-jmp ROTULO1040
-ROTULO1039:
-xor ax, ax
-ROTULO1040:
-cmp ax, 0
-jne ROTULO1036
-jmp ROTULO1037
-ROTULO1036:
 ;     ---=== System.IO.Disk.Floppy.hcb:256:30 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _thread_yield
-jmp ROTULO1035
-ROTULO1037:
+jmp ROTULO1037
+ROTULO1039:
 ;     ---=== System.IO.Disk.Floppy.hcb:257:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_floppydisk_irqstatus], 0
-ROTULO1034:
+ROTULO1036:
 FIM_floppydisk_waitirq:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:260:9 ===---
@@ -12140,13 +12186,13 @@ add sp, 2
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 cmp ax, 0
-jne ROTULO1051
-jmp ROTULO1052
-ROTULO1051:
+jne ROTULO1053
+jmp ROTULO1054
+ROTULO1053:
 ;     ---=== System.IO.Disk.Floppy.hcb:263:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+6], 1
-ROTULO1052:
+ROTULO1054:
 ;     ---=== System.IO.Disk.Floppy.hcb:264:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:264:35 ===---
@@ -12171,7 +12217,7 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-ROTULO1041:
+ROTULO1043:
 mov sp, bp
 pop bp
 FIM_floppydisk_configdrive:
@@ -12200,7 +12246,7 @@ cs mov [_floppydisk_statusregister0], ax
 push cs
 call _floppydisk_readdata
 cs mov [_floppydisk_currentcylinder], ax
-ROTULO1056:
+ROTULO1058:
 FIM_floppydisk_checkinterrupt:
 retf
 ;     ---=== System.IO.Disk.Floppy.hcb:273:9 ===---
@@ -12222,7 +12268,7 @@ call _os_stackcheck
 ;     ---=== System.IO.Disk.Floppy.hcb:275:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 1
-ROTULO1058:
+ROTULO1060:
 ;     ---=== System.IO.Disk.Floppy.hcb:275:22 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:275:22 ===---
 ; ACAO LEITURA - Le variavel
@@ -12233,18 +12279,18 @@ mov ax, 10
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO1061
+jbe ROTULO1063
+jmp ROTULO1064
+ROTULO1063:
+mov ax, 65535
+jmp ROTULO1065
+ROTULO1064:
+xor ax, ax
+ROTULO1065:
+cmp ax, 0
+jne ROTULO1061
 jmp ROTULO1062
 ROTULO1061:
-mov ax, 65535
-jmp ROTULO1063
-ROTULO1062:
-xor ax, ax
-ROTULO1063:
-cmp ax, 0
-jne ROTULO1059
-jmp ROTULO1060
-ROTULO1059:
 ;     ---=== System.IO.Disk.Floppy.hcb:276:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:276:22 ===---
@@ -12306,28 +12352,28 @@ mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1069
+je ROTULO1071
+jmp ROTULO1072
+ROTULO1071:
+mov ax, 65535
+jmp ROTULO1073
+ROTULO1072:
+xor ax, ax
+ROTULO1073:
+cmp ax, 0
+jne ROTULO1069
 jmp ROTULO1070
 ROTULO1069:
-mov ax, 65535
-jmp ROTULO1071
-ROTULO1070:
-xor ax, ax
-ROTULO1071:
-cmp ax, 0
-jne ROTULO1067
-jmp ROTULO1068
-ROTULO1067:
 ;     ---=== System.IO.Disk.Floppy.hcb:283:49 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:283:54 ===---
 xor ax, ax
-jmp ROTULO1057
-ROTULO1068:
+jmp ROTULO1059
+ROTULO1070:
 ;     ---=== System.IO.Disk.Floppy.hcb:275:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO1058
-ROTULO1060:
+jmp ROTULO1060
+ROTULO1062:
 ;     ---=== System.IO.Disk.Floppy.hcb:285:15 ===---
 mov ax, _floppydisk
 mov [bp+-8], ax
@@ -12335,7 +12381,7 @@ mov ax, 285
 mov [bp+-10], ax
 mov ax, 10
 cs jmp word [_os_trycode]
-ROTULO1057:
+ROTULO1059:
 mov sp, bp
 pop bp
 FIM_floppydisk_seek:
@@ -12398,18 +12444,18 @@ mov ax, 18
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1075
+je ROTULO1077
+jmp ROTULO1078
+ROTULO1077:
+mov ax, 65535
+jmp ROTULO1079
+ROTULO1078:
+xor ax, ax
+ROTULO1079:
+cmp ax, 0
+jne ROTULO1075
 jmp ROTULO1076
 ROTULO1075:
-mov ax, 65535
-jmp ROTULO1077
-ROTULO1076:
-xor ax, ax
-ROTULO1077:
-cmp ax, 0
-jne ROTULO1073
-jmp ROTULO1074
-ROTULO1073:
 ;     ---=== System.IO.Disk.Floppy.hcb:292:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:292:22 ===---
@@ -12418,8 +12464,8 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-jmp ROTULO1078
-ROTULO1074:
+jmp ROTULO1080
+ROTULO1076:
 ;     ---=== System.IO.Disk.Floppy.hcb:294:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:294:22 ===---
@@ -12428,7 +12474,7 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-ROTULO1078:
+ROTULO1080:
 ;     ---=== System.IO.Disk.Floppy.hcb:296:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:296:34 ===---
@@ -12592,18 +12638,18 @@ es mov ax, [di+43]
 mov bx, ax
 pop ax
 cmp ax, bx
-jae ROTULO1093
+jae ROTULO1095
+jmp ROTULO1096
+ROTULO1095:
+mov ax, 65535
+jmp ROTULO1097
+ROTULO1096:
+xor ax, ax
+ROTULO1097:
+cmp ax, 0
+jne ROTULO1093
 jmp ROTULO1094
 ROTULO1093:
-mov ax, 65535
-jmp ROTULO1095
-ROTULO1094:
-xor ax, ax
-ROTULO1095:
-cmp ax, 0
-jne ROTULO1091
-jmp ROTULO1092
-ROTULO1091:
 ;     ---=== System.IO.Disk.Floppy.hcb:306:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:306:22 ===---
@@ -12613,8 +12659,8 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-jmp ROTULO1096
-ROTULO1092:
+jmp ROTULO1098
+ROTULO1094:
 ;     ---=== System.IO.Disk.Floppy.hcb:308:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:308:33 ===---
@@ -12633,7 +12679,7 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-ROTULO1096:
+ROTULO1098:
 ;     ---=== System.IO.Disk.Floppy.hcb:310:9 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:310:25 ===---
 ;     ---=== System.IO.Disk.Floppy.hcb:310:12 ===---
@@ -12648,18 +12694,18 @@ mov ax, 18
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1099
+je ROTULO1101
+jmp ROTULO1102
+ROTULO1101:
+mov ax, 65535
+jmp ROTULO1103
+ROTULO1102:
+xor ax, ax
+ROTULO1103:
+cmp ax, 0
+jne ROTULO1099
 jmp ROTULO1100
 ROTULO1099:
-mov ax, 65535
-jmp ROTULO1101
-ROTULO1100:
-xor ax, ax
-ROTULO1101:
-cmp ax, 0
-jne ROTULO1097
-jmp ROTULO1098
-ROTULO1097:
 ;     ---=== System.IO.Disk.Floppy.hcb:311:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:311:22 ===---
@@ -12668,8 +12714,8 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-jmp ROTULO1102
-ROTULO1098:
+jmp ROTULO1104
+ROTULO1100:
 ;     ---=== System.IO.Disk.Floppy.hcb:313:13 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:313:22 ===---
@@ -12678,7 +12724,7 @@ push ax
 push cs
 call _floppydisk_writecmd
 add sp, 2
-ROTULO1102:
+ROTULO1104:
 ;     ---=== System.IO.Disk.Floppy.hcb:315:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== System.IO.Disk.Floppy.hcb:315:18 ===---
@@ -12745,7 +12791,7 @@ push di
 push cs
 call _memory_copy
 add sp, 10
-ROTULO1072:
+ROTULO1074:
 mov sp, bp
 pop bp
 FIM_floppydisk_readblock:
@@ -12769,7 +12815,7 @@ mov ax, 329
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
-ROTULO1103:
+ROTULO1105:
 mov sp, bp
 pop bp
 FIM_floppydisk_writeblock:
