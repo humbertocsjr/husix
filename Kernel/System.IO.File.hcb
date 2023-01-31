@@ -16,3 +16,34 @@ Structure DirectoryInfo
     Dim GetFileInfo as Func(Of DirectoryInfo, UInt16, FileInfo, UInt16)
     Dim GetDirectoryInfo as Func(Of DirectoryInfo, UInt16, DirectoryInfo, UInt16)
 End
+
+Module FileInfo
+    Public Sub Initialize(dir as FileInfo)
+        dir.Name = dir
+        Dim ptr as PtrByteArray
+        ptr = dir
+        ptr = 32
+        @ptr++
+        ptr = 0
+        #ptr = 0
+        @ptr = 0
+        dir.MountedFileSystem = ptr
+        dir.Open = ptr
+    End
+End
+
+Module DirectoryInfo
+    Public Sub Initialize(dir as DirectoryInfo)
+        dir.Name = dir
+        Dim ptr as PtrByteArray
+        ptr = dir
+        ptr = 32
+        @ptr++
+        ptr = 0
+        #ptr = 0
+        @ptr = 0
+        dir.MountedFileSystem = ptr
+        dir.GetFileInfo = ptr
+        dir.GetDirectoryInfo = ptr
+    End
+End

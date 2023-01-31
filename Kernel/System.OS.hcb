@@ -60,9 +60,8 @@ Module OS
             end
         end
         ' Define ponteiro
-        asm "mov ax, cs"
-        asm "mov [bp-2], ax"
-        asm "mov word [bp-4], 0x80"
+        #args = CodeSegment()
+        @args = 0x80
         ' Adiciona um zero ao final da variavel para ser ASCIZ
         asm "mov al, [0x80]"
         asm "xor ah, ah"

@@ -45,17 +45,17 @@ Module Disk
         List.Initialize Disks, SizeOf(DiskInfo)
     End
     
-    Public Function RegisterNew(name as String, internalId as UInt16, Cylinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
+    Public Function RegisterNew(name as String, internalId as UInt16, cylinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
         Dim info as DiskInfo 
         Dim ptr as PtrByteArray
         ptr = List.Add(Disks)
-        #info = #ptr
-        @info = @ptr
+        info = ptr
         info.Name = info ' Nome é alocado nos primeiros 33 bytes
         info.InternalId = internalId
-        info.Cylinders = Cylinders
+        info.Cylinders = cylinders
         info.Heads = heads
         info.Sectors = sectors
+        info.BlockSize = blockSize
         info.ReadBlock = AddressOf(GenericReadBlock)
         info.WriteBlock = AddressOf(GenericWriteBlock)
         ptr = 32 ' Tamanho do nome

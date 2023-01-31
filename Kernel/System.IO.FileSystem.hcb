@@ -22,6 +22,10 @@ Structure MountedFileSystem
     Dim Param6 as UInt16
     Dim Param7 as UInt16
     Dim Param8 as UInt16
+    Dim Ptr1 as PtrByteArray
+    Dim Ptr2 as PtrByteArray
+    Dim Ptr3 as PtrByteArray
+    Dim Ptr4 as PtrByteArray
     Dim GetRoot as Action(Of MountedFileSystem, DirectoryInfo)
 End
 
@@ -38,7 +42,7 @@ Module FileSystem
     End
 
     Public Sub GetRoot(output as DirectoryInfo)
-        If Not RootIsMounted Then Throw NotFoundError
+        If RootIsMounted == 0 Then Throw NotFoundError
         Root.GetRoot.Invoke output
     End
 
@@ -104,7 +108,7 @@ Module FileSystem
         If #fs.Mount == 0 Then Throw NotImplementedError
         If fs.IsMountable.Invoke(d) == 0 Then Throw InvalidValueError
         If String.Equals(mountPoint, "/") Then
-            RootIsMounted = 1
+            RootIsMounted = 0xffff
             mount = Root
         Else
             mount = List.Add(MountList)

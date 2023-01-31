@@ -15,6 +15,10 @@ Imports ConfigDefault
 
 Module Program
 
+    Sub WriteDot
+        Console.Write " ."
+    End
+
     Public Sub Main(args as PtrByteArray)
         Dim ptr as PtrByteArray
         Dim ver as Version
@@ -32,32 +36,49 @@ Module Program
         Console.WriteLine ver.Release
         Console.Write "Initializing"
         MultiThreading.PreInitialize
-        Console.Write "."
+        WriteDot
         GlobalMemory.Initialize
-        Console.Write "."
+        WriteDot
         Memory.Initialize
-        Console.Write "."
+        WriteDot
         MultiThreading.Initialize
-        Console.Write "."
+        WriteDot
         SystemTimer.Initialize
-        Console.Write "."
+        WriteDot
         MultiThreading.Resume
-        Console.Write "."
+        WriteDot
         Disk.Initialize
-        Console.Write "."
+        WriteDot
         FileSystem.Initialize
-        Console.WriteLine ". [ OK ]"
+        WriteDot
+        Console.WriteLine " [ OK ]"
         
         ConfigDefault.Initialize
 
         Dim disk as String
         disk = "BIOSDisk000_360"
-        Console.Write "Mounting "
+        Console.Write "Mounting ["
         Console.Write disk
+        Console.Write "]"
         If Disk.Exist(disk) == 0 Then 
             FatalError "[ DISK NOT FOUND ]", disk, 0
         End
-        Console.WriteLine ". [ OK ]"
+        WriteDot
+        Try
+            FileSystem.Mount disk, "MinixFS", "/"
+        Catch Error
+            FatalError "[ DISK NOT FORMATED ]", disk, 0
+        End
+        WriteDot
+        Console.WriteLine " [ OK ]"
+        Dim root as DirectoryInfo
+        root = New
+        Dim dir as DirectoryInfo
+        dir = New
+        FileSystem.GetRoot root
+        FileSystem.GetDirectoryInfo root, 1, dir
+        Console.WriteLine dir.Name
+
 
         While 1
             Console.WriteChar 13

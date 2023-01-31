@@ -60,6 +60,7 @@ Module BIOSDisk
 
     Sub ReadBlock(disk as DiskInfo, block as PtrByteArray, positionLow as UInt16, positionHigh as UInt16)
         Dim chs as CHSAddress
+        chs = New
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse
@@ -73,6 +74,7 @@ Module BIOSDisk
 
     Sub WriteBlock(disk as DiskInfo, block as PtrByteArray, positionLow as UInt16, positionHigh as UInt16)
         Dim chs as CHSAddress
+        chs = New
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse

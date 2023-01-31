@@ -1,10 +1,10 @@
 Imports System
 Imports System.IO.Disk
-Imports System.IO.Disk.Floppy
+Imports BIOSDisk
 
 
 Module ConfigDefault
     Public Sub Initialize
-        FloppyDisk.Initialize
+        BIOSDisk.Initialize
     End
 End

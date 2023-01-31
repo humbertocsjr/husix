@@ -3,8 +3,8 @@ Imports System.IO.FileSystem
 Imports System.IO.Disk
 
 Structure MinixFSIndex
-    Dim Blocks as UInt16
     Dim Items as UInt16
+    Dim Blocks as UInt16
     Dim ItensMapBlocks as UInt16
     Dim BlocksMapBlocks as UInt16
     Dim FirstDataBlock as UInt16
@@ -15,33 +15,58 @@ Structure MinixFSIndex
     Dim Status as UInt16
 End
 
-Structure MinixFSItem
+Structure MinixFSItemRef
     Dim Id as UInt16
     Spacing 30
 End
 
+Structure MinixFSItem
+    Dim Permissions as UInt16
+    Dim UserId as UInt16
+    Dim SizeLow as UInt16
+    Dim SizeHigh as UInt16
+    Dim TimeLow as UInt16
+    Dim TimeHigh as UInt16
+    Dim GroupId as UInt8
+    Dim Links as UInt8
+    Dim Zone0 as UInt16
+    Dim Zone1 as UInt16
+    Dim Zone2 as UInt16
+    Dim Zone3 as UInt16
+    Dim Zone4 as UInt16
+    Dim Zone5 as UInt16
+    Dim Zone6 as UInt16
+    Dim ZoneIndirect as UInt16
+    Dim ZoneDoubleIndirect as UInt16
+End
+
 Module MinixFS
+    Dim InUse as Semaphore
     Public Sub Initialize
         Dim fs as FileSystem
         fs = FileSystem.RegisterNew("MinixFS")
         fs.Mount = AddressOf(Mount)
         fs.IsMountable = AddressOf(IsMountable)
+        Semaphore.Initialize InUse, 1
     End
 
     Sub ReadBlock(d as DiskInfo, block as PtrByteArray, address as UInt16)
         If address and 0x8000 Then Throw OutOfBoundsError
         Disk.ReadBlock d, block, address shl 1, 0
+        @block = @block + 512
+        Disk.ReadBlock d, block, (address shl 1) + 1, 0
+        Console.Write "[BLK"
+        Console.WriteUInt16 (address shl 1 )
+        Console.Write "]"
     End
 
     Function IsMountable(fs as FileSystem, d as DiskInfo) as UInt16
         Dim buffer as Block1KiB
-        Dim ptr as PtrWordArray
         Dim index as MinixFSIndex
         buffer = New
-        ptr = buffer
         index = buffer
         If d.BlockSize <> 512 Then Return 0
-        ReadBlock d, ptr, 1
+        ReadBlock d, buffer, 1
         If index.Signature <> 5007 Then Return 0
         If index.Blocks >= 0x8000 Then Return 0
         Return 1 
@@ -56,7 +81,158 @@ Module MinixFS
         index = buffer
         If IsMountable(fs, mfs.DiskInfo) == 0 Then Throw InvalidFormatError
         ReadBlock mfs.DiskInfo, ptr, 1
+        mfs.Ptr1 = Memory.Alloc(SizeOf(MinixFSIndex))
+        mfs.Ptr2 = GlobalMemory.AllocKiB(MultiThreading.KernelThread, 1)
+        mfs.Ptr3 = GlobalMemory.AllocKiB(MultiThreading.KernelThread, 1)
+        mfs.Ptr4 = Memory.Alloc(SizeOf(Semaphore))
+        Semaphore.Initialize mfs.Ptr4, 1
+        mfs.Param1 = 32
+        mfs.Param2 = 0
+        mfs.Param3 = 0
+        Memory.Copy mfs.Ptr1, index, SizeOf(MinixFSIndex)
+        mfs.GetRoot = AddressOf(GetRoot)
+    End
 
+    Sub GetRoot(mfs as MountedFileSystem, dir as DirectoryInfo)
+        DirectoryInfo.Initialize dir
+        String.Copy dir.Name, ""
+        dir.Id = 0
+        dir.MountedFileSystem = mfs
+        dir.GetDirectoryInfo = AddressOf(GetDirectoryInfo)
+        dir.GetFileInfo = AddressOf(GetFileInfo)
+    End
+
+    Sub LoadItemMapBlock(mfs as MountedFileSystem, block as Block1KiB, pos as UInt16)
+        Dim index as MinixFSIndex
+        index = mfs.Ptr1
+        pos = pos + 2
+        If mfs.Param2 <> pos Then
+            ReadBlock mfs.DiskInfo, mfs.Ptr2, pos
+        End
+        Memory.Copy block, mfs.Ptr2, 1024
+        mfs.Param2 = pos
+    End
+
+    Sub LoadItem(mfs as MountedFileSystem, id as UInt16, item as MinixFSItem)
+        Dim block as Block1KiB
+        Semaphore.WaitOne mfs.Ptr4
+        block = New
+        LoadItemMapBlock mfs, block, id / 32
+        @block = @block + ((id mod 32) * 32)
+        Semaphore.Release mfs.Ptr4
+        Memory.Copy item, block, SizeOf(MinixFSItem)
+    End
+
+    Sub ReadBlockFromItem(mfs as MountedFileSystem, item as MinixFSItem, block as Block1KiB, pos as UInt16)
+        Dim ptr as PtrWordArray
+        If pos < 7 Then
+            If pos == 0 Then pos = item.Zone0
+            If pos == 1 Then pos = item.Zone1
+            If pos == 2 Then pos = item.Zone2
+            If pos == 3 Then pos = item.Zone3
+            If pos == 4 Then pos = item.Zone4
+            If pos == 5 Then pos = item.Zone5
+            If pos == 6 Then pos = item.Zone6
+        Else
+            If pos < (7 + 512) Then
+                ReadBlock mfs.DiskInfo, block, item.ZoneIndirect
+                pos = pos - 7
+                ptr = block
+                @ptr = @ptr + (pos shl 1)
+                pos = ptr
+            Else
+                Throw NotImplementedError
+            End
+        End
+        ReadBlock mfs.DiskInfo, block, pos
+    End
+
+    Function GetSubItem(parent as DirectoryInfo, pos as UInt16, outputItem as MinixFSItem, outputRef as MinixFSItemRef) as UInt16
+        Dim parentItem as MinixFSItem
+        Dim block as Block1KiB
+        Dim tmp as MinixFSItemRef
+        Dim ptr as PtrByteArray
+        Dim mfs as MountedFileSystem
+        mfs = parent.MountedFileSystem
+        Semaphore.WaitOne InUse ' Try nao suporta multitask
+        Try
+            parentItem = New
+            LoadItem mfs, parent.Id, parentItem
+            block = New
+            ReadBlockFromItem mfs, parentItem, block, pos / 32
+            tmp = block
+            @tmp = @tmp + ((pos mod 32) * SizeOf(MinixFSItemRef))
+            Memory.Copy outputRef, tmp, SizeOf(MinixFSItemRef)
+            LoadItem mfs, tmp.Id, outputItem
+        Catch Error
+            Semaphore.Release InUse
+            Return 0
+        End
+        Semaphore.Release InUse
+        Return 0xffff
+    End
+
+    Function GetDirectoryInfo(parent as DirectoryInfo, pos as UInt16, output as DirectoryInfo) as UInt16
+        Dim i as UInt16
+        Dim item as MinixFSItem
+        Dim ref as MinixFSItemRef
+        Dim counter as UInt16
+        Dim ptr1 as PtrByteArray
+        Dim ptr2 as PtrByteArray
+        item = New
+        ref = New
+        counter = 0
+        For i = 0 to 511
+            If GetSubItem(parent, i, item, ref) == 0 Then Return 0
+            Console.WriteUInt16 ref.Id
+            Console.Write " "
+            'If item.Permissions and 16384 Then
+                counter ++
+                If counter == pos Then
+                    DirectoryInfo.Initialize output
+                    output.Id = ref.Id
+                    ptr1 = output.Name
+                    @ptr1++
+                    ptr2 = ref
+                    @ptr2++
+                    @ptr2++
+                    Memory.Copy ptr1, ptr2, 30
+                    @ptr1 = @ptr1 + 30
+                    ptr1 = 0
+                    Return 1
+                End
+            'End
+        End
+    End
+
+    Function GetFileInfo(parent as DirectoryInfo, pos as UInt16, output as FileInfo) as UInt16
+        Dim i as UInt16
+        Dim item as MinixFSItem
+        Dim ref as MinixFSItemRef
+        Dim counter as UInt16
+        Dim ptr1 as PtrByteArray
+        Dim ptr2 as PtrByteArray
+        item = New
+        ref = New
+        counter = 0
+        For i = 0 to 511
+            GetSubItem parent, i, item, ref
+            If (item.Permissions and 16384) == 0 Then
+                counter ++
+                If counter == pos Then
+                    FileInfo.Initialize output
+                    output.Id = ref.Id
+                    ptr1 = output.Name
+                    @ptr1++
+                    ptr2 = ref
+                    @ptr2++
+                    @ptr2++
+                    Memory.Copy ptr1, ptr2, 30
+                    @ptr1 = @ptr1 + 30
+                    ptr1 = 0
+                End
+            End
+        End
     End
 
 
