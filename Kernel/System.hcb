@@ -12,6 +12,7 @@ error NoAnswerError = 10
 error TimeoutError = 11
 error InvalidValueError = 12
 error AccessDeniedError = 13
+error InvalidFormatError = 14
 
 
 structure Stream

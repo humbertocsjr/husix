@@ -28,6 +28,14 @@ Structure DiskInfo
     Dim BlockSize as UInt16
     Dim ReadBlock as Action(Of DiskInfo, PtrByteArray, UInt16, UInt16)
     Dim WriteBlock as Action(Of DiskInfo, PtrByteArray, UInt16, UInt16)
+    Dim Param1 as UInt16
+    Dim Param2 as UInt16
+    Dim Param3 as UInt16
+    Dim Param4 as UInt16
+    Dim Param5 as UInt16
+    Dim Param6 as UInt16
+    Dim Param7 as UInt16
+    Dim Param8 as UInt16
 End
 
 Module Disk
@@ -85,6 +93,20 @@ Module Disk
         Return 0
     End
 
+    Function Item(name as String) as DiskInfo
+        Dim i as UInt16
+        For i = 1 to List.Count(Disks)
+            Dim d as DiskInfo
+            d = List.Item(Disks, i)
+            If String.Equals(d.Name, name) Then Return d
+        End
+        Throw NotFoundError
+    End
+
+    Function Count() as UInt16
+        Return List.Count(Disks)
+    End
+
     Function GetBlockSize(name as String) as UInt16
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
@@ -95,7 +117,11 @@ Module Disk
         Throw NotFoundError
     End
 
-    Sub ReadBlock(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+    Sub ReadBlock(d as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        d.ReadBlock.Invoke data, addressLow, addressHigh
+    End
+
+    Sub ReadBlockByName(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo

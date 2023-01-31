@@ -80,13 +80,15 @@ Module MultiThreading
             t.Active = 0
             t.Suspended = 1
             t.NewStack = 0
-            t.Next = ptr
-            t.Previous = ptr
+            t.Next = t
+            t.Previous = t
             If i == 1 Then
                 #KernelThread = #ptr
                 @KernelThread = @ptr
                 #Current = #ptr
                 @Current = @ptr
+                Current.Next = ptr
+                Current.Previous = ptr
             End
         End
         Semaphore.Initialize InUse, 1
@@ -101,6 +103,7 @@ Module MultiThreading
     Sub Int81(ss as UInt16, sp as UInt16) Handles Interrupt
         ' DONT ADD STACK VARS TO THIS ROUTINE
         ' NAO DECLARE VARIAVEIS NESSA ROTINA
+        If @Current.Next == 0 Then Current.Next = KernelThread
         Current.StackSegment = ss
         Current.StackPointer = sp
         find_next:
@@ -253,6 +256,7 @@ Module Thread
 
     ' Entrega o controle para a proxima tarefa expontaneamente
     Public Sub Yield()
+        asm "sti"
         If MultiThreading.IsActive() == 0 Then Return
         asm "int 0x81"
     End

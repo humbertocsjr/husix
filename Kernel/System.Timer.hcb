@@ -99,5 +99,7 @@ Module SystemTimer
         asm ".end_clock:"
         ' Troca de tarefa
         Thread.Yield
+        asm "mov ax, 0x20"
+        asm "out 0x20, al"
     End
 End

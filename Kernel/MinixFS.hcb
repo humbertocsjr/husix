@@ -1,0 +1,63 @@
+Imports System
+Imports System.IO.FileSystem
+Imports System.IO.Disk
+
+Structure MinixFSIndex
+    Dim Blocks as UInt16
+    Dim Items as UInt16
+    Dim ItensMapBlocks as UInt16
+    Dim BlocksMapBlocks as UInt16
+    Dim FirstDataBlock as UInt16
+    Dim DataBlockSize as UInt16
+    Dim MaxFileSizeLow as UInt16
+    Dim MaxFileSizeHigh as UInt16
+    Dim Signature as UInt16
+    Dim Status as UInt16
+End
+
+Structure MinixFSItem
+    Dim Id as UInt16
+    Spacing 30
+End
+
+Module MinixFS
+    Public Sub Initialize
+        Dim fs as FileSystem
+        fs = FileSystem.RegisterNew("MinixFS")
+        fs.Mount = AddressOf(Mount)
+        fs.IsMountable = AddressOf(IsMountable)
+    End
+
+    Sub ReadBlock(d as DiskInfo, block as PtrByteArray, address as UInt16)
+        If address and 0x8000 Then Throw OutOfBoundsError
+        Disk.ReadBlock d, block, address shl 1, 0
+    End
+
+    Function IsMountable(fs as FileSystem, d as DiskInfo) as UInt16
+        Dim buffer as Block1KiB
+        Dim ptr as PtrWordArray
+        Dim index as MinixFSIndex
+        buffer = New
+        ptr = buffer
+        index = buffer
+        If d.BlockSize <> 512 Then Return 0
+        ReadBlock d, ptr, 1
+        If index.Signature <> 5007 Then Return 0
+        If index.Blocks >= 0x8000 Then Return 0
+        Return 1 
+    End
+
+    Sub Mount(fs as FileSystem, mfs as MountedFileSystem)
+        Dim buffer as Block1KiB
+        Dim ptr as PtrWordArray
+        Dim index as MinixFSIndex
+        buffer = New
+        ptr = buffer
+        index = buffer
+        If IsMountable(fs, mfs.DiskInfo) == 0 Then Throw InvalidFormatError
+        ReadBlock mfs.DiskInfo, ptr, 1
+
+    End
+
+
+End

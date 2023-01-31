@@ -490,7 +490,7 @@ EscrevaCHS:
 
 times 952-($-$$) db 0
 Argumento:
-db " Disk=Floppy"
+db " Disk=BIOSDisk"
 ArgumentoDisco:
 db "000"
 

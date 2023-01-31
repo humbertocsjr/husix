@@ -132,6 +132,7 @@ Module List
                 If GetId(l, block, i) == 0 Then
                     l.LastId = l.LastId + 1
                     SetId l, block, i, l.LastId
+                    l.Count ++
                     Return GetPtr(l, block, i)
                 End
             End

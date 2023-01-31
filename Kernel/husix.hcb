@@ -9,6 +9,7 @@ Imports System.IO.Console
 Imports System.Timer
 Imports System.IO.Disk
 Imports System.Collections
+Imports System.IO.FileSystem
 Imports Version
 Imports ConfigDefault
 
@@ -43,28 +44,27 @@ Module Program
         MultiThreading.Resume
         Console.Write "."
         Disk.Initialize
+        Console.Write "."
+        FileSystem.Initialize
         Console.WriteLine ". [ OK ]"
         
         ConfigDefault.Initialize
 
         Dim disk as String
-        disk = "Floppy0_360"
+        disk = "BIOSDisk000_360"
         Console.Write "Mounting "
         Console.Write disk
         If Disk.Exist(disk) == 0 Then 
             FatalError "[ DISK NOT FOUND ]", disk, 0
         End
-        Dim block as Block512B
-        Disk.ReadBlock disk, block, 0, 0
         Console.WriteLine ". [ OK ]"
-
 
         While 1
             Console.WriteChar 13
             Console.WriteUInt16 Clock.Minute
             Console.Write ":"
             Console.WriteUInt16 Clock.Second
-            Thread.Yield
+            Thread.Sleep 1000
         End
     End
 

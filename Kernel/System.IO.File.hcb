@@ -1,11 +1,18 @@
 Imports System
 
-Structure File
-End
-
 Structure FileInfo
-    
+    Spacing 33
+    Dim Id as UInt16
+    Dim Name as PtrByteArray
+    Dim MountedFileSystem as PtrByteArray
+    Dim Open as Action(Of FileInfo, Stream)
 End
 
-Structure Directory
+Structure DirectoryInfo
+    Spacing 33
+    Dim Id as UInt16
+    Dim Name as PtrByteArray
+    Dim MountedFileSystem as PtrByteArray
+    Dim GetFileInfo as Func(Of DirectoryInfo, UInt16, FileInfo, UInt16)
+    Dim GetDirectoryInfo as Func(Of DirectoryInfo, UInt16, DirectoryInfo, UInt16)
 End

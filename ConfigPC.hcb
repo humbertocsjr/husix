@@ -1,10 +1,12 @@
 Imports System
 Imports System.IO.Disk
-Imports System.IO.Disk.Floppy
+Imports BIOSDisk
+Imports MinixFS
 
 
 Module ConfigDefault
     Public Sub Initialize
-        FloppyDisk.Initialize
+        BIOSDisk.Initialize
+        MinixFS.Initialize
     End
 End

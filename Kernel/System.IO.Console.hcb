@@ -4,12 +4,11 @@ Imports System.Text
 Module Console
 
     Public Sub Mode80x25x4
-        asm "mov ax, 3"
-        asm "int 0x10"
+        IO.SetVideoMode 3
     End
 
     Public Function ReadChar() as UInt8
-        return OS.ConsoleReadChar()
+        return IO.ConsoleReadChar()
     End
 
     Public Sub ReadLine(txt as PtrByteArray)
@@ -21,7 +20,7 @@ Module Console
         c = 0
         pos = 1
         While 1
-            c = OS.ConsoleReadChar()
+            c = IO.ConsoleReadChar()
             If c == 13 Then Goto done
             If c == 10 Then Goto done
             If c == 9 Then
@@ -47,7 +46,7 @@ Module Console
     End
 
     Public Sub WriteChar(c as UInt8)
-        OS.ConsoleWriteChar c
+        IO.ConsoleWriteChar c
     End
 
     Public Sub Write(txt as PtrByteArray)

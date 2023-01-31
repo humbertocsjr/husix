@@ -1,4 +1,123 @@
 Imports System
+Imports System.IO.Disk
+Imports System.IO.File
 
+Structure FileSystem
+    Spacing 33
+    Dim Name as PtrByteArray
+    Dim Mount as Action(Of FileSystem, MountedFileSystem)
+    Dim IsMountable as Func(Of FileSystem, DiskInfo, UInt16)
+End
 
+Structure MountedFileSystem
+    Spacing 97
+    Dim MountPoint as PtrByteArray
+    Dim FileSystem as PtrByteArray
+    Dim DiskInfo as PtrByteArray
+    Dim Param1 as UInt16
+    Dim Param2 as UInt16
+    Dim Param3 as UInt16
+    Dim Param4 as UInt16
+    Dim Param5 as UInt16
+    Dim Param6 as UInt16
+    Dim Param7 as UInt16
+    Dim Param8 as UInt16
+    Dim GetRoot as Action(Of MountedFileSystem, DirectoryInfo)
+End
+
+Module FileSystem
+    Dim FSList as List
+    Dim MountList as List
+    Dim Root as MountedFileSystem
+    Dim RootIsMounted as UInt16
+
+    Public Sub Initialize
+        RootIsMounted = 0
+        List.Initialize FSList, SizeOf(FileSystem)
+        List.Initialize MountList, SizeOf(MountedFileSystem)
+    End
+
+    Public Sub GetRoot(output as DirectoryInfo)
+        If Not RootIsMounted Then Throw NotFoundError
+        Root.GetRoot.Invoke output
+    End
+
+    Public Function GetDirectoryInfo(parent as DirectoryInfo, position as UInt16, output as DirectoryInfo) as UInt16
+        Return parent.GetDirectoryInfo.Invoke(position, output)
+    End
+
+    Public Function GetFileInfo(parent as DirectoryInfo, position as UInt16, output as FileInfo) as UInt16
+        Return parent.GetFileInfo.Invoke(position, output)
+    End
+
+    Function Exist(name as String) as UInt16
+        Dim i as UInt16
+        For i = 1 to List.Count(FSList)
+            Dim fs as FileSystem
+            fs = List.Item(FSList, i)
+            If String.Equals(fs.Name, name) Then 
+                Return 0xffff
+            End
+        End
+        Return 0
+    End
+
+    Function Item(name as String) as FileSystem
+        Dim i as UInt16
+        For i = 1 to List.Count(FSList)
+            Dim fs as FileSystem
+            fs = List.Item(FSList, i)
+            If String.Equals(fs.Name, name) Then Return fs
+        End
+        Throw NotFoundError
+    End
+
+    Function Count() as UInt16
+        Return List.Count(FSList)
+    End
+
+    Public Function RegisterNew(name as String) as FileSystem
+        Dim ret as FileSystem 
+        Dim ptr as PtrByteArray
+        ptr = List.Add(FSList)
+        #ret = #ptr
+        @ret = @ptr
+        ret.Name = ret ' Nome é alocado nos primeiros 33 bytes
+        ptr = 32 ' Tamanho do nome
+        String.Copy ret.Name, ""
+        String.Copy ret.Name, name
+        #ptr = 0
+        @ptr = 0
+        ret.Mount = ptr
+        ret.IsMountable = ptr
+        Return ret
+    End
+
+    Public Sub Mount(diskName as String, fsName as String, mountPoint as String)
+        Dim d as DiskInfo
+        Dim fs as FileSystem
+        Dim mount as MountedFileSystem
+        Dim txt as PtrByteArray
+        d = Disk.Item(diskName)
+        fs = Item(fsName)
+        If #fs.IsMountable == 0 Then Throw NotImplementedError
+        If #fs.Mount == 0 Then Throw NotImplementedError
+        If fs.IsMountable.Invoke(d) == 0 Then Throw InvalidValueError
+        If String.Equals(mountPoint, "/") Then
+            RootIsMounted = 1
+            mount = Root
+        Else
+            mount = List.Add(MountList)
+        End
+        mount.MountPoint = mount
+        txt = mount
+        txt = 96
+        @txt++
+        txt = 0
+        String.Copy mount.MountPoint, mountPoint
+        mount.FileSystem = fs
+        mount.DiskInfo = d
+        fs.Mount.Invoke mount
+    End
+End
 

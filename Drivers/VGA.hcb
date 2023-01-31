@@ -14,8 +14,7 @@ Module VGA
     Dim Video as VideoMode
 
     Public Sub Mode640x480x2
-        asm "mov ax, 0x11"
-        asm "int 0x10"
+        IO.SetVideoMode 0x11
         Video.Width = 640
         Video.Height = 480
         Video.Colors = 2

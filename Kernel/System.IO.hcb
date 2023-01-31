@@ -48,4 +48,31 @@ Module IO
         #ret = ptr
         Return ret
     End
+
+    Public Function ConsoleAvail() as UInt16
+        
+    End
+
+    Public Function ConsoleReadChar() as UInt16
+
+    End
+
+    Public Sub ConsoleWriteChar(c as UInt8)
+        asm "mov ax, [bp+6]"
+        asm "mov ah, 0xe"
+        asm "int 0x10"
+    End
+
+    Public Sub SetVideoMode(mode as UInt8)
+        asm "mov ax, [bp+6]"
+        asm "int 0x10"
+    End
+
+    Public Sub DisableInterrupts()
+        asm "cli"
+    End
+
+    Public Sub EnableInterrupts()
+        asm "sti"
+    End
 End
