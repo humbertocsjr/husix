@@ -56,7 +56,7 @@ Module Program
         ConfigDefault.Initialize
 
         Dim disk as String
-        disk = "BIOSDisk000_360"
+        disk = "BIOSDisk000"
         Console.Write "Mounting ["
         Console.Write disk
         Console.Write "]"
@@ -79,6 +79,14 @@ Module Program
         FileSystem.GetDirectoryInfo root, 1, dir
         Console.WriteLine dir.Name
 
+
+        #ptr = 0x40
+        @ptr = 0x90
+        Console.Write " BIOS FLOPPY DATA"
+        Console.WriteUInt16 ptr ' Floppy
+        Console.Write " "
+        @ptr++
+        Console.WriteUInt16 ptr ' Floppy
 
         While 1
             Console.WriteChar 13

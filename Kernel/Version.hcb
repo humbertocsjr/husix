@@ -12,8 +12,8 @@ Module HusixVersion
     Public Sub GetVersion(ver as Version)
         ' ARQUIVO GERADO AUTOMATICAMENTE - NAO MODIFICAR
         ver.Version = 2023
-        ver.SubVersion = 1
-        ver.Revision =  3021
+        ver.SubVersion = 2
+        ver.Revision =  3100
         ver.Release = "Alfa"
     End
 End

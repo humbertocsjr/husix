@@ -4,43 +4,19 @@ Imports System.IO.Disk
 Imports System.Threading
 
 Module BIOSDisk
-    Pointer Dim FloppyA360 as DiskInfo
-    Pointer Dim FloppyA720 as DiskInfo
-    Pointer Dim FloppyA1200 as DiskInfo
-    Pointer Dim FloppyA1440 as DiskInfo
-    Pointer Dim FloppyB360 as DiskInfo
-    Pointer Dim FloppyB720 as DiskInfo
-    Pointer Dim FloppyB1200 as DiskInfo
-    Pointer Dim FloppyB1440 as DiskInfo
+    Pointer Dim FloppyA as DiskInfo
+    Pointer Dim FloppyB as DiskInfo
     Dim Buffer as Block512B
     Dim InUse as Semaphore
 
     Public Sub Initialize
         Semaphore.Initialize InUse, 1
-        FloppyA360  = Disk.RegisterNew("BIOSDisk000_360", 0, 40, 2, 9, 512)
-        FloppyA360.ReadBlock = AddressOf(ReadBlock)
-        FloppyA360.WriteBlock = AddressOf(WriteBlock)
-        FloppyA720  = Disk.RegisterNew("BIOSDisk000_720", 0, 40, 2, 18, 512)
-        FloppyA720.ReadBlock = AddressOf(ReadBlock)
-        FloppyA720.WriteBlock = AddressOf(WriteBlock)
-        FloppyA1200 = Disk.RegisterNew("BIOSDisk000_1200", 0, 80, 2, 15, 512)
-        FloppyA1200.ReadBlock = AddressOf(ReadBlock)
-        FloppyA1200.WriteBlock = AddressOf(WriteBlock)
-        FloppyA1440 = Disk.RegisterNew("BIOSDisk000_1440", 0, 80, 2, 18, 512)
-        FloppyA1440.ReadBlock = AddressOf(ReadBlock)
-        FloppyA1440.WriteBlock = AddressOf(WriteBlock)
-        FloppyB360  = Disk.RegisterNew("BIOSDisk001_360", 1, 40, 2, 9, 512)
-        FloppyB360.ReadBlock = AddressOf(ReadBlock)
-        FloppyB360.WriteBlock = AddressOf(WriteBlock)
-        FloppyB720  = Disk.RegisterNew("BIOSDisk001_720", 1, 40, 2, 18, 512)
-        FloppyB720.ReadBlock = AddressOf(ReadBlock)
-        FloppyB720.WriteBlock = AddressOf(WriteBlock)
-        FloppyB1200 = Disk.RegisterNew("BIOSDisk001_1200", 1, 80, 2, 15, 512)
-        FloppyB1200.ReadBlock = AddressOf(ReadBlock)
-        FloppyB1200.WriteBlock = AddressOf(WriteBlock)
-        FloppyB1440 = Disk.RegisterNew("BIOSDisk001_1440", 1, 80, 2, 18, 512)
-        FloppyB1440.ReadBlock = AddressOf(ReadBlock)
-        FloppyB1440.WriteBlock = AddressOf(WriteBlock)
+        FloppyA  = Disk.RegisterNew("BIOSDisk000", 0, 40, 2, 9, 512)
+        FloppyA.ReadBlock = AddressOf(ReadBlock)
+        FloppyA.WriteBlock = AddressOf(WriteBlock)
+        FloppyB  = Disk.RegisterNew("BIOSDisk001", 1, 40, 2, 9, 512)
+        FloppyB.ReadBlock = AddressOf(ReadBlock)
+        FloppyB.WriteBlock = AddressOf(WriteBlock)
     End
 
     Function CallBIOS(ax as UInt16, bx as UInt16, cx as UInt16, dx as UInt16, es as UInt16) as UInt16
@@ -58,9 +34,33 @@ Module BIOSDisk
         asm "pop bp"
     End
 
+    Sub UpdateSize(disk as DiskInfo)
+        Dim ptr as PtrByteArray
+        Dim value as UInt16
+        If disk.InternalId <= 1 then
+            #ptr = 0x40
+            @ptr = 0x90
+            If disk.InternalId == 1 Then @ptr++
+            value = ptr and 7
+            If (value == 0) OrElse (value == 4) OrElse (value == 1) OrElse (value == 3) Then
+                disk.Cylinders = 40
+                disk.Sectors = 9
+            End
+            If (value == 2) OrElse (value == 5) Then
+                disk.Cylinders = 80
+                disk.Sectors = 15
+            End
+            If (value == 7) Then
+                disk.Cylinders = 80
+                disk.Sectors = 18
+            End
+        End
+    End
+
     Sub ReadBlock(disk as DiskInfo, block as PtrByteArray, positionLow as UInt16, positionHigh as UInt16)
         Dim chs as CHSAddress
         chs = New
+        UpdateSize disk
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse
@@ -75,6 +75,7 @@ Module BIOSDisk
     Sub WriteBlock(disk as DiskInfo, block as PtrByteArray, positionLow as UInt16, positionHigh as UInt16)
         Dim chs as CHSAddress
         chs = New
+        UpdateSize disk
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse
