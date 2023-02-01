@@ -38,6 +38,7 @@ Module BIOSDisk
         Dim ptr as PtrByteArray
         Dim value as UInt16
         If disk.InternalId <= 1 then
+            ' Le a BIOS Data Area
             #ptr = 0x40
             @ptr = 0x90
             If disk.InternalId == 1 Then @ptr++
