@@ -76,7 +76,7 @@ Module Program
         Dim dir as DirectoryInfo
         dir = New
         FileSystem.GetRoot root
-        FileSystem.GetDirectoryInfo root, 1, dir
+        FileSystem.GetDirectoryInfo root, 2, dir
         Console.WriteLine dir.Name
 
 
