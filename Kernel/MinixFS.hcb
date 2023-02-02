@@ -55,9 +55,6 @@ Module MinixFS
         Disk.ReadBlock d, block, address shl 1, 0
         @block = @block + 512
         Disk.ReadBlock d, block, (address shl 1) + 1, 0
-        Console.Write "[BLK"
-        Console.WriteUInt16 (address )
-        Console.Write "]"
     End
 
     Function IsMountable(fs as FileSystem, d as DiskInfo) as UInt16
@@ -119,19 +116,13 @@ Module MinixFS
         block = New
         LoadItemMapBlock mfs, block, id / 32
         @block = @block + ((id mod 32) * 32)
-        Console.Write "{"
-    Console.WriteUInt16 ((id mod 32) * 32)
-        Console.Write "}"
         Semaphore.Release mfs.Ptr4
         Memory.Copy item, block, SizeOf(MinixFSItem)
     End
 
     Sub ReadBlockFromItem(mfs as MountedFileSystem, item as MinixFSItem, block as Block1KiB, pos as UInt16)
         Dim ptr as PtrWordArray
-        Dim blockNum as UInt16    
-        Console.Write "<"
-        Console.WriteUInt16 pos
-        Console.Write "="
+        Dim blockNum as UInt16 
         If pos < 7 Then
             If pos == 0 Then blockNum = item.Zone0
             If pos == 1 Then blockNum = item.Zone1
@@ -153,9 +144,6 @@ Module MinixFS
         End
         blockNum --
         ReadBlock mfs.DiskInfo, block, blockNum
-        Console.Write "?"
-        Console.WriteUInt16 blockNum
-        Console.Write ">"
     End
 
     Function GetSubItem(parent as DirectoryInfo, pos as UInt16, outputItem as MinixFSItem, outputRef as MinixFSItemRef) as UInt16
@@ -175,9 +163,6 @@ Module MinixFS
             @tmp = @tmp + ((pos mod 32) * SizeOf(MinixFSItemRef))
             Memory.Copy outputRef, tmp, SizeOf(MinixFSItemRef)
             outputRef.Id++
-        Console.Write "<SUB"
-        Console.WriteUInt16 outputRef.Id
-        Console.Write ">"
             LoadItem mfs, outputRef.Id, outputItem
         Catch Error
             Semaphore.Release InUse
@@ -198,11 +183,8 @@ Module MinixFS
         ref = New
         counter = 0
         For i = 2 to 512
-            Console.WriteLine "####"
             If GetSubItem(parent, i, item, ref) == 0 Then Return 0
-            Console.WriteUInt16 ref.Id
-            Console.Write " "
-            'If item.Permissions and 16384 Then
+            If item.Permissions and 16384 Then
                 counter ++
                 If counter == pos Then
                     DirectoryInfo.Initialize output
@@ -215,10 +197,9 @@ Module MinixFS
                     Memory.Copy ptr1, ptr2, 30
                     @ptr1 = @ptr1 + 30
                     ptr1 = 0
-                    Console.Write output.Name
                     Return 1
                 End
-            'End
+            End
         End
     End
 
@@ -232,9 +213,9 @@ Module MinixFS
         item = New
         ref = New
         counter = 0
-        For i = 0 to 511
-            GetSubItem parent, i, item, ref
-            If (item.Permissions and 16384) == 0 Then
+        For i = 2 to 512
+            If GetSubItem(parent, i, item, ref) == 0 Then Return 0
+            If item.Permissions and 16384 Then
                 counter ++
                 If counter == pos Then
                     FileInfo.Initialize output
@@ -247,6 +228,7 @@ Module MinixFS
                     Memory.Copy ptr1, ptr2, 30
                     @ptr1 = @ptr1 + 30
                     ptr1 = 0
+                    Return 1
                 End
             End
         End
