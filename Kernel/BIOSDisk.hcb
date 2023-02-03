@@ -19,7 +19,7 @@ Module BIOSDisk
         FloppyB.WriteBlock = AddressOf(WriteBlock)
     End
 
-    Function CallBIOS(ax as UInt16, bx as UInt16, cx as UInt16, dx as UInt16, es as UInt16) as UInt16
+    Function CallBIOS(ax as UInt16, bx as UInt16, cx as UInt16, dx as UInt16, es as UInt16) as Int16
         asm "push bp"
         asm "mov ax, [bp+6]"
         asm "mov bx, [bp+8]"
@@ -66,7 +66,13 @@ Module BIOSDisk
         Dim ret as Int16
         Semaphore.WaitOne InUse
         MultiThreading.Suspend
-        ret = CallBIOS(0x201, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
+        Dim i as UInt16
+        ret = -1
+        i = 0
+        While (i <= 3) AndAlso ret < 0
+            ret = CallBIOS(0x201, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
+            If ret < 0 Then CallBIOS 0,0,0,disk.InternalId, #Buffer
+        End
         MultiThreading.Resume
         Semaphore.Release InUse
         If ret < 0 Then Throw InvalidValueError
@@ -81,7 +87,13 @@ Module BIOSDisk
         Dim ret as Int16
         Semaphore.WaitOne InUse
         MultiThreading.Suspend
-        ret = CallBIOS(0x301, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
+        Dim i as UInt16
+        ret = -1
+        i = 0
+        While (i <= 3) AndAlso ret < 0
+            ret = CallBIOS(0x201, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
+            If ret < 0 Then CallBIOS 0,0,0,disk.InternalId, #Buffer
+        End
         MultiThreading.Resume
         Semaphore.Release InUse
         If ret < 0 Then Throw InvalidValueError
