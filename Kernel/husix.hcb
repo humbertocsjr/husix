@@ -24,6 +24,10 @@ Module Program
         Dim ver as Version
         ver = new
         HusixVersion.GetVersion ver
+        Console.Initialize
+        If Console.CanTextOnly() Then
+            FatalError "Modo de Video nao detectado, Requer CGA ou superior", "husix.hcb", 0
+        End
         Console.Mode80x25x4
         Console.WriteLine "HUSIX Operating System"
         Console.Write "Kernel v"

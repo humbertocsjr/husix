@@ -2,6 +2,62 @@ Imports System
 Imports System.Text
 
 Module Console
+    Dim SupportLevel as UInt16
+
+    Public Function CanVGA() as UInt16
+        Return SupportLevel >= 3
+    End
+
+    Public Function CanEGA() as UInt16
+        Return SupportLevel >= 2
+    End
+
+    Public Function CanCGA() as UInt16
+        Return SupportLevel >= 1
+    End
+
+    Public Function CanMGA() as UInt16
+        Return SupportLevel >= 0
+    End
+
+    Public Function CanTextOnly() as UInt16
+        Return SupportLevel == 0
+    End
+
+
+    Public Sub Initialize
+        Dim teste as UInt16
+        SupportLevel = 0
+        teste = 0
+        asm "xor bx, bx"
+        asm "mov ax, 0x1a00"
+        asm "int 0x10"
+        asm "mov [bp-2], bx"
+        If (teste == 7) OrElse (teste == 8) Then 
+            SupportLevel = 3
+            Return
+        End
+
+        asm "mov ax, 0x1200"
+        asm "mov bl, 0x10"
+        asm "int 0x10"
+        asm "mov [bp-2], bx"
+        If teste <> 0x10 Then
+            SupportLevel = 2
+            Return
+        End
+
+        asm "mov ax, 0xf00"
+        asm "int 0x10"
+        asm "xor ah, ah"
+        asm "mov [bp-2], ax"
+
+        If teste == 3 Then
+            SupportLevel = 1
+        Else
+            SupportLevel = 0
+        End
+    End
 
     Public Sub Mode80x25x4
         IO.SetVideoMode 3
