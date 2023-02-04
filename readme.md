@@ -1,10 +1,25 @@
 # Sistema Operacional HUSIX
 
-Este projeto está em fase protótipo, e é direcionado em criar um Framework próximo ao .Net Framework porém 16bits, usando a linguagem [HCBasic](https://github.com/humbertocsjr/hcbasic)
+Este projeto está em fase protótipo, e é direcionado em criar um Sistema Operacional Gráfico para IBM PC e aproveitar e Framework próximo ao .Net Framework porém 16bits, usando a linguagem [HCBasic](https://github.com/humbertocsjr/hcbasic).
 
-[Suporte para Visual Code](https://github.com/humbertocsjr/hcbasic_syntax) Copiar conteúdo para pasta ~/.vscode/extensions/hcbasic_syntax (No caso do Linux/macOS)
+O objetivo geral é criar um sistema operacional como se fosse o um macOS atual, que unem a leveza de um unix porém com facilidade, simplicidade e organização voltados para um usuário leigo, porém usando a estética da Apple e estilo dos anos 80, principalmente do ecosistema do Mac 128/Mac Plus. 
 
-Por enquanto estou montando o framework que está embutido no Kernel, já é bootável porém ainda não tem os recursos necessários para ler o disco e carregar outros executáveis
+Então quero montar algo simples de usar, focado na interface gráfica, preto e branco, afinal manipular cores no IBM PC é uma loucura rodando com um bus de 8 bits a 4 mhz, só ver a loucura que é usar Windows 2.0-3.0 em EGA rodando num PC original, então quero manter o mais leve possível, para isso sacrificar a cor ja economiza muitos ciclos de processamento e que podem ser usados para outras coisas como audio
+
+Este projeto é tem como inspiração:
+
+- QuickBASIC/Visual BASIC (Onde eu aprendi a programar nos anos 2000-2003)
+- .NET Framework (Inspiração pra criar a organização das bibliotecas do sistema)
+- Apple System 1.0-6.0 (Aparencia e características)
+- macOS X (Hierarquia de arquivos e organizacao, talvez a dock, mas ainda nem cheguei a parte gráfica)
+- SymbOS (Ideia de criar algo voltado a retrocomputação)
+- Serenity OS (Ideia de fazer algo com a estética antiga (Este foca nos anos 90 e o meu nos anos 80))
+- Retrocomputaria/Retropolis (Inspiração em manter minha coleção de computadores clássicos funcionais e tentar ajudar a comunidade com alguns projetinhos)
+- SmallerC (Compilador que adaptei pro 8086(Aparentemente o autor original abandonou o projeto então se precisarem usar na prática peguem do meu repositório), que quero no final portar pro HUSIX para fazer algo mais compatível com POSIX)
+
+[Suporte para Visual Code para a linguagem HCBasic](https://github.com/humbertocsjr/hcbasic_syntax) Copiar conteúdo para pasta ~/.vscode/extensions/hcbasic_syntax (No caso do Linux/macOS)
+
+Por enquanto estou montando o framework que está embutido no Kernel, já é bootável porém ainda não tem os recursos necessários para carregar outros executáveis do disco
 
 # Requisitos mínimos
 
