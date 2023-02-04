@@ -6,6 +6,8 @@ O objetivo geral é criar um sistema operacional como se fosse o um macOS atual,
 
 Então quero montar algo simples de usar, focado na interface gráfica, preto e branco, afinal manipular cores no IBM PC é uma loucura rodando com um bus de 8 bits a 4 mhz, só ver a loucura que é usar Windows 2.0-3.0 em EGA rodando num PC original, então quero manter o mais leve possível, para isso sacrificar a cor ja economiza muitos ciclos de processamento e que podem ser usados para outras coisas como audio
 
+Para testar este projeto sem compilar basa usar um disquete com o nome terminado em TEST.IMG no diretorio Distro
+
 Este projeto é tem como inspiração:
 
 - QuickBASIC/Visual BASIC (Onde eu aprendi a programar nos anos 2000-2003)
