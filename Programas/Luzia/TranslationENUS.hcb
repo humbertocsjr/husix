@@ -1,0 +1,7 @@
+Module Translation
+    Public Dim InitSystem as PtrByteArray
+
+    Public Sub Initialize
+        InitSystem = "Init System"
+    End
+End

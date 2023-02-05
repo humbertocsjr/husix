@@ -10,9 +10,27 @@ Module GlobalMemory
     Public Sub Initialize
         Dim freeKiB as UInt16
         Dim i as UInt16
-        asm "xor ax, ax"
-        asm "int 0x12"
-        asm "cs mov [_globalmemory_memorysizekib], ax"
+        If String.Equals(Config.OperatingMode, "DOS") Then
+            asm "push es"
+            asm "mov ax, cs"
+            asm "dec ax"
+            asm "mov es, ax"
+            asm "es mov bx, [3]"
+            asm "mov ax, cs"
+            asm "add ax, bx"
+            asm "shr ax, 1"
+            asm "shr ax, 1"
+            asm "shr ax, 1"
+            asm "shr ax, 1"
+            asm "shr ax, 1"
+            asm "shr ax, 1"
+            asm "cs mov [_globalmemory_memorysizekib], ax"
+            asm "pop es"
+        Else
+            asm "xor ax, ax"
+            asm "int 0x12"
+            asm "cs mov [_globalmemory_memorysizekib], ax"
+        End
 
         #MapPtr = OS.CodeSegment() + 4096
         @MapPtr = 0

@@ -1,8 +1,13 @@
 Imports System
 
 Module Config
+    Public Dim OperatingMode as String
     Public Dim RootFileSystem as String
     Public Dim RootDisk as String
+
+    Public Sub Initialize
+        String.Copy OperatingMode, "HUSIX"
+    End
 
     Public Sub ParseArgs(args as PtrByteArray)
         Dim len as UInt16
@@ -33,24 +38,29 @@ Module Config
                     @txt++
                     txt = 0
                 Else
-                    If String.Equals(arg, "Disco") Then
+                    If String.Equals(arg, "Disk") Then
                         mode = 2
                         txt = RootDisk
                         @txt++
                         txt = 0
-                    ElseIf String.Equals(arg, "SisArq") Then
+                    ElseIf String.Equals(arg, "FileSystem") Then
                         mode = 2
                         txt = RootFileSystem
                         @txt++
                         txt = 0
+                    ElseIf String.Equals(arg, "Mode") Then
+                        mode = 2
+                        txt = OperatingMode
+                        @txt++
+                        txt = 0
                     Else
+                        Console.Write "Aviso: Argumento '"
+                        Console.Write arg
+                        Console.WriteLine "' desconhecido."
                         mode = 2
                         txt = arg
                         @txt++
                         txt = 0
-                        Console.Write "Aviso: Argumento '"
-                        Console.Write arg
-                        Console.WriteLine "' desconhecido."
                     End
                 End
             ElseIf mode == 2 Then
@@ -61,6 +71,7 @@ Module Config
                     txt = 0
                 Else
                     mode = 0
+                    txt = arg
                 End
             Else
             End

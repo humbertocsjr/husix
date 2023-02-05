@@ -176,7 +176,7 @@ teste-dosbox:
 	@$(MAKE) all
 	@TRADUCAO=ptbr $(MAKE) discos
 	@echo -= Iniciando emulacao [DOSBox] =-
-	@dosbox -C "BOOT Distro/1440TEST.img -l A" > /dev/null
+	@dosbox -C "IMGMOUNT 0 Distro/1440TEST.img -size 512,18,2,80 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "c:\husix Mode=DOS Disk=BIOSDisk000" > /dev/null
 
 ptbr:
 	@echo -= Aplicando Tradução PT-BR =-

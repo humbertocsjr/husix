@@ -10,6 +10,8 @@ Module Translation
     Public Dim Loading as PtrByteArray
     Public Dim BrazilianOperatingSystem as PtrByteArray
     Public Dim RequiresCGA as PtrByteArray
+    Public Dim ModeDOS as PtrByteArray
+    Public Dim AvailMemory as PtrByteArray
 
     Public Sub Initialize
         Kernel = "Kernel"
@@ -23,6 +25,8 @@ Module Translation
         Loading = "Loading "
         BrazilianOperatingSystem = "Brazilian Operating System =)"
         RequiresCGA = "Video Mode not detected. Requires CGA or Higher"
+        ModeDOS = "Operating Environment Mode over DOS"
+        AvailMemory = "Available Memory: "
     End
 
     

@@ -119,10 +119,14 @@ Module Console
         End
     End
 
-    Public Sub WriteLine(txt as PtrByteArray)
-        Write txt
+    Public Sub WriteEnter()
         WriteChar 13
         WriteChar 10
+    End
+
+    Public Sub WriteLine(txt as PtrByteArray)
+        Write txt
+        WriteEnter
     End
 
     Public Sub WriteUInt16(nro as UInt16)

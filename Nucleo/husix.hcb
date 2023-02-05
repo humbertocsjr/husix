@@ -44,6 +44,16 @@ Module Program
         Console.WriteUInt16 ver.Revision
         Console.Write " - "
         Console.WriteLine ver.Release
+        ' Configura o Kernel com os parametros padrão
+        Config.Initialize
+        ConfigDefault.Initialize
+        ' Configura os parametros fornecidos pelo BootLoader
+        Config.ParseArgs args
+        If String.Equals(Config.OperatingMode, "DOS") Then
+            Console.WriteLine Translation.ModeDOS
+        End
+        ' Inicia modulos internos
+        Console.WriteEnter
         Console.Write Translation.Starting
         ' Prepara multitarefa
         MultiThreading.PreInitialize
@@ -70,11 +80,8 @@ Module Program
         FileSystem.Initialize
         WriteDot
         Console.WriteLine Translation.Ok
-        
-        ' Configura o Kernel carregando os modulos selecionados e a parametros padrão
-        ConfigDefault.Initialize
-        ' Configura os parametros fornecidos pelo BootLoader
-        Config.ParseArgs args
+        ' Inicia Modulos Anexados pela Configuração
+        ConfigDefault.LoadModules
 
         ' Monta Sistema de Arquivos
         Console.Write Translation.Mounting
@@ -92,6 +99,14 @@ Module Program
         End
         WriteDot
         Console.WriteLine Translation.Ok
+
+        Console.WriteEnter
+
+        Console.Write Translation.AvailMemory
+        Console.WriteUInt16 GlobalMemory.GetAvailKiB()
+        Console.WriteLine " KIB"
+
+        Console.WriteEnter
         
         Console.Write Translation.Loading
         Console.Write "Luzia" ' Referencia a Brasileira mais antiga encontrada

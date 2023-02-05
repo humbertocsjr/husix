@@ -10,6 +10,7 @@ Module OS
         asm "cpu 8086"
         asm "bits 16"
         asm "org 0x100"
+        asm "mov sp, 0xfffe"
         asm "mov word [_os_minstackptr], END"
         Start2
     End

@@ -8,10 +8,12 @@ Imports MinixFS
 Module ConfigDefault
 
     Public Sub Initialize
-        BIOSDisk.Initialize
-        MinixFS.Initialize
-        ' Esses parametros são modificáveis pelo argumento do bootloader
         String.Copy Config.RootFileSystem, "MinixFS"
         String.Copy Config.RootDisk, "BIOSDisk000"
+    End
+
+    Public Sub LoadModules
+        BIOSDisk.Initialize
+        MinixFS.Initialize
     End
 End

@@ -20,6 +20,8 @@ Module UTF8
             If c == 0xb3 Then Return 0xa2
             If c == 0x9a Then Return 0x55
             If c == 0xba Then Return 0xa3
+            If c == 0x8d Then Return 0x49
+            If c == 0xad Then Return 0xa1
         End
         If c == 0xe2 Then
             @c++
