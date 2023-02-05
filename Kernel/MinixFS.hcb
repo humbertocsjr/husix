@@ -223,6 +223,7 @@ Module MinixFS
                 If counter == pos Then
                     FileInfo.Initialize output
                     output.Id = ref.Id
+                    output.Open = AddressOf(Open)
                     ptr1 = output.Name
                     @ptr1++
                     ptr2 = ref
@@ -237,5 +238,8 @@ Module MinixFS
         End
     End
 
+    Sub Open(file as FileInfo, s as Stream)
+        Throw NotImplementedError
+    End
 
 End

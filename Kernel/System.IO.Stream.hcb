@@ -10,6 +10,9 @@ Structure Stream
     Dim SeekCurrent as Func(Of Stream, UInt16, UInt16)
     Dim SeekStart as Func(Of Stream, UInt16, UInt16)
     Dim SeekEnd as Func(Of Stream, UInt16, UInt16)
+    Dim Buffer as PtrByteArray
+    Dim Position as UInt16
+    Dim CurrentBlock as UInt16
 End
 
 Module Stream
@@ -27,8 +30,45 @@ Module Stream
         s.SeekStart = ptr
         s.SeekEnd = ptr
     End
-
+    
+    ' Return size
+    Public Function ReadRaw(s as Stream, data as PtrByteArray, len as UInt16) as UInt16
+        If #s.ReadRaw == 0 Then Throw NotImplementedError
+        Return s.ReadRaw.Invoke(data, len)
+    End
+    ' Return size
+    Public Function Read(s as Stream, data as PtrByteArray) as UInt16
+        If #s.Read == 0 Then Throw NotImplementedError
+        Return s.Read.Invoke(data)
+    End
+    ' Return size
+    Public Function WriteRaw(s as Stream, data as PtrByteArray, len as UInt16) as UInt16
+        If #s.WriteRaw == 0 Then Throw NotImplementedError
+        Return s.WriteRaw.Invoke(data, len)
+    End
+    ' Return size
+    Public Function Write(s as Stream, data as PtrByteArray) as UInt16
+        If #s.Write == 0 Then Throw NotImplementedError
+        Return s.Write.Invoke(data)
+    End
+    
     Public Function Close(s as Stream) as UInt16
-        Return s.Close.Invoke(s)
+        If #s.Close == 0 Then Throw NotImplementedError
+        Return s.Close.Invoke()
+    End
+    
+    Public Function SeekCurrent(s as Stream, position as UInt16) as UInt16
+        If #s.SeekCurrent == 0 Then Throw NotImplementedError
+        Return s.SeekCurrent.Invoke(position)
+    End
+    
+    Public Function SeekEnd(s as Stream, pos as UInt16) as UInt16
+        If #s.SeekEnd == 0 Then Throw NotImplementedError
+        Return s.SeekEnd.Invoke(pos)
+    End
+    
+    Public Function SeekStart(s as Stream, pos as UInt16) as UInt16
+        If #s.SeekStart == 0 Then Throw NotImplementedError
+        Return s.SeekStart.Invoke(pos)
     End
 End
