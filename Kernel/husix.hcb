@@ -30,8 +30,9 @@ Module Program
             FatalError "Modo de Video nao detectado, Requer CGA ou superior", "husix.hcb", 0
         End
         Console.Mode80x25x4
-        Console.WriteLine "HUSIX Operating System"
-        Console.Write "Kernel v"
+        ' Exibe versão do núcleo
+        Console.WriteLine "HUSIX - Sistema Operacional Brasileiro =)"
+        Console.Write "Núcleo v"
         Console.WriteUInt16 ver.Version
         Console.Write "."
         Console.WriteUInt16 ver.SubVersion
@@ -39,58 +40,54 @@ Module Program
         Console.WriteUInt16 ver.Revision
         Console.Write " - "
         Console.WriteLine ver.Release
-        Console.Write "Initializing"
+        Console.Write "Iniciando"
+        ' Prepara multitarefa
         MultiThreading.PreInitialize
         WriteDot
+        ' Inicia Memória Global
         GlobalMemory.Initialize
         WriteDot
+        ' Inicia Memória Local
         Memory.Initialize
         WriteDot
+        ' Configura a Multitarefa
         MultiThreading.Initialize
         WriteDot
+        ' Inicia Inicia o Cronometro do Sistema
         SystemTimer.Initialize
         WriteDot
+        ' Inicia Multitarefa
         MultiThreading.Resume
         WriteDot
+        ' Inicia o Gerenciador de Discos
         Disk.Initialize
         WriteDot
+        ' Inicia o Gerenciador de Sistema de Arquivos
         FileSystem.Initialize
         WriteDot
         Console.WriteLine " [ OK ]"
         
+        ' Configura o Kernel carregando os modulos selecionados e a parametros padrão
         ConfigDefault.Initialize
+        ' Configura os parametros fornecidos pelo BootLoader
         Config.ParseArgs args
 
-        Console.Write "Mounting ["
+        ' Monta Sistema de Arquivos
+        Console.Write "Montando ["
         Console.Write Config.RootDisk
         Console.Write "]"
         If Disk.Exist(Config.RootDisk) == 0 Then 
-            FatalError "[ DISK NOT FOUND ]", Config.RootDisk, 0
+            FatalError "[ DISCO NÃO ENCONTRADO ]", Config.RootDisk, 0
         End
         WriteDot
         Try
             FileSystem.Mount Config.RootDisk, Config.RootFileSystem, "/"
         Catch Error
-            FatalError "[ DISK NOT FORMATED ]", Config.RootDisk, 0
+            FatalError "[ DISCO NÃO FORMATADO ]", Config.RootDisk, 0
         End
         WriteDot
         Console.WriteLine " [ OK ]"
-        Dim root as DirectoryInfo
-        root = New
-        Dim file as FileInfo
-        Dim s as Stream
-        Dim blockTmp as String
-        s = New
-        file = New
-        blockTmp = New
-        FileSystem.GetRoot root
-        FileSystem.GetFileInfo root, 2, file
-        Console.WriteLine file.Name
-        file.Open.Invoke s
-        While Stream.Read(s, blockTmp)
-            Console.Write blockTmp
-        End
-        Console.WriteLine "[EOF]"
+        
 
         While 1
             Console.WriteChar 13
@@ -103,14 +100,14 @@ Module Program
 
     Public Sub FatalError(msg as String, file as String, line as UInt16)
         Console.Mode80x25x4
-        Console.WriteLine "FATAL ERROR:"
+        Console.WriteLine "ERRO FATAL:"
         Console.Write file
         Console.Write ":"
         Console.WriteUInt16 line
         Console.WriteLine ":"
         Console.WriteLine msg
         Console.WriteLine ""
-        Console.WriteLine "<SYSTEM HALTED>"
+        Console.WriteLine "<SISTEMA PARALIZADO>"
         While 1
             asm "cli"
             asm "hlt"

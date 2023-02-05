@@ -48,7 +48,7 @@ Module Config
                         txt = arg
                         @txt++
                         txt = 0
-                        Console.Write "Argumento '"
+                        Console.Write "Aviso: Argumento '"
                         Console.Write arg
                         Console.WriteLine "' desconhecido."
                     End

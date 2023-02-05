@@ -18,6 +18,8 @@ Module UTF8
             If c == 0xa3 Then Return 0x61
             If c == 0x93 Then Return 0x4f
             If c == 0xb3 Then Return 0xa2
+            If c == 0x9a Then Return 0x55
+            If c == 0xba Then Return 0xa3
         End
         If c == 0xe2 Then
             @c++

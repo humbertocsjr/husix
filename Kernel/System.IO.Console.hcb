@@ -114,7 +114,7 @@ Module Console
         i = 1
         While (txt > 0) AndAlso (i <= len)
             WriteChar UTF8.ConvertCharToCP437(txt)
-            @txt ++
+            @txt = @txt + UTF8.CharSize(txt)
             i++
         End
     End
