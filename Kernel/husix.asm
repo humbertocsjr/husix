@@ -4019,7 +4019,7 @@ es mov [di+2], ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:16:9 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:16:25 ===---
-mov ax, 3513
+mov ax, 3515
 es mov [di+4], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:17:9 ===---

@@ -1,10 +1,12 @@
 Imports System
 Imports System.IO.Disk
 Imports BIOSDisk
+Imports MinixFS
 
 
 Module ConfigDefault
     Public Sub Initialize
         BIOSDisk.Initialize
+        MinixFS.Initialize
     End
 End
