@@ -189,6 +189,9 @@ Module MinixFS
                 If counter == pos Then
                     DirectoryInfo.Initialize output
                     output.Id = ref.Id
+                    output.MountedFileSystem = parent.MountedFileSystem
+                    output.GetDirectoryInfo = AddressOf(GetDirectoryInfo)
+                    output.GetFileInfo = AddressOf(GetFileInfo)
                     ptr1 = output.Name
                     @ptr1++
                     ptr2 = ref

@@ -77,7 +77,7 @@ Module BIOSDisk
             Thread.Yield '  Garante que vai rodar outras Threads
         End
         Semaphore.Release InUse
-        If ret = -3 Then Throw AccessDeniedError
+        If ret == -3 Then Throw AccessDeniedError
         If ret < 0 Then Throw InvalidValueError
         Memory.Copy block, Buffer, 512
     End
@@ -101,7 +101,7 @@ Module BIOSDisk
             Thread.Yield '  Garante que vai rodar outras Threads
         End
         Semaphore.Release InUse
-        If ret = -3 Then Throw AccessDeniedError
+        If ret == -3 Then Throw AccessDeniedError
         If ret < 0 Then Throw InvalidValueError
         Memory.Copy block, Buffer, 512
     End
