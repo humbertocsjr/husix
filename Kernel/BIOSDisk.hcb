@@ -65,15 +65,17 @@ Module BIOSDisk
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse
-        MultiThreading.Suspend
         Dim i as UInt16
         ret = -1
         i = 0
         While (i <= 3) AndAlso ret < 0
+            Thread.Yield
+            MultiThreading.Suspend
             ret = CallBIOS(0x201, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
             If ret < 0 Then CallBIOS 0,0,0,disk.InternalId, #Buffer
+            MultiThreading.Resume
+            Thread.Yield '  Garante que vai rodar outras Threads
         End
-        MultiThreading.Resume
         Semaphore.Release InUse
         If ret = -3 Then Throw AccessDeniedError
         If ret < 0 Then Throw InvalidValueError
@@ -87,15 +89,17 @@ Module BIOSDisk
         Disk.ConvertToCHS chs, disk, positionLow, positionHigh
         Dim ret as Int16
         Semaphore.WaitOne InUse
-        MultiThreading.Suspend
         Dim i as UInt16
         ret = -1
         i = 0
         While (i <= 3) AndAlso ret < 0
+            Thread.Yield
+            MultiThreading.Suspend
             ret = CallBIOS(0x301, @Buffer, (chs.Cylinder shl 8) + (chs.Sector), (chs.Head shl 8) + disk.InternalId, #Buffer)
             If ret < 0 Then CallBIOS 0,0,0,disk.InternalId, #Buffer
+            MultiThreading.Resume
+            Thread.Yield '  Garante que vai rodar outras Threads
         End
-        MultiThreading.Resume
         Semaphore.Release InUse
         If ret = -3 Then Throw AccessDeniedError
         If ret < 0 Then Throw InvalidValueError
