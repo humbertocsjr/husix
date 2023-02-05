@@ -969,7 +969,7 @@ retf
 _program_main:
 push bp
 mov bp, sp
-sub sp, 30
+sub sp, 38
 push cs
 call _os_stackcheck
 ; ARG: args TAM: 4 POS: BP+6 
@@ -977,13 +977,17 @@ call _os_stackcheck
 ; ARG: ver TAM: 4 POS: BP--18 
 ; ARG: disk TAM: 4 POS: BP--22 
 ; ARG: root TAM: 4 POS: BP--26 
-; ARG: dir TAM: 4 POS: BP--30 
+; ARG: file TAM: 4 POS: BP--30 
+; ARG: s TAM: 4 POS: BP--34 
+; ARG: blocktmp TAM: 4 POS: BP--38 
 ;     ---=== husix.hcb:22:21 ===---
 ;     ---=== husix.hcb:23:13 ===---
 ;     ---=== husix.hcb:24:13 ===---
 ;     ---=== husix.hcb:62:13 ===---
 ;     ---=== husix.hcb:78:13 ===---
 ;     ---=== husix.hcb:80:13 ===---
+;     ---=== husix.hcb:81:13 ===---
+;     ---=== husix.hcb:82:13 ===---
 ;     ---=== husix.hcb:25:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 10
@@ -1544,18 +1548,38 @@ mov di, sp
 push es
 pop word [bp+-26+2]
 mov [bp+-26], di
-;     ---=== husix.hcb:81:9 ===---
+;     ---=== husix.hcb:83:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
-sub sp, 51
+sub sp, 52
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-34+2]
+mov [bp+-34], di
+;     ---=== husix.hcb:84:9 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 47
 push ss
 pop es
 mov di, sp
 push es
 pop word [bp+-30+2]
 mov [bp+-30], di
-;     ---=== husix.hcb:82:9 ===---
+;     ---=== husix.hcb:85:9 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 129
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-38+2]
+mov [bp+-38], di
+es mov byte [di+0], 128
+es mov byte [di+1], 0
+;     ---=== husix.hcb:86:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:82:28 ===---
+;     ---=== husix.hcb:86:28 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-26+2]
 pop es
@@ -1565,19 +1589,19 @@ push di
 push cs
 call _filesystem_getroot
 add sp, 4
-;     ---=== husix.hcb:83:9 ===---
+;     ---=== husix.hcb:87:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:83:46 ===---
+;     ---=== husix.hcb:87:41 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-30+2]
 pop es
 mov di, [bp+-30]
 push es
 push di
-;     ---=== husix.hcb:83:43 ===---
+;     ---=== husix.hcb:87:38 ===---
 mov ax, 2
 push ax
-;     ---=== husix.hcb:83:37 ===---
+;     ---=== husix.hcb:87:32 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-26+2]
 pop es
@@ -1585,11 +1609,11 @@ mov di, [bp+-26]
 push es
 push di
 push cs
-call _filesystem_getdirectoryinfo
+call _filesystem_getfileinfo
 add sp, 10
-;     ---=== husix.hcb:84:9 ===---
+;     ---=== husix.hcb:88:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:84:27 ===---
+;     ---=== husix.hcb:88:27 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 35
 push word [bp+-30+2]
 pop es
@@ -1603,35 +1627,87 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:86:9 ===---
+;     ---=== husix.hcb:89:9 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== husix.hcb:89:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-34+2]
+pop es
+mov di, [bp+-34]
+push es
+push di
+;     ---=== husix.hcb:89:9 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-30+2]
+pop es
+mov di, [bp+-30]
+push es
+push di
+es call far [di+43]
+add sp, 8
+;     ---=== husix.hcb:90:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== husix.hcb:90:37 ===---
+mov ax, 200
+push ax
+;     ---=== husix.hcb:90:27 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-38+2]
+pop es
+mov di, [bp+-38]
+push es
+push di
+;     ---=== husix.hcb:90:24 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-34+2]
+pop es
+mov di, [bp+-34]
+push es
+push di
+push cs
+call _stream_readraw
+add sp, 10
+;     ---=== husix.hcb:91:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== husix.hcb:91:27 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-38+2]
+pop es
+mov di, [bp+-38]
+push es
+push di
+push cs
+call _console_writeline
+add sp, 4
+;     ---=== husix.hcb:93:9 ===---
 ROTULO137:
-;     ---=== husix.hcb:86:15 ===---
+;     ---=== husix.hcb:93:15 ===---
 mov ax, 1
 cmp ax, 0
 jne ROTULO138
 jmp ROTULO139
 ROTULO138:
-;     ---=== husix.hcb:87:13 ===---
+;     ---=== husix.hcb:94:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:87:31 ===---
+;     ---=== husix.hcb:94:31 ===---
 mov ax, 13
 xor ah, ah
 push ax
 push cs
 call _console_writechar
 add sp, 2
-;     ---=== husix.hcb:88:13 ===---
+;     ---=== husix.hcb:95:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:88:33 ===---
+;     ---=== husix.hcb:95:33 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_clock_minute]
 push ax
 push cs
 call _console_writeuint16
 add sp, 2
-;     ---=== husix.hcb:89:13 ===---
+;     ---=== husix.hcb:96:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:89:27 ===---
+;     ---=== husix.hcb:96:27 ===---
 push cs
 pop es
 mov di, ROTULO141
@@ -1646,18 +1722,18 @@ push di
 push cs
 call _console_write
 add sp, 4
-;     ---=== husix.hcb:90:13 ===---
+;     ---=== husix.hcb:97:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:90:33 ===---
+;     ---=== husix.hcb:97:33 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_clock_second]
 push ax
 push cs
 call _console_writeuint16
 add sp, 2
-;     ---=== husix.hcb:91:13 ===---
+;     ---=== husix.hcb:98:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:91:26 ===---
+;     ---=== husix.hcb:98:26 ===---
 mov ax, 1000
 push ax
 push cs
@@ -1670,23 +1746,23 @@ mov sp, bp
 pop bp
 FIM_program_main:
 retf
-;     ---=== husix.hcb:95:16 ===---
+;     ---=== husix.hcb:102:16 ===---
 _program_fatalerror:
 push bp
 mov bp, sp
 ; ARG: msg TAM: 4 POS: BP+6 
 ; ARG: file TAM: 4 POS: BP+10 
 ; ARG: line TAM: 2 POS: BP+14 
-;     ---=== husix.hcb:95:27 ===---
-;     ---=== husix.hcb:95:42 ===---
-;     ---=== husix.hcb:95:58 ===---
-;     ---=== husix.hcb:96:9 ===---
+;     ---=== husix.hcb:102:27 ===---
+;     ---=== husix.hcb:102:42 ===---
+;     ---=== husix.hcb:102:58 ===---
+;     ---=== husix.hcb:103:9 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _console_mode80x25x4
-;     ---=== husix.hcb:97:9 ===---
+;     ---=== husix.hcb:104:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:97:27 ===---
+;     ---=== husix.hcb:104:27 ===---
 push cs
 pop es
 mov di, ROTULO144
@@ -1701,9 +1777,9 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:98:9 ===---
+;     ---=== husix.hcb:105:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:98:23 ===---
+;     ---=== husix.hcb:105:23 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+10+2]
 pop es
@@ -1713,9 +1789,9 @@ push di
 push cs
 call _console_write
 add sp, 4
-;     ---=== husix.hcb:99:9 ===---
+;     ---=== husix.hcb:106:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:99:23 ===---
+;     ---=== husix.hcb:106:23 ===---
 push cs
 pop es
 mov di, ROTULO146
@@ -1730,18 +1806,18 @@ push di
 push cs
 call _console_write
 add sp, 4
-;     ---=== husix.hcb:100:9 ===---
+;     ---=== husix.hcb:107:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:100:29 ===---
+;     ---=== husix.hcb:107:29 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+14]
 push ax
 push cs
 call _console_writeuint16
 add sp, 2
-;     ---=== husix.hcb:101:9 ===---
+;     ---=== husix.hcb:108:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:101:27 ===---
+;     ---=== husix.hcb:108:27 ===---
 push cs
 pop es
 mov di, ROTULO148
@@ -1756,9 +1832,9 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:102:9 ===---
+;     ---=== husix.hcb:109:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:102:27 ===---
+;     ---=== husix.hcb:109:27 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -1768,9 +1844,9 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:103:9 ===---
+;     ---=== husix.hcb:110:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:103:27 ===---
+;     ---=== husix.hcb:110:27 ===---
 push cs
 pop es
 mov di, ROTULO150
@@ -1784,9 +1860,9 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:104:9 ===---
+;     ---=== husix.hcb:111:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== husix.hcb:104:27 ===---
+;     ---=== husix.hcb:111:27 ===---
 push cs
 pop es
 mov di, ROTULO152
@@ -1801,17 +1877,17 @@ push di
 push cs
 call _console_writeline
 add sp, 4
-;     ---=== husix.hcb:105:9 ===---
+;     ---=== husix.hcb:112:9 ===---
 ROTULO153:
-;     ---=== husix.hcb:105:15 ===---
+;     ---=== husix.hcb:112:15 ===---
 mov ax, 1
 cmp ax, 0
 jne ROTULO154
 jmp ROTULO155
 ROTULO154:
-;     ---=== husix.hcb:106:17 ===---
+;     ---=== husix.hcb:113:17 ===---
 cli
-;     ---=== husix.hcb:107:17 ===---
+;     ---=== husix.hcb:114:17 ===---
 hlt
 jmp ROTULO153
 ROTULO155:
@@ -3834,7 +3910,7 @@ es mov [di+2], ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:16:9 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:16:25 ===---
-mov ax, 3512
+mov ax, 3513
 es mov [di+4], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/Version.hcb:17:9 ===---
@@ -13982,8 +14058,11 @@ call _os_stackcheck
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:114:58 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:115:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:116:9 ===---
+; ACAO DEC - Decrementa variavel
+dec word [bp+10]
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:117:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:116:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:117:27 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 137
 push word [bp+6+2]
 pop es
@@ -13997,7 +14076,7 @@ push di
 push cs
 call _semaphore_waitone
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:117:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 1024
 push ss
@@ -14006,21 +14085,21 @@ mov di, sp
 push es
 pop word [bp+-4+2]
 mov [bp+-4], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:41 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:38 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:43 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:43 ===---
 mov ax, 32
 cmp ax, 0
 jne ROTULO1127
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:43 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:43 ===---
 mov ax, _minixfs
 mov [bp+-8], ax
-mov ax, 118
+mov ax, 119
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -14030,11 +14109,11 @@ pop ax
 xor dx, dx
 div bx
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:31 ===---
 ; ACAO LEITURA - Le ponteiro
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:118:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:26 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -14044,27 +14123,27 @@ push di
 push cs
 call _minixfs_loaditemmapblock
 add sp, 10
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:10 ===---
 ; ACAO STRUCTURE - Define Segmento/desvio de estrutura
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:25 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:40 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:40 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:42 ===---
 mov ax, 32
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:32 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:29 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:36 ===---
 mov ax, 32
 cmp ax, 0
 jne ROTULO1128
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:36 ===---
 mov ax, _minixfs
 mov [bp+-8], ax
-mov ax, 119
+mov ax, 120
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -14077,16 +14156,16 @@ mov ax, dx
 pop bx
 mul bx
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:119:19 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:19 ===---
 ; ACAO STRUCTURE - Define Segmento/desvio de estrutura
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 pop bx
 add ax, bx
 mov [bp+-4], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:120:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:27 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 137
 push word [bp+6+2]
 pop es
@@ -14100,20 +14179,20 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:122:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:122:34 ===---
 ; ACAO CHAMADA - Calcula tamanho de item
 mov ax, 32
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:122:27 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:121:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:122:21 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+12+2]
 pop es
@@ -14128,7 +14207,7 @@ mov sp, bp
 pop bp
 FIM_minixfs_loaditem:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:124:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:9 ===---
 _minixfs_readblockfromitem:
 push bp
 mov bp, sp
@@ -14141,19 +14220,19 @@ call _os_stackcheck
 ; ARG: pos TAM: 2 POS: BP+18 
 ; ARG: ptr TAM: 4 POS: BP--4 
 ; ARG: blocknum TAM: 2 POS: BP--6 
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:124:27 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:124:53 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:124:74 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:124:94 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:53 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:74 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:125:94 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:126:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:127:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:127:16 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:127:12 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:127:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:12 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:127:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:18 ===---
 mov ax, 7
 mov bx, ax
 pop ax
@@ -14170,13 +14249,13 @@ cmp ax, 0
 jne ROTULO1130
 jmp ROTULO1131
 ROTULO1130:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:23 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -14193,9 +14272,9 @@ cmp ax, 0
 jne ROTULO1135
 jmp ROTULO1136
 ROTULO1135:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:128:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 14
 push word [bp+10+2]
 pop es
@@ -14203,13 +14282,13 @@ mov di, [bp+10]
 es mov ax, [di+14]
 mov [bp+-6], ax
 ROTULO1136:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:23 ===---
 mov ax, 1
 mov bx, ax
 pop ax
@@ -14226,9 +14305,9 @@ cmp ax, 0
 jne ROTULO1140
 jmp ROTULO1141
 ROTULO1140:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:129:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 16
 push word [bp+10+2]
 pop es
@@ -14236,13 +14315,13 @@ mov di, [bp+10]
 es mov ax, [di+16]
 mov [bp+-6], ax
 ROTULO1141:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:23 ===---
 mov ax, 2
 mov bx, ax
 pop ax
@@ -14259,9 +14338,9 @@ cmp ax, 0
 jne ROTULO1145
 jmp ROTULO1146
 ROTULO1145:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:130:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 18
 push word [bp+10+2]
 pop es
@@ -14269,13 +14348,13 @@ mov di, [bp+10]
 es mov ax, [di+18]
 mov [bp+-6], ax
 ROTULO1146:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:23 ===---
 mov ax, 3
 mov bx, ax
 pop ax
@@ -14292,9 +14371,9 @@ cmp ax, 0
 jne ROTULO1150
 jmp ROTULO1151
 ROTULO1150:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:131:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 20
 push word [bp+10+2]
 pop es
@@ -14302,13 +14381,13 @@ mov di, [bp+10]
 es mov ax, [di+20]
 mov [bp+-6], ax
 ROTULO1151:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:23 ===---
 mov ax, 4
 mov bx, ax
 pop ax
@@ -14325,9 +14404,9 @@ cmp ax, 0
 jne ROTULO1155
 jmp ROTULO1156
 ROTULO1155:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:132:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 22
 push word [bp+10+2]
 pop es
@@ -14335,13 +14414,13 @@ mov di, [bp+10]
 es mov ax, [di+22]
 mov [bp+-6], ax
 ROTULO1156:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:23 ===---
 mov ax, 5
 mov bx, ax
 pop ax
@@ -14358,9 +14437,9 @@ cmp ax, 0
 jne ROTULO1160
 jmp ROTULO1161
 ROTULO1160:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:133:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 24
 push word [bp+10+2]
 pop es
@@ -14368,13 +14447,13 @@ mov di, [bp+10]
 es mov ax, [di+24]
 mov [bp+-6], ax
 ROTULO1161:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:23 ===---
 mov ax, 6
 mov bx, ax
 pop ax
@@ -14391,9 +14470,9 @@ cmp ax, 0
 jne ROTULO1165
 jmp ROTULO1166
 ROTULO1165:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:134:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:135:41 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 26
 push word [bp+10+2]
 pop es
@@ -14403,17 +14482,17 @@ mov [bp+-6], ax
 ROTULO1166:
 jmp ROTULO1170
 ROTULO1131:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:25 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:27 ===---
 mov ax, 512
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:136:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:23 ===---
 mov ax, 7
 pop bx
 add ax, bx
@@ -14432,23 +14511,23 @@ cmp ax, 0
 jne ROTULO1171
 jmp ROTULO1172
 ROTULO1171:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:17 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:48 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:48 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 28
 push word [bp+10+2]
 pop es
 mov di, [bp+10]
 es mov ax, [di+28]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:41 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+14+2]
 pop es
 mov di, [bp+14]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:137:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:27 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 105
 push word [bp+6+2]
 pop es
@@ -14462,21 +14541,21 @@ push di
 push cs
 call _minixfs_readblock
 add sp, 10
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:17 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:27 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:29 ===---
 mov ax, 7
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:138:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:23 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 pop bx
 sub ax, bx
 mov [bp+18], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:17 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:139:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:23 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+14+2]
 pop es
@@ -14484,29 +14563,29 @@ mov di, [bp+14]
 push es
 pop word [bp+-4+2]
 mov [bp+-4], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:18 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:29 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:36 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:32 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:40 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:40 ===---
 mov ax, 1
 mov cx, ax
 pop ax
 shl ax, cl
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:140:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:25 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 pop bx
 add ax, bx
 mov [bp+-4], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:142:17 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:141:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:142:28 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-4+2]
 pop es
@@ -14515,18 +14594,15 @@ es mov ax, [di+0]
 mov [bp+-6], ax
 jmp ROTULO1176
 ROTULO1172:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:143:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:144:23 ===---
 mov ax, _minixfs
 mov [bp+-8], ax
-mov ax, 143
+mov ax, 144
 mov [bp+-10], ax
 mov ax, 7
 cs jmp word [_os_trycode]
 ROTULO1176:
 ROTULO1170:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:146:9 ===---
-; ACAO DEC - Decrementa variavel
-dec word [bp+-6]
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:147:9 ===---
 ; ACAO CHAMADA - Chama rotina
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:147:40 ===---
@@ -14784,28 +14860,68 @@ push cs
 call _memory_copy
 add sp, 10
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:166:13 ===---
-; ACAO STRUCTURE - Incremento de ponteiro
-push word [bp+16+2]
-pop es
-mov di, [bp+16]
-es inc word [di+0]
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:41 ===---
-; ACAO LEITURA - Le ponteiro
-push word [bp+12+2]
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:166:27 ===---
+push cs
 pop es
-mov di, [bp+12]
+mov di, ROTULO1183
+jmp ROTULO1182
+ROTULO1183:
+db 3
+db 91,73,68
+times 1 db 0
+ROTULO1182:
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:27 ===---
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:33 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+16+2]
 pop es
 mov di, [bp+16]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:167:22 ===---
+push cs
+call _console_writeuint16
+add sp, 2
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:168:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:168:27 ===---
+push cs
+pop es
+mov di, ROTULO1185
+jmp ROTULO1184
+ROTULO1185:
+db 1
+db 93
+times 1 db 0
+ROTULO1184:
+push es
+push di
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:41 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+12+2]
+pop es
+mov di, [bp+12]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+16+2]
+pop es
+mov di, [bp+16]
+es mov ax, [di+0]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:22 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-30+2]
 pop es
@@ -14829,9 +14945,9 @@ pop word [bp+-8+2]
 mov [bp+-8], di
 mov [bp+-10], ax
 mov ax, bx
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:171:13 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:169:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:171:31 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_minixfs_inuse+2]
 pop es
@@ -14841,12 +14957,12 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:170:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:170:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:172:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:172:20 ===---
 xor ax, ax
 jmp ROTULO1177
 jmp ROTULO1179
-ROTULO1183:
+ROTULO1187:
 cs jmp word [_os_tryfatal]
 ROTULO1179:
 mov ax, [bp+-6]
@@ -14855,9 +14971,9 @@ mov ax, [bp+-4]
 cs mov [_os_trystack], ax
 mov ax, [bp+-2]
 cs mov [_os_trycode], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:172:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:174:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:172:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:174:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_minixfs_inuse+2]
 pop es
@@ -14867,8 +14983,8 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:173:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:173:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:175:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:175:16 ===---
 mov ax, 65535
 jmp ROTULO1177
 ROTULO1177:
@@ -14876,7 +14992,7 @@ mov sp, bp
 pop bp
 FIM_minixfs_getsubitem:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:176:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:178:14 ===---
 _minixfs_getdirectoryinfo:
 push bp
 mov bp, sp
@@ -14892,16 +15008,16 @@ call _os_stackcheck
 ; ARG: counter TAM: 2 POS: BP--12 
 ; ARG: ptr1 TAM: 4 POS: BP--16 
 ; ARG: ptr2 TAM: 4 POS: BP--20 
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:176:31 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:176:56 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:176:71 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:177:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:178:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:178:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:178:56 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:178:71 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:179:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:180:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:181:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:182:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:183:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:183:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:184:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:185:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 32
 push ss
@@ -14910,7 +15026,7 @@ mov di, sp
 push es
 pop word [bp+-6+2]
 mov [bp+-6], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:184:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 32
 push ss
@@ -14919,59 +15035,59 @@ mov di, sp
 push es
 pop word [bp+-10+2]
 mov [bp+-10], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:185:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 2
-ROTULO1185:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
+ROTULO1189:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
 mov ax, 512
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO1188
-jmp ROTULO1189
-ROTULO1188:
+jbe ROTULO1192
+jmp ROTULO1193
+ROTULO1192:
 mov ax, 65535
-jmp ROTULO1190
-ROTULO1189:
+jmp ROTULO1194
+ROTULO1193:
 xor ax, ax
-ROTULO1190:
+ROTULO1194:
 cmp ax, 0
-jne ROTULO1186
-jmp ROTULO1187
-ROTULO1186:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:49 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:16 ===---
+jne ROTULO1190
+jmp ROTULO1191
+ROTULO1190:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:49 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:44 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:44 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-10+2]
 pop es
 mov di, [bp+-10]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:38 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:35 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:27 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -14982,76 +15098,76 @@ push cs
 call _minixfs_getsubitem
 add sp, 14
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:52 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:52 ===---
 xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1193
-jmp ROTULO1194
-ROTULO1193:
+je ROTULO1197
+jmp ROTULO1198
+ROTULO1197:
 mov ax, 65535
-jmp ROTULO1195
-ROTULO1194:
+jmp ROTULO1199
+ROTULO1198:
 xor ax, ax
-ROTULO1195:
+ROTULO1199:
 cmp ax, 0
-jne ROTULO1191
-jmp ROTULO1192
-ROTULO1191:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:59 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:187:66 ===---
+jne ROTULO1195
+jmp ROTULO1196
+ROTULO1195:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:59 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:66 ===---
 xor ax, ax
-jmp ROTULO1184
-ROTULO1192:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:33 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:16 ===---
+jmp ROTULO1188
+ROTULO1196:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:16 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:37 ===---
 mov ax, 16384
 mov bx, ax
 pop ax
 and ax, bx
 cmp ax, 0
-jne ROTULO1196
-jmp ROTULO1197
-ROTULO1196:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:189:17 ===---
+jne ROTULO1200
+jmp ROTULO1201
+ROTULO1200:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:191:17 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-12]
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:28 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-12]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:190:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:31 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1203
-jmp ROTULO1204
-ROTULO1203:
+je ROTULO1207
+jmp ROTULO1208
+ROTULO1207:
 mov ax, 65535
-jmp ROTULO1205
-ROTULO1204:
+jmp ROTULO1209
+ROTULO1208:
 xor ax, ax
-ROTULO1205:
+ROTULO1209:
 cmp ax, 0
-jne ROTULO1201
-jmp ROTULO1202
-ROTULO1201:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:191:21 ===---
+jne ROTULO1205
+jmp ROTULO1206
+ROTULO1205:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:193:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:191:46 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:193:46 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+12+2]
 pop es
@@ -15061,9 +15177,9 @@ push di
 push cs
 call _directoryinfo_initialize
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:194:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:192:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:194:33 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+-10+2]
 pop es
@@ -15074,9 +15190,9 @@ pop es
 mov di, [bp+12]
 es mov [di+33], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:193:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:195:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:193:48 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:195:48 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 39
 push word [bp+6+2]
 pop es
@@ -15093,9 +15209,9 @@ mov di, [bp+12]
 es pop word [di+39]
 es pop word [di+39+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:194:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:196:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:194:47 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:196:47 ===---
 push cs
 pop es
 mov di, _minixfs_getdirectoryinfo
@@ -15107,9 +15223,9 @@ mov di, [bp+12]
 es pop word [di+47]
 es pop word [di+47+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:195:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:197:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:195:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:197:42 ===---
 push cs
 pop es
 mov di, _minixfs_getfileinfo
@@ -15121,9 +15237,9 @@ mov di, [bp+12]
 es pop word [di+43]
 es pop word [di+43+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:196:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:198:21 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:196:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:198:28 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 35
 es push word [di+35+2]
 es push word [di+35]
@@ -15132,13 +15248,13 @@ pop es
 push es
 pop word [bp+-16+2]
 mov [bp+-16], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:197:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:199:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
 inc di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:198:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:200:21 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:198:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:200:28 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-10+2]
 pop es
@@ -15146,26 +15262,26 @@ mov di, [bp+-10]
 push es
 pop word [bp+-20+2]
 mov [bp+-20], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:199:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:201:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
 inc di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:200:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:202:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:201:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:203:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:201:45 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:203:45 ===---
 mov ax, 30
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:201:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:203:39 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-20+2]
 pop es
 mov di, [bp+-20]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:201:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:203:33 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
@@ -15175,41 +15291,41 @@ push di
 push cs
 call _memory_copy
 add sp, 10
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:202:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:202:35 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:202:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:37 ===---
 mov ax, 30
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:202:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:30 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-16]
 pop bx
 add ax, bx
 mov [bp+-16], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:203:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:205:21 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov byte [di+0], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:204:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:206:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:206:28 ===---
 mov ax, 1
-jmp ROTULO1184
-ROTULO1202:
-ROTULO1197:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:186:22 ===---
+jmp ROTULO1188
+ROTULO1206:
+ROTULO1201:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:188:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO1185
-ROTULO1187:
-ROTULO1184:
+jmp ROTULO1189
+ROTULO1191:
+ROTULO1188:
 mov sp, bp
 pop bp
 FIM_minixfs_getdirectoryinfo:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:210:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:212:14 ===---
 _minixfs_getfileinfo:
 push bp
 mov bp, sp
@@ -15225,16 +15341,16 @@ call _os_stackcheck
 ; ARG: counter TAM: 2 POS: BP--12 
 ; ARG: ptr1 TAM: 4 POS: BP--16 
 ; ARG: ptr2 TAM: 4 POS: BP--20 
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:210:26 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:210:51 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:210:66 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:211:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:212:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:212:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:212:51 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:212:66 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:213:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:214:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:215:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:216:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:217:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:217:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:218:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:219:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 32
 push ss
@@ -15243,7 +15359,7 @@ mov di, sp
 push es
 pop word [bp+-6+2]
 mov [bp+-6], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:218:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:9 ===---
 ; ACAO STRUCTURE - Aloca estrutura na pilha
 sub sp, 32
 push ss
@@ -15252,59 +15368,59 @@ mov di, sp
 push es
 pop word [bp+-10+2]
 mov [bp+-10], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:219:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 2
-ROTULO1207:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
+ROTULO1211:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
 mov ax, 512
 mov bx, ax
 pop ax
 cmp ax, bx
-jbe ROTULO1210
-jmp ROTULO1211
-ROTULO1210:
+jbe ROTULO1214
+jmp ROTULO1215
+ROTULO1214:
 mov ax, 65535
-jmp ROTULO1212
-ROTULO1211:
+jmp ROTULO1216
+ROTULO1215:
 xor ax, ax
-ROTULO1212:
+ROTULO1216:
 cmp ax, 0
-jne ROTULO1208
-jmp ROTULO1209
-ROTULO1208:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:49 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:16 ===---
+jne ROTULO1212
+jmp ROTULO1213
+ROTULO1212:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:49 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:16 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:44 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:44 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-10+2]
 pop es
 mov di, [bp+-10]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:38 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:35 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:27 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+6+2]
 pop es
@@ -15315,76 +15431,202 @@ push cs
 call _minixfs_getsubitem
 add sp, 14
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:52 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:52 ===---
 xor ax, ax
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1215
-jmp ROTULO1216
-ROTULO1215:
+je ROTULO1219
+jmp ROTULO1220
+ROTULO1219:
 mov ax, 65535
-jmp ROTULO1217
-ROTULO1216:
+jmp ROTULO1221
+ROTULO1220:
 xor ax, ax
-ROTULO1217:
+ROTULO1221:
 cmp ax, 0
-jne ROTULO1213
-jmp ROTULO1214
-ROTULO1213:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:59 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:221:66 ===---
+jne ROTULO1217
+jmp ROTULO1218
+ROTULO1217:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:59 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:66 ===---
 xor ax, ax
-jmp ROTULO1206
-ROTULO1214:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:33 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:16 ===---
+jmp ROTULO1210
+ROTULO1218:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:33 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+-6+2]
 pop es
 mov di, [bp+-6]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:37 ===---
-mov ax, 16384
+push cs
+call _console_writeuint16
+add sp, 2
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:225:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:225:27 ===---
+push cs
+pop es
+mov di, ROTULO1223
+jmp ROTULO1222
+ROTULO1223:
+db 1
+db 61
+times 1 db 0
+ROTULO1222:
+push es
+push di
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:50 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:33 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov ax, [di+0]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:54 ===---
+mov ax, 32768
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+push cs
+call _console_writeuint16
+add sp, 2
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:227:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:227:27 ===---
+push cs
+pop es
+mov di, ROTULO1228
+jmp ROTULO1227
+ROTULO1228:
+db 1
+db 58
+times 1 db 0
+ROTULO1227:
+push es
+push di
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:228:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:228:33 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+es mov ax, [di+0]
+push ax
+push cs
+call _console_writeuint16
+add sp, 2
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:229:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:229:27 ===---
+push cs
+pop es
+mov di, ROTULO1230
+jmp ROTULO1229
+ROTULO1230:
+db 1
+db 64
+times 1 db 0
+ROTULO1229:
+push es
+push di
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:230:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:230:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:230:37 ===---
+mov ax, 32
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:230:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+pop bx
+mul bx
+push ax
+push cs
+call _console_writeuint16
+add sp, 2
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:231:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:231:27 ===---
+push cs
+pop es
+mov di, ROTULO1232
+jmp ROTULO1231
+ROTULO1232:
+db 1
+db 32
+times 1 db 0
+ROTULO1231:
+push es
+push di
+push cs
+call _console_write
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:232:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:232:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:232:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov ax, [di+0]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:232:37 ===---
+mov ax, 32768
 mov bx, ax
 pop ax
 and ax, bx
 cmp ax, 0
-jne ROTULO1218
-jmp ROTULO1219
-ROTULO1218:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:223:17 ===---
+jne ROTULO1233
+jmp ROTULO1234
+ROTULO1233:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:233:17 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-12]
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:28 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-12]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:224:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:31 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 mov bx, ax
 pop ax
 cmp ax, bx
-je ROTULO1225
-jmp ROTULO1226
-ROTULO1225:
+je ROTULO1240
+jmp ROTULO1241
+ROTULO1240:
 mov ax, 65535
-jmp ROTULO1227
-ROTULO1226:
+jmp ROTULO1242
+ROTULO1241:
 xor ax, ax
-ROTULO1227:
+ROTULO1242:
 cmp ax, 0
-jne ROTULO1223
-jmp ROTULO1224
-ROTULO1223:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:225:21 ===---
+jne ROTULO1238
+jmp ROTULO1239
+ROTULO1238:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:225:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:41 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+12+2]
 pop es
@@ -15394,9 +15636,9 @@ push di
 push cs
 call _fileinfo_initialize
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:236:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:226:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:236:33 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+-10+2]
 pop es
@@ -15407,9 +15649,9 @@ pop es
 mov di, [bp+12]
 es mov [di+33], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:227:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:237:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:227:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:237:35 ===---
 push cs
 pop es
 mov di, _minixfs_open
@@ -15421,9 +15663,9 @@ mov di, [bp+12]
 es pop word [di+43]
 es pop word [di+43+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:228:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:238:21 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:228:48 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:238:48 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 39
 push word [bp+6+2]
 pop es
@@ -15440,9 +15682,9 @@ mov di, [bp+12]
 es pop word [di+39]
 es pop word [di+39+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:229:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:239:21 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:229:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:239:28 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 35
 es push word [di+35+2]
 es push word [di+35]
@@ -15451,13 +15693,13 @@ pop es
 push es
 pop word [bp+-16+2]
 mov [bp+-16], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:230:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:240:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
 inc di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:231:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:241:21 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:231:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:241:28 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-10+2]
 pop es
@@ -15465,26 +15707,26 @@ mov di, [bp+-10]
 push es
 pop word [bp+-20+2]
 mov [bp+-20], di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:232:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:242:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
 inc di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:233:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:243:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:45 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:45 ===---
 mov ax, 30
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:39 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-20+2]
 pop es
 mov di, [bp+-20]
 push es
 push di
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:234:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:33 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
@@ -15494,51 +15736,242 @@ push di
 push cs
 call _memory_copy
 add sp, 10
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:35 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:37 ===---
 mov ax, 30
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:235:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:30 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-16]
 pop bx
 add ax, bx
 mov [bp+-16], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:236:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:246:21 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov byte [di+0], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:237:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:237:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:247:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:247:28 ===---
 mov ax, 1
-jmp ROTULO1206
-ROTULO1224:
-ROTULO1219:
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:220:22 ===---
+jmp ROTULO1210
+ROTULO1239:
+ROTULO1234:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:222:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
-jmp ROTULO1207
-ROTULO1209:
-ROTULO1206:
+jmp ROTULO1211
+ROTULO1213:
+ROTULO1210:
 mov sp, bp
 pop bp
 FIM_minixfs_getfileinfo:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:243:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:253:9 ===---
+_minixfs_readblockfromstream:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: blocknum TAM: 2 POS: BP+10 
+; ARG: item TAM: 4 POS: BP--4 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:253:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:253:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:254:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:255:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:255:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 44
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+44+2]
+es push word [di+44]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:256:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:256:74 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:256:64 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 38
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+38+2]
+es push word [di+38]
+pop di
+pop es
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:256:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 44
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+44+2]
+es push word [di+44]
+pop di
+pop es
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:256:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 34
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+34+2]
+es push word [di+34]
+pop di
+pop es
+push es
+push di
+push cs
+call _minixfs_readblockfromitem
+add sp, 14
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:13 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+6]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1249
+jmp ROTULO1250
+ROTULO1249:
+mov ax, 65535
+jmp ROTULO1251
+ROTULO1250:
+xor ax, ax
+ROTULO1251:
+cmp ax, 0
+je ROTULO1247
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:64 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:56 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:43 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:60 ===---
+mov ax, 10
+mov cx, ax
+pop ax
+shr ax, cl
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:257:67 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1252
+jmp ROTULO1253
+ROTULO1252:
+mov ax, 65535
+jmp ROTULO1254
+ROTULO1253:
+xor ax, ax
+ROTULO1254:
+cmp ax, 0
+je ROTULO1247
+ROTULO1246:
+mov ax, 65535
+jmp ROTULO1248
+ROTULO1247:
+xor ax, ax
+ROTULO1248:
+cmp ax, 0
+jne ROTULO1244
+jmp ROTULO1245
+ROTULO1244:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:258:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:258:28 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+42], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+jmp ROTULO1255
+ROTULO1245:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:260:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:260:28 ===---
+mov ax, 1024
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+42], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO1255:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:262:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:262:22 ===---
+xor ax, ax
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+48], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:263:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:263:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+es mov [di+50], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO1243:
+mov sp, bp
+pop bp
+FIM_minixfs_readblockfromstream:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:266:9 ===---
 _minixfs_open:
 push bp
 mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
 ; ARG: file TAM: 4 POS: BP+6 
 ; ARG: s TAM: 4 POS: BP+10 
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:243:14 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:243:32 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:9 ===---
+; ARG: item TAM: 4 POS: BP--4 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:266:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:266:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:274:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:267:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:267:27 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push cs
+call _stream_initialize
+add sp, 4
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:268:9 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:244:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:268:16 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 33
 push word [bp+6+2]
 pop es
@@ -15549,9 +15982,9 @@ pop es
 mov di, [bp+10]
 es mov [di+0], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:269:9 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
-;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:245:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:269:31 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 39
 push word [bp+6+2]
 pop es
@@ -15568,10 +16001,370 @@ mov di, [bp+10]
 es pop word [di+34]
 es pop word [di+34+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO1228:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:270:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:270:21 ===---
+push cs
+pop es
+mov di, _minixfs_readraw
+push es
+push di
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es pop word [di+2]
+es pop word [di+2+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:271:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:271:20 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:271:60 ===---
+mov ax, 1
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:271:42 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _thread_current
+push es
+push di
+push cs
+call _globalmemory_allockib
+add sp, 6
+push es
+push di
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es pop word [di+38]
+es pop word [di+38+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:272:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:272:26 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:272:39 ===---
+; ACAO CHAMADA - Calcula tamanho de item
+mov ax, 32
+push ax
+push cs
+call _memory_alloc
+add sp, 2
+push es
+push di
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es pop word [di+44]
+es pop word [di+44+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:273:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:273:51 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 44
+es push word [di+44+2]
+es push word [di+44]
+pop di
+pop es
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:273:42 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 33
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+33]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:273:18 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 39
+es push word [di+39+2]
+es push word [di+39]
+pop di
+pop es
+push es
+push di
+push cs
+call _minixfs_loaditem
+add sp, 10
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:275:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:275:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 44
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es push word [di+44+2]
+es push word [di+44]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:276:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:276:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:276:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 14
+es mov ax, [di+14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:276:26 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO1259
+jmp ROTULO1260
+ROTULO1259:
+mov ax, 65535
+jmp ROTULO1261
+ROTULO1260:
+xor ax, ax
+ROTULO1261:
+cmp ax, 0
+jne ROTULO1257
+jmp ROTULO1258
+ROTULO1257:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:277:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:277:36 ===---
+xor ax, ax
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:277:33 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push cs
+call _minixfs_readblockfromstream
+add sp, 6
+ROTULO1258:
+ROTULO1256:
 mov sp, bp
 pop bp
 FIM_minixfs_open:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:281:14 ===---
+_minixfs_readraw:
+push bp
+mov bp, sp
+sub sp, 10
+push cs
+call _os_stackcheck
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: data TAM: 4 POS: BP+10 
+; ARG: len TAM: 2 POS: BP+14 
+; ARG: tmp TAM: 4 POS: BP--4 
+; ARG: i TAM: 2 POS: BP--6 
+; ARG: value TAM: 2 POS: BP--8 
+; ARG: ret TAM: 2 POS: BP--10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:281:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:281:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:281:57 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:282:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:283:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:284:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:285:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:286:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:286:15 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 38
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+38+2]
+es push word [di+38]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:287:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:287:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:287:28 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 48
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+48]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:287:17 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+es mov ax, [di+38]
+pop bx
+add ax, bx
+mov [bp+-4], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:288:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-10], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-6], 1
+ROTULO1263:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO1266
+jmp ROTULO1267
+ROTULO1266:
+mov ax, 65535
+jmp ROTULO1268
+ROTULO1267:
+xor ax, ax
+ROTULO1268:
+cmp ax, 0
+jne ROTULO1264
+jmp ROTULO1265
+ROTULO1264:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:290:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:290:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:290:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 48
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+48]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:290:30 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 42
+es mov ax, [di+42]
+mov bx, ax
+pop ax
+cmp ax, bx
+jae ROTULO1271
+jmp ROTULO1272
+ROTULO1271:
+mov ax, 65535
+jmp ROTULO1273
+ROTULO1272:
+xor ax, ax
+ROTULO1273:
+cmp ax, 0
+jne ROTULO1269
+jmp ROTULO1270
+ROTULO1269:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 42
+es mov ax, [di+42]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:35 ===---
+mov ax, 1024
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO1276
+jmp ROTULO1277
+ROTULO1276:
+mov ax, 65535
+jmp ROTULO1278
+ROTULO1277:
+xor ax, ax
+ROTULO1278:
+cmp ax, 0
+jne ROTULO1274
+jmp ROTULO1275
+ROTULO1274:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:45 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:291:52 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+jmp ROTULO1262
+ROTULO1275:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:292:17 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:292:51 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:292:53 ===---
+mov ax, 1
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:292:40 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 48
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+48]
+pop bx
+add ax, bx
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:292:37 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _minixfs_readblockfromstream
+add sp, 6
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:293:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:293:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:293:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 48
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+48]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:293:25 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+es mov ax, [di+38]
+pop bx
+add ax, bx
+mov [bp+-4], ax
+ROTULO1270:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:295:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:295:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+xor ax, ax
+es mov al, [di+0]
+mov [bp+-8], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:296:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:296:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov [di+0], al
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:297:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+10]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:298:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:299:13 ===---
+; ACAO STRUCTURE - Incremento de ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es inc word [di+48]
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:300:13 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-10]
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/MinixFS.hcb:289:22 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-6]
+jmp ROTULO1263
+ROTULO1265:
+ROTULO1262:
+mov sp, bp
+pop bp
+FIM_minixfs_readraw:
 retf
 ; MODULO FIM: minixfs
 ;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.File.hcb:36:8 ===---
@@ -15674,7 +16467,7 @@ mov di, [bp+6]
 es pop word [di+47]
 es pop word [di+47+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO1229:
+ROTULO1279:
 mov sp, bp
 pop bp
 FIM_directoryinfo_initialize:
@@ -15765,12 +16558,840 @@ mov di, [bp+6]
 es pop word [di+43]
 es pop word [di+43+2]
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
-ROTULO1230:
+ROTULO1280:
 mov sp, bp
 pop bp
 FIM_fileinfo_initialize:
 retf
 ; MODULO FIM: fileinfo
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:21:8 ===---
+; MODULO: stream
+_stream:
+db 20
+db 83,121,115,116,101,109,46,73,79,46,83,116,114,101,97,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:22:16 ===---
+_stream_initialize:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: ptr TAM: 4 POS: BP--4 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:22:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:23:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:24:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+mov word [bp+-4+2], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:25:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-4], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:26:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:26:16 ===---
+xor ax, ax
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:27:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:27:18 ===---
+push cs
+pop es
+mov di, _stream_genericread
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+6]
+es pop word [di+6+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:28:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:28:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+2]
+es pop word [di+2+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:29:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:29:19 ===---
+push cs
+pop es
+mov di, _stream_genericwrite
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+14]
+es pop word [di+14+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:30:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:30:22 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:31:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:31:19 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+18]
+es pop word [di+18+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:32:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:32:25 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+22]
+es pop word [di+22+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:33:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:33:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+26]
+es pop word [di+26+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:34:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:34:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+30]
+es pop word [di+30+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:35:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:35:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+38]
+es pop word [di+38+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:36:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:36:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+44]
+es pop word [di+44+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:37:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:37:26 ===---
+xor ax, ax
+es mov [di+50], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:38:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:38:22 ===---
+xor ax, ax
+es mov [di+48], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:39:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:39:24 ===---
+xor ax, ax
+es mov [di+42], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO1281:
+mov sp, bp
+pop bp
+FIM_stream_initialize:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:42:14 ===---
+_stream_genericread:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: text TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:42:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:42:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:33 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:47 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push cs
+call _string_length
+add sp, 4
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:27 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:43:24 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _stream_readraw
+add sp, 10
+jmp ROTULO1282
+ROTULO1282:
+mov sp, bp
+pop bp
+FIM_stream_genericread:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:46:14 ===---
+_stream_genericwrite:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: text TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:46:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:46:40 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:34 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:48 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push cs
+call _string_length
+add sp, 4
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:47:25 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _stream_writeraw
+add sp, 10
+jmp ROTULO1283
+ROTULO1283:
+mov sp, bp
+pop bp
+FIM_stream_genericwrite:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:51:21 ===---
+_stream_readraw:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: data TAM: 4 POS: BP+10 
+; ARG: len TAM: 2 POS: BP+14 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:51:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:51:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:51:64 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:52:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:52:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:52:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+4]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:52:26 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1287
+jmp ROTULO1288
+ROTULO1287:
+mov ax, 65535
+jmp ROTULO1289
+ROTULO1288:
+xor ax, ax
+ROTULO1289:
+cmp ax, 0
+jne ROTULO1285
+jmp ROTULO1286
+ROTULO1285:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:52:39 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 52
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1286:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:53:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:53:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:53:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:53:33 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:53:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+2]
+add sp, 10
+jmp ROTULO1284
+ROTULO1284:
+mov sp, bp
+pop bp
+FIM_stream_readraw:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:56:21 ===---
+_stream_read:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: data TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:56:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:56:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:57:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:57:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:57:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+8]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:57:23 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1293
+jmp ROTULO1294
+ROTULO1293:
+mov ax, 65535
+jmp ROTULO1295
+ROTULO1294:
+xor ax, ax
+ROTULO1295:
+cmp ax, 0
+jne ROTULO1291
+jmp ROTULO1292
+ROTULO1291:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:57:36 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 57
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1292:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:58:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:58:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:58:30 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:58:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+6]
+add sp, 8
+jmp ROTULO1290
+ROTULO1290:
+mov sp, bp
+pop bp
+FIM_stream_read:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:61:21 ===---
+_stream_writeraw:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: data TAM: 4 POS: BP+10 
+; ARG: len TAM: 2 POS: BP+14 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:61:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:61:43 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:61:65 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:62:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:62:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:62:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+12]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:62:27 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1299
+jmp ROTULO1300
+ROTULO1299:
+mov ax, 65535
+jmp ROTULO1301
+ROTULO1300:
+xor ax, ax
+ROTULO1301:
+cmp ax, 0
+jne ROTULO1297
+jmp ROTULO1298
+ROTULO1297:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:62:40 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 62
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1298:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:63:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:63:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:63:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:63:34 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:63:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+10]
+add sp, 10
+jmp ROTULO1296
+ROTULO1296:
+mov sp, bp
+pop bp
+FIM_stream_writeraw:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:66:21 ===---
+_stream_write:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: data TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:66:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:66:40 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:67:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:67:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:67:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+16]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:67:24 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1305
+jmp ROTULO1306
+ROTULO1305:
+mov ax, 65535
+jmp ROTULO1307
+ROTULO1306:
+xor ax, ax
+ROTULO1307:
+cmp ax, 0
+jne ROTULO1303
+jmp ROTULO1304
+ROTULO1303:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:67:37 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 67
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1304:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:68:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:68:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:68:31 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:68:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+14]
+add sp, 8
+jmp ROTULO1302
+ROTULO1302:
+mov sp, bp
+pop bp
+FIM_stream_write:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:71:21 ===---
+_stream_close:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:71:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:72:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:72:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:72:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+20]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:72:24 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1311
+jmp ROTULO1312
+ROTULO1311:
+mov ax, 65535
+jmp ROTULO1313
+ROTULO1312:
+xor ax, ax
+ROTULO1313:
+cmp ax, 0
+jne ROTULO1309
+jmp ROTULO1310
+ROTULO1309:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:72:37 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 72
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1310:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:73:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:73:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:73:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+18]
+add sp, 4
+jmp ROTULO1308
+ROTULO1308:
+mov sp, bp
+pop bp
+FIM_stream_close:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:76:21 ===---
+_stream_seekcurrent:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: position TAM: 2 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:76:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:76:46 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:77:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:77:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:77:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+24]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:77:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1317
+jmp ROTULO1318
+ROTULO1317:
+mov ax, 65535
+jmp ROTULO1319
+ROTULO1318:
+xor ax, ax
+ROTULO1319:
+cmp ax, 0
+jne ROTULO1315
+jmp ROTULO1316
+ROTULO1315:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:77:43 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 77
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1316:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:78:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:78:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:78:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:78:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+22]
+add sp, 6
+jmp ROTULO1314
+ROTULO1314:
+mov sp, bp
+pop bp
+FIM_stream_seekcurrent:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:81:21 ===---
+_stream_seekend:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: pos TAM: 2 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:81:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:81:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:82:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:82:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:82:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+32]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:82:26 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1323
+jmp ROTULO1324
+ROTULO1323:
+mov ax, 65535
+jmp ROTULO1325
+ROTULO1324:
+xor ax, ax
+ROTULO1325:
+cmp ax, 0
+jne ROTULO1321
+jmp ROTULO1322
+ROTULO1321:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:82:39 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 82
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1322:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:83:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:83:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:83:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:83:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+30]
+add sp, 6
+jmp ROTULO1320
+ROTULO1320:
+mov sp, bp
+pop bp
+FIM_stream_seekend:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:86:21 ===---
+_stream_seekstart:
+push bp
+mov bp, sp
+; ARG: s TAM: 4 POS: BP+6 
+; ARG: pos TAM: 2 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:86:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:86:44 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:87:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:87:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:87:13 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+28]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:87:28 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO1329
+jmp ROTULO1330
+ROTULO1329:
+mov ax, 65535
+jmp ROTULO1331
+ROTULO1330:
+xor ax, ax
+ROTULO1331:
+cmp ax, 0
+jne ROTULO1327
+jmp ROTULO1328
+ROTULO1327:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:87:41 ===---
+mov ax, _stream
+mov [bp+-8], ax
+mov ax, 87
+mov [bp+-10], ax
+mov ax, 7
+cs jmp word [_os_trycode]
+ROTULO1328:
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:88:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:88:16 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:88:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Kernel/System.IO.Stream.hcb:88:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+26]
+add sp, 6
+jmp ROTULO1326
+ROTULO1326:
+mov sp, bp
+pop bp
+FIM_stream_seekstart:
+retf
+; MODULO FIM: stream
 REALOC_TABLE:
 dw 3
 dw _multithreading_kernelthread

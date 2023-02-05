@@ -113,6 +113,7 @@ Module MinixFS
 
     Sub LoadItem(mfs as MountedFileSystem, id as UInt16, item as MinixFSItem)
         Dim block as Block1KiB
+        id--
         Semaphore.WaitOne mfs.Ptr4
         block = New
         LoadItemMapBlock mfs, block, id / 32
@@ -143,7 +144,6 @@ Module MinixFS
                 Throw NotImplementedError
             End
         End
-        blockNum --
         ReadBlock mfs.DiskInfo, block, blockNum
     End
 
@@ -163,7 +163,9 @@ Module MinixFS
             tmp = block
             @tmp = @tmp + ((pos mod 32) * SizeOf(MinixFSItemRef))
             Memory.Copy outputRef, tmp, SizeOf(MinixFSItemRef)
-            outputRef.Id++
+            Console.Write "[ID"
+            Console.WriteUInt16 outputRef.Id
+            Console.Write "]"
             LoadItem mfs, outputRef.Id, outputItem
         Catch Error
             Semaphore.Release InUse
@@ -185,7 +187,7 @@ Module MinixFS
         counter = 0
         For i = 2 to 512
             If GetSubItem(parent, i, item, ref) == 0 Then Return 0
-            If item.Permissions and 16384 Then
+            If item.Permissions and 0x4000 Then
                 counter ++
                 If counter == pos Then
                     DirectoryInfo.Initialize output
@@ -219,7 +221,15 @@ Module MinixFS
         counter = 0
         For i = 2 to 512
             If GetSubItem(parent, i, item, ref) == 0 Then Return 0
-            If item.Permissions and 16384 Then
+            Console.WriteUInt16 item.Permissions
+            Console.Write "="
+            Console.WriteUInt16 item.Permissions and 0x8000
+            Console.Write ":"
+            Console.WriteUInt16 ref.Id
+            Console.Write "@"
+            Console.WriteUInt16 i * 32
+            Console.Write " "
+            If item.Permissions and 0x8000 Then
                 counter ++
                 If counter == pos Then
                     FileInfo.Initialize output
@@ -240,9 +250,55 @@ Module MinixFS
         End
     End
 
+    Sub ReadBlockFromStream(s as Stream, blockNum as UInt16)
+        Dim item as MinixFSItem
+        item = s.InternalInfo
+        ReadBlockFromItem s.MountedFileSystem, s.InternalInfo, s.Buffer, blockNum
+        If (item.SizeHigh == 0) AndAlso ((item.SizeLow SHR 10) == 0) Then
+            s.BufferSize = item.SizeLow
+        Else
+            s.BufferSize = 1024
+        End
+        s.Position = 0
+        s.CurrentBlock = blockNum
+    End
+
     Sub Open(file as FileInfo, s as Stream)
+        Stream.Initialize s
         s.Id = file.Id
         s.MountedFileSystem = file.MountedFileSystem
+        s.ReadRaw = AddressOf(ReadRaw)
+        s.Buffer = GlobalMemory.AllocKiB(Thread.Current(), 1)
+        s.InternalInfo = Memory.Alloc(SizeOf(MinixFSItem))
+        LoadItem file.MountedFileSystem, file.Id, s.InternalInfo
+        Dim item as MinixFSItem
+        item = s.InternalInfo
+        If item.Zone0 <> 0 Then
+            ReadBlockFromStream s, 0
+        End
+    End
+
+    Function ReadRaw(s as Stream, data as PtrByteArray, len as UInt16) as UInt16
+        Dim tmp as PtrByteArray
+        Dim i as UInt16
+        Dim value as UInt8
+        Dim ret as UInt16
+        tmp = s.Buffer
+        @tmp = @s.Buffer + s.Position
+        ret = 0
+        For i = 1 to len
+            If s.Position >= s.BufferSize Then 
+                If s.BufferSize < 1024 Then Return ret
+                ReadBlockFromStream s, s.Position + 1
+                @tmp = @s.Buffer + s.Position
+            End
+            value = tmp
+            data = value
+            @data++
+            @tmp++
+            s.Position++
+            ret++
+        End
     End
 
 End

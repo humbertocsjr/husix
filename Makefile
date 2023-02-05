@@ -121,6 +121,7 @@ discos_copia:
 	@minixfs mkdir img.img /Library
 	@minixfs mkdir img.img /Config
 	@minixfs mkdir img.img /System
+	@minixfs add img.img LICENSE /LICENSE
 
 teste-qemu:
 	@$(MAKE) clean

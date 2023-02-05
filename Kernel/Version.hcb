@@ -13,7 +13,7 @@ Module HusixVersion
         ' ARQUIVO GERADO AUTOMATICAMENTE - NAO MODIFICAR
         ver.Version = 2023
         ver.SubVersion = 2
-        ver.Revision =  3512
+        ver.Revision =  3513
         ver.Release = "Alfa"
     End
 End

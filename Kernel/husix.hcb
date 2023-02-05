@@ -77,11 +77,18 @@ Module Program
         Console.WriteLine " [ OK ]"
         Dim root as DirectoryInfo
         root = New
-        Dim dir as DirectoryInfo
-        dir = New
+        Dim file as FileInfo
+        Dim s as Stream
+        Dim blockTmp as String
+        s = New
+        file = New
+        blockTmp = New
         FileSystem.GetRoot root
-        FileSystem.GetDirectoryInfo root, 2, dir
-        Console.WriteLine dir.Name
+        FileSystem.GetFileInfo root, 2, file
+        Console.WriteLine file.Name
+        file.Open.Invoke s
+        Stream.ReadRaw s, blockTmp, 200
+        Console.WriteLine blockTmp
 
         While 1
             Console.WriteChar 13

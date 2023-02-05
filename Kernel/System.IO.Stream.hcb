@@ -12,6 +12,8 @@ Structure Stream
     Dim SeekEnd as Func(Of Stream, UInt16, UInt16)
     Dim MountedFileSystem as PtrByteArray
     Dim Buffer as PtrByteArray
+    Dim BufferSize as UInt16
+    Dim InternalInfo as PtrByteArray
     Dim Position as UInt16
     Dim CurrentBlock as UInt16
 End
@@ -22,17 +24,27 @@ Module Stream
         #ptr = 0
         @ptr = 0
         s.Id = 0
-        s.Read = ptr
+        s.Read = AddressOf(GenericRead)
         s.ReadRaw = ptr
-        s.Write = ptr
+        s.Write = AddressOf(GenericWrite)
         s.WriteRaw = ptr
         s.Close = ptr
         s.SeekCurrent = ptr
         s.SeekStart = ptr
         s.SeekEnd = ptr
         s.Buffer = ptr
+        s.InternalInfo = ptr
         s.CurrentBlock = 0
         s.Position = 0
+        s.BufferSize = 0
+    End
+
+    Function GenericRead(s as Stream, text as PtrByteArray) as UInt16
+        Return ReadRaw(s, text, String.Length(text))
+    End
+
+    Function GenericWrite(s as Stream, text as PtrByteArray) as UInt16
+        Return WriteRaw(s, text, String.Length(text))
     End
 
     ' Return size
