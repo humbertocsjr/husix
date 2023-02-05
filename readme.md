@@ -69,9 +69,12 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
     - [ ] Implementar Mecanismo de carregamento de traduções do programa
 - [ ] Criar uma linguagem simples de scripts baseado em GWBasic para automatizar a inicialização
 - [ ] Implementar Suporte a Leitura e Gravação de Fitas Cassete via Porta Cassete do IBM PC 5150/PCjr
+- [x] Internacionalização
+    - [x] Suporte a Internacionalização Embutida no binario através do arquivo Translation
 
 # Objetivos futuros
 
+- [ ] Suporte a Internacionalização Dinamica onde o Translation carrega um arquivo externo ao iniciar lendo as traduções
 - [ ] Implementar Suporte a MarkDown no System.Forms para usar como um tipo de RichTextBox
 - [ ] Implementar Layouts de Teclado
 - [ ] Implementar Teclado/Mouse PS/2
