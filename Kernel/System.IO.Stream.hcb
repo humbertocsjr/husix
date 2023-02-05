@@ -10,6 +10,7 @@ Structure Stream
     Dim SeekCurrent as Func(Of Stream, UInt16, UInt16)
     Dim SeekStart as Func(Of Stream, UInt16, UInt16)
     Dim SeekEnd as Func(Of Stream, UInt16, UInt16)
+    Dim MountedFileSystem as PtrByteArray
     Dim Buffer as PtrByteArray
     Dim Position as UInt16
     Dim CurrentBlock as UInt16

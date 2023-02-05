@@ -16,19 +16,6 @@ error InvalidFormatError = 14
 error NotReadyError = 15
 
 
-structure Stream
-    Dim Id as uint16
-    Dim ReadRaw as func(of stream, ptrbytearray, uint16, uint16)
-    Dim Read as func(of stream, ptrbytearray, uint16)
-    Dim WriteRaw as func(of stream, ptrbytearray, uint16, uint16)
-    Dim Write as func(of stream, ptrbytearray, uint16)
-    Dim Close as func(of stream, uint16)
-    Dim SeekCurrent as func(of stream, uint16) as uint16
-    Dim SeekStart as func(of stream, uint16) as uint16
-    Dim SeekEnd as func(of stream, uint16) as uint16
-end
-
-
 Structure String
     Dim Capacity as UInt8
 End

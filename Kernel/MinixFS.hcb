@@ -1,6 +1,7 @@
 Imports System
 Imports System.IO.FileSystem
 Imports System.IO.Disk
+Imports System.IO.Stream
 
 Structure MinixFSIndex
     Dim Items as UInt16
@@ -224,6 +225,7 @@ Module MinixFS
                     FileInfo.Initialize output
                     output.Id = ref.Id
                     output.Open = AddressOf(Open)
+                    output.MountedFileSystem = parent.MountedFileSystem
                     ptr1 = output.Name
                     @ptr1++
                     ptr2 = ref
@@ -239,7 +241,8 @@ Module MinixFS
     End
 
     Sub Open(file as FileInfo, s as Stream)
-        Throw NotImplementedError
+        s.Id = file.Id
+        s.MountedFileSystem = file.MountedFileSystem
     End
 
 End
