@@ -2,7 +2,7 @@
 
 all:
 	@hcbasic Luzia.hcb Luzia.tmp ../../Incluir/
-	@nasm -f bin -o Luzia.com Luzia.tmp
+	@nasm -f bin -o Luzia.hsx Luzia.tmp
 
 ptbr:
 	@-rm Translation.hcb
@@ -13,5 +13,5 @@ enus:
 	@ln -s TranslationENUS.hcb Translation.hcb
 
 clean:
-	@-rm -f *.com
+	@-rm -f *.hsx
 	@-rm -f *.tmp
