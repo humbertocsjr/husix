@@ -8,7 +8,29 @@ Então quero montar algo simples de usar, focado na interface gráfica, preto e 
 
 Para testar este projeto sem compilar basa usar um disquete com o nome terminado em TEST.IMG no diretorio Distro
 
-Este projeto é tem como inspiração:
+# Objetivos
+
+- [ ] Implementar MinixFS
+    - [x] Listagem de Diretorios/Arquivos
+    - [x] Implementar a Abertura de Arquivos (Open)
+    - [x] Implementar ReadRaw/Read
+    - [ ] Implementar ReadLine
+    - [ ] Implementar WriteRaw/Write
+    - [ ] Implementar SeekCurrent/SeekEnd/SeekBegin
+    - [ ] Implementar Close
+- [ ] Implementar System.Reflection para carregar e executar arquivos
+    - [ ] Implementar no compilador lista de modulos/rotinas públicas
+    - [ ] Implementar bibliotecas externas (Criar .DLL)
+    - [ ] Implementar carregamento de bibliotecas externas automaticamente
+    - [ ] Implementar chamada dinamica de uma rotina
+- [ ] Implementar Interface Gráfica
+    - [ ] Implementar System.Drawing/System.Forms Minimo
+    - [ ] Criar Aplicativo Explorador (Gerenciador de Arquivos)
+    - [ ] Criar Aplicativo Escrivaninha (Mesa/Desktop)
+- [ ] Criar uma linguagem simples de scripts baseado em GWBasic para automatizar a inicialização
+
+
+# Este projeto é tem como inspiração:
 
 - QuickBASIC/Visual BASIC (Onde eu aprendi a programar nos anos 2000-2003)
 - .NET Framework (Inspiração pra criar a organização das bibliotecas do sistema)
