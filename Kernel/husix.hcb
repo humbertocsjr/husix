@@ -83,15 +83,6 @@ Module Program
         FileSystem.GetDirectoryInfo root, 2, dir
         Console.WriteLine dir.Name
 
-
-        #ptr = 0x40
-        @ptr = 0x90
-        Console.Write " BIOS FLOPPY DATA"
-        Console.WriteUInt16 ptr ' Floppy
-        Console.Write " "
-        @ptr++
-        Console.WriteUInt16 ptr ' Floppy
-
         While 1
             Console.WriteChar 13
             Console.WriteUInt16 Clock.Minute
