@@ -87,8 +87,10 @@ Module Program
         FileSystem.GetFileInfo root, 2, file
         Console.WriteLine file.Name
         file.Open.Invoke s
-        Stream.ReadRaw s, blockTmp, 200
-        Console.WriteLine blockTmp
+        While Stream.Read(s, blockTmp)
+            Console.Write blockTmp
+        End
+        Console.WriteLine "[EOF]"
 
         While 1
             Console.WriteChar 13

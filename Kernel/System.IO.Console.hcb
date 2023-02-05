@@ -103,14 +103,19 @@ Module Console
 
     Public Sub WriteChar(c as UInt8)
         IO.ConsoleWriteChar c
+        If c == 10 Then IO.ConsoleWriteChar 13
     End
 
     Public Sub Write(txt as PtrByteArray)
-        ' Ignora o byte inicial com a capacidade da variavel
+        Dim len as UInt16
+        Dim i as UInt16
+        len = txt
         @txt ++
-        While txt > 0
+        i = 1
+        While (txt > 0) AndAlso (i <= len)
             WriteChar UTF8.ConvertCharToCP437(txt)
             @txt ++
+            i++
         End
     End
 

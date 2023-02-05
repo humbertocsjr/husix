@@ -144,6 +144,7 @@ Module MinixFS
                 Throw NotImplementedError
             End
         End
+        If blockNum == 0 Then Throw NotFoundError
         ReadBlock mfs.DiskInfo, block, blockNum
     End
 
@@ -163,9 +164,6 @@ Module MinixFS
             tmp = block
             @tmp = @tmp + ((pos mod 32) * SizeOf(MinixFSItemRef))
             Memory.Copy outputRef, tmp, SizeOf(MinixFSItemRef)
-            Console.Write "[ID"
-            Console.WriteUInt16 outputRef.Id
-            Console.Write "]"
             LoadItem mfs, outputRef.Id, outputItem
         Catch Error
             Semaphore.Release InUse
@@ -221,14 +219,6 @@ Module MinixFS
         counter = 0
         For i = 2 to 512
             If GetSubItem(parent, i, item, ref) == 0 Then Return 0
-            Console.WriteUInt16 item.Permissions
-            Console.Write "="
-            Console.WriteUInt16 item.Permissions and 0x8000
-            Console.Write ":"
-            Console.WriteUInt16 ref.Id
-            Console.Write "@"
-            Console.WriteUInt16 i * 32
-            Console.Write " "
             If item.Permissions and 0x8000 Then
                 counter ++
                 If counter == pos Then
@@ -253,8 +243,14 @@ Module MinixFS
     Sub ReadBlockFromStream(s as Stream, blockNum as UInt16)
         Dim item as MinixFSItem
         item = s.InternalInfo
-        ReadBlockFromItem s.MountedFileSystem, s.InternalInfo, s.Buffer, blockNum
-        If (item.SizeHigh == 0) AndAlso ((item.SizeLow SHR 10) == 0) Then
+        Try
+            ReadBlockFromItem s.MountedFileSystem, s.InternalInfo, s.Buffer, blockNum
+        Catch Error
+            s.Position = 0
+            s.BufferSize = 0
+            Return 
+        End
+        If (item.SizeHigh == 0) AndAlso ((item.SizeLow / 1024) == 0) Then
             s.BufferSize = item.SizeLow
         Else
             s.BufferSize = 1024
@@ -289,7 +285,8 @@ Module MinixFS
         For i = 1 to len
             If s.Position >= s.BufferSize Then 
                 If s.BufferSize < 1024 Then Return ret
-                ReadBlockFromStream s, s.Position + 1
+                ReadBlockFromStream s, s.CurrentBlock + 1
+                If s.BufferSize == 0 Then Return ret
                 @tmp = @s.Buffer + s.Position
             End
             value = tmp
@@ -299,6 +296,7 @@ Module MinixFS
             s.Position++
             ret++
         End
+        Return ret
     End
 
 End

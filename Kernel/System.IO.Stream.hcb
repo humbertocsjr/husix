@@ -40,11 +40,19 @@ Module Stream
     End
 
     Function GenericRead(s as Stream, text as PtrByteArray) as UInt16
-        Return ReadRaw(s, text, String.Length(text))
+        Dim len as UInt16
+        len = text
+        @text++
+        text = 0
+        Return ReadRaw(s, text, len)
     End
 
     Function GenericWrite(s as Stream, text as PtrByteArray) as UInt16
-        Return WriteRaw(s, text, String.Length(text))
+        Dim len as UInt16
+        len = String.Length(text)
+        If Len > text Then Throw OutOfBoundsError
+        @text++
+        Return WriteRaw(s, text, len)
     End
 
     ' Return size
