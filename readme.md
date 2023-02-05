@@ -66,6 +66,7 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
     - [ ] Implementar Suporte a CGA Monocromático
     - [ ] Implementar Suporte a VGA Monocromático
     - [ ] Implementar Suporte a Hercules
+    - [ ] Implementar Mecanismo de carregamento de traduções do programa
 - [ ] Criar uma linguagem simples de scripts baseado em GWBasic para automatizar a inicialização
 - [ ] Implementar Suporte a Leitura e Gravação de Fitas Cassete via Porta Cassete do IBM PC 5150/PCjr
 
@@ -98,6 +99,7 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
     - [ ] Implementar Controlador Resound 2 OPL3
 - [ ] Implementar Suporte a Lo-tech 2MB EMS Board
 - [ ] Implementar Controlador para Lo-tech ISA USB Adapter / Adaptador Genérico ISA USB
+- [ ] Implementar Memoria virtual, onde realoca blocos de memória para o HD ou EMS
 
 # Este projeto é tem como inspiração:
 
