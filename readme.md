@@ -8,8 +8,33 @@ Então quero montar algo simples de usar, focado na interface gráfica, preto e 
 
 Para testar este projeto sem compilar basa usar um disquete com o nome terminado em TEST.IMG no diretorio Distro
 
-# Objetivos
+# Objetivos para Versão 1.0
 
+- [ ] Implementar Interpretação dos Argumentos passados pelo BootLoader para o Kernel
+    - [ ] Definir o Disco inicial
+    - [ ] Definir o Arquivo que deve ser executado primeiro
+    - [ ] Definir o Controlador de Vídeo que deve ser carregado
+- [ ] Implementar System.Collections List
+    - [x] Criação de Lista
+    - [x] Adição de itens
+    - [ ] Remoção de Itens
+    - [ ] Inclusão em qualquer posicao
+- [ ] Implementar Strings / UTF-8
+    - [x] Implementar Conversão mínima de UTF-8 para CP437, suficiente para ler ASCII basico
+    - [ ] Implementar Conversão de todos os caracteres focados em texto ou emojis suportados no CP437
+- [x] Implementar System.Console
+    - [x] Implementar Suporte Minimo a Teclado (Usando BIOS e layout padrão da BIOS)
+    - [x] Implementar Video Texto via CGA ou Superior, usando a BIOS (Ignorar MDA)
+    - [x] Detectar automaticamente tipo de placa de video (MDA/CGA/EGA/VGA)
+- [x] Implementar System.IO.Stream
+    - [x] Implementar criação de Stream
+    - [x] Implementar rotinas genéricas de Read/Write para manipular strings
+- [x] Implementar System.IO.Disk
+    - [x] Implementar rotinas básicas para alocação de unidades de disco
+- [x] Implementar Disco usando BIOS (BIOSDisk)
+    - [x] Ler da BIOS qual a configuração dos discos
+- [x] Implementar System.IO.FileSystem
+    - [x] Implementar rotinas básicas para criação e montagem de sistema de arquivos
 - [ ] Implementar MinixFS
     - [x] Listagem de Diretorios/Arquivos
     - [x] Implementar a Abertura de Arquivos (Open)
@@ -18,17 +43,61 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
     - [ ] Implementar WriteRaw/Write
     - [ ] Implementar SeekCurrent/SeekEnd/SeekBegin
     - [ ] Implementar Close
+- [ ] Implementar System.IO.File
+    - [ ] Usando System.IO.FileSystem, implementar abertura de Arquivos
 - [ ] Implementar System.Reflection para carregar e executar arquivos
     - [ ] Implementar no compilador lista de modulos/rotinas públicas
     - [ ] Implementar bibliotecas externas (Criar .DLL)
     - [ ] Implementar carregamento de bibliotecas externas automaticamente
     - [ ] Implementar chamada dinamica de uma rotina
+- [ ] Implementar System.IO.SerialPort (Basear no .NET) para comunicação binária
+- [ ] Implementar System.Net.Sockets (Basear no .NET) para comunicação via pacotes (Apenas o essencial)
+- [ ] Implementar Protocolo OBEX (System.Net.OBEX)
+    - [ ] Permitir envio de arquivos via Serial
+    - [ ] Permitir recebimento de arquivos via Serial
+- [ ] Implementar Protocolo XModem (System.Net.XModem)
+    - [ ] Permitir envio de arquivos via Serial
+    - [ ] Permitir recebimento de arquivos via Serial
 - [ ] Implementar Interface Gráfica
     - [ ] Implementar System.Drawing/System.Forms Minimo
+    - [ ] Criar Controlador de Mouse Serial usando biblioteca System.IO.SerialPort
     - [ ] Criar Aplicativo Explorador (Gerenciador de Arquivos)
     - [ ] Criar Aplicativo Escrivaninha (Mesa/Desktop)
+    - [ ] Implementar Suporte a CGA Monocromático
+    - [ ] Implementar Suporte a VGA Monocromático
+    - [ ] Implementar Suporte a Hercules
 - [ ] Criar uma linguagem simples de scripts baseado em GWBasic para automatizar a inicialização
+- [ ] Implementar Suporte a Leitura e Gravação de Fitas Cassete via Porta Cassete do IBM PC 5150/PCjr
 
+# Objetivos futuros
+
+- [ ] Implementar Suporte a MarkDown no System.Forms para usar como um tipo de RichTextBox
+- [ ] Implementar Layouts de Teclado
+- [ ] Implementar Teclado/Mouse PS/2
+- [ ] Implementar Controlador ATA/ATAPI para Discos
+    - [ ] Suporte a CD-ROM
+    - [ ] Suporte a ZIP Drive via IDE
+- [ ] Implementar Controlador ZIP Drive via Paralela
+- [ ] Implementar Pilha mínima de IPX (System.Net.IPX)
+- [ ] Implementar Pilha mínima de IP (System.Net.IP)
+- [ ] Implementar Protocolo TFTP (System.Net.TFTP)
+- [ ] Implementar HTTP WebRequest (System.Net.HTTP)
+- [ ] Implementar SLIP/PLIP
+    - [ ] Implementar Controlador para Wifi232 para se conectar a conexão SLIP via Telnet
+    - [ ] Implementar Controlador para Plipbox
+    - [ ] Implementar Controlador para Plip2Slip usando Arduino
+- [ ] Implementar Suporte a Wifi usando Placas Externas Via Serial/Paralela
+    - [ ] Implementar Controlador para RetroWifiModem com SLIP via Telnet
+    - [ ] Implementar Controlador para ESP_SLIP_ROUTER que suporte a configuração via TCP/IP
+        - [ ] Testar equipamento usando ESP_SLIP_ROUTER + Plip2Slip para maior desempenho
+- [ ] Implementar Suporte a ISA PnP
+- [ ] Implementar Suporte a Áudio
+    - [ ] Implementar Controlador AdLib
+    - [ ] Implementar Controlador SoundBlaster 1.0/1.5/2.0/Pro
+    - [ ] Implementar Controlador SoundBlaster 16/Vibra ISA PnP
+    - [ ] Implementar Controlador Resound 2 OPL3
+- [ ] Implementar Suporte a Lo-tech 2MB EMS Board
+- [ ] Implementar Controlador para Lo-tech ISA USB Adapter / Adaptador Genérico ISA USB
 
 # Este projeto é tem como inspiração:
 
