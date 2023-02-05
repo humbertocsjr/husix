@@ -20,7 +20,7 @@ End
 
 Structure DiskInfo
     Spacing 33 ' Nome 32 bytes de texto e 1 de cabecalho
-    Dim Name as PtrByteArray
+    Dim Name as PtrByteArray ' Aponta para o DiskInfo (No Initialize)
     Dim InternalId as UInt16
     Dim Cylinders as UInt16
     Dim Heads as UInt16

@@ -21,6 +21,7 @@ Module FileInfo
     Public Sub Initialize(dir as FileInfo)
         dir.Name = dir
         Dim ptr as PtrByteArray
+        ' Criado manualmente a String Nome e criado seu ponteiro
         ptr = dir
         ptr = 32
         @ptr++
