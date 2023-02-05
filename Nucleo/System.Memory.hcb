@@ -11,6 +11,7 @@ Module GlobalMemory
         Dim freeKiB as UInt16
         Dim i as UInt16
         If String.Equals(Config.OperatingMode, "DOS") Then
+            ' Calcula o tamanho da memoria a partir do Memory Control Block do DOS
             asm "push es"
             asm "mov ax, cs"
             asm "dec ax"
@@ -27,6 +28,7 @@ Module GlobalMemory
             asm "cs mov [_globalmemory_memorysizekib], ax"
             asm "pop es"
         Else
+            ' Chama a BIOS para saber o tamanho da memoria
             asm "xor ax, ax"
             asm "int 0x12"
             asm "cs mov [_globalmemory_memorysizekib], ax"
