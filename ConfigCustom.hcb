@@ -1,12 +1,16 @@
 Imports System
 Imports System.IO.Disk
+Imports Config
 Imports BIOSDisk
 Imports MinixFS
 
 
 Module ConfigDefault
+
     Public Sub Initialize
         BIOSDisk.Initialize
         MinixFS.Initialize
+        String.Copy Config.RootFileSystem, "MinixFS"
+        String.Copy Config.RootDisk, "BIOSDisk000"
     End
 End

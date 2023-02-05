@@ -11,6 +11,7 @@ Imports System.IO.Disk
 Imports System.Collections
 Imports System.IO.FileSystem
 Imports Version
+Imports Config
 Imports ConfigDefault
 
 Module Program
@@ -58,20 +59,19 @@ Module Program
         Console.WriteLine " [ OK ]"
         
         ConfigDefault.Initialize
+        Config.ParseArgs args
 
-        Dim disk as String
-        disk = "BIOSDisk000"
         Console.Write "Mounting ["
-        Console.Write disk
+        Console.Write Config.RootDisk
         Console.Write "]"
-        If Disk.Exist(disk) == 0 Then 
-            FatalError "[ DISK NOT FOUND ]", disk, 0
+        If Disk.Exist(Config.RootDisk) == 0 Then 
+            FatalError "[ DISK NOT FOUND ]", Config.RootDisk, 0
         End
         WriteDot
         Try
-            FileSystem.Mount disk, "MinixFS", "/"
+            FileSystem.Mount Config.RootDisk, Config.RootFileSystem, "/"
         Catch Error
-            FatalError "[ DISK NOT FORMATED ]", disk, 0
+            FatalError "[ DISK NOT FORMATED ]", Config.RootDisk, 0
         End
         WriteDot
         Console.WriteLine " [ OK ]"

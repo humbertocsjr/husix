@@ -1,0 +1,9 @@
+Imports System
+
+Module Config
+    Public Dim RootFileSystem as String
+    Public Dim RootDisk as String
+
+    Public Sub ParseArgs(args as String)
+    End
+End
