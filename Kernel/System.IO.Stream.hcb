@@ -29,8 +29,11 @@ Module Stream
         s.SeekCurrent = ptr
         s.SeekStart = ptr
         s.SeekEnd = ptr
+        s.Buffer = ptr
+        s.CurrentBlock = 0
+        s.Position = 0
     End
-    
+
     ' Return size
     Public Function ReadRaw(s as Stream, data as PtrByteArray, len as UInt16) as UInt16
         If #s.ReadRaw == 0 Then Throw NotImplementedError
