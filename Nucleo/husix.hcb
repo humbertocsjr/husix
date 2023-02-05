@@ -1,0 +1,126 @@
+' HUSIX - Humberto Sistema *NIX
+' Kernel
+
+Imports System
+Imports System.Memory
+Imports System.Threading
+Imports System.IO
+Imports System.IO.Console
+Imports System.Timer
+Imports System.IO.Disk
+Imports System.Collections
+Imports System.IO.FileSystem
+Imports Version
+Imports Config
+Imports ConfigDefault
+Imports Translation
+
+Module Program
+
+    Sub WriteDot
+        Console.Write " ."
+    End
+
+    Public Sub Main(args as PtrByteArray)
+        Dim ptr as PtrByteArray
+        Dim ver as Version
+        Translation.Initialize
+        ver = new
+        HusixVersion.GetVersion ver
+        Console.Initialize
+        If Console.CanTextOnly() Then
+            FatalError Translation.RequiresCGA, "husix.hcb", 0
+        End
+        Console.Mode80x25x4
+        ' Exibe versão do núcleo
+        Console.Write "HUSIX - "
+        Console.WriteLine Translation.BrazilianOperatingSystem
+        Console.Write Translation.Kernel
+        Console.Write " v"
+        Console.WriteUInt16 ver.Version
+        Console.Write "."
+        Console.WriteUInt16 ver.SubVersion
+        Console.Write " R"
+        Console.WriteUInt16 ver.Revision
+        Console.Write " - "
+        Console.WriteLine ver.Release
+        Console.Write Translation.Starting
+        ' Prepara multitarefa
+        MultiThreading.PreInitialize
+        WriteDot
+        ' Inicia Memória Global
+        GlobalMemory.Initialize
+        WriteDot
+        ' Inicia Memória Local
+        Memory.Initialize
+        WriteDot
+        ' Configura a Multitarefa
+        MultiThreading.Initialize
+        WriteDot
+        ' Inicia Inicia o Cronometro do Sistema
+        SystemTimer.Initialize
+        WriteDot
+        ' Inicia Multitarefa
+        MultiThreading.Resume
+        WriteDot
+        ' Inicia o Gerenciador de Discos
+        Disk.Initialize
+        WriteDot
+        ' Inicia o Gerenciador de Sistema de Arquivos
+        FileSystem.Initialize
+        WriteDot
+        Console.WriteLine Translation.Ok
+        
+        ' Configura o Kernel carregando os modulos selecionados e a parametros padrão
+        ConfigDefault.Initialize
+        ' Configura os parametros fornecidos pelo BootLoader
+        Config.ParseArgs args
+
+        ' Monta Sistema de Arquivos
+        Console.Write Translation.Mounting
+        Console.Write " ["
+        Console.Write Config.RootDisk
+        Console.Write "]"
+        If Disk.Exist(Config.RootDisk) == 0 Then 
+            FatalError Translation.DiskNotFound, Config.RootDisk, 0
+        End
+        WriteDot
+        Try
+            FileSystem.Mount Config.RootDisk, Config.RootFileSystem, "/"
+        Catch Error
+            FatalError Translation.CorruptedFileSystem, Config.RootDisk, 0
+        End
+        WriteDot
+        Console.WriteLine Translation.Ok
+        
+        Console.Write Translation.Loading
+        Console.Write "Luzia" ' Referencia a Brasileira mais antiga encontrada
+
+
+        Console.WriteLine ""
+        While 1
+            Console.WriteChar 13
+            Console.WriteUInt16 Clock.Minute
+            Console.Write ":"
+            Console.WriteUInt16 Clock.Second
+            Thread.Sleep 1000
+        End
+    End
+
+    Public Sub FatalError(msg as String, file as String, line as UInt16)
+        Console.Mode80x25x4
+        Console.WriteLine Translation.FatalError
+        Console.Write file
+        Console.Write ":"
+        Console.WriteUInt16 line
+        Console.WriteLine ":"
+        Console.WriteLine msg
+        Console.WriteLine ""
+        Console.WriteLine Translation.SystemHalted
+        While 1
+            asm "cli"
+            asm "hlt"
+        End
+    End
+
+End

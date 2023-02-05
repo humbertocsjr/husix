@@ -1,0 +1,12 @@
+' Luzia é o fóssil mais antigo de uma Brasileira encontrada até então
+' Então nada melhor que Luzia para iniciar tudo
+Imports System
+
+Module Program
+
+    Public Sub Main(args as String)
+
+        While 1 asm "int 0x81"
+    End
+
+End

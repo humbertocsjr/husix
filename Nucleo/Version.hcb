@@ -1,0 +1,20 @@
+' ARQUIVO GERADO AUTOMATICAMENTE - NAO MODIFICAR
+Imports System
+
+Structure Version
+    Dim Version as UInt16
+    Dim SubVersion as UInt16
+    Dim Revision as UInt16
+    Dim Release as PtrByteArray
+End
+
+Module HusixVersion
+    Public Sub GetVersion(ver as Version)
+        ' ARQUIVO GERADO AUTOMATICAMENTE - NAO MODIFICAR
+        ver.Version = 2023
+        ver.SubVersion = 2
+        ver.Revision =  3518
+        ver.Release = "Alfa"
+    End
+End
+

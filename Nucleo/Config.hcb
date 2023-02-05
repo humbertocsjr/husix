@@ -1,0 +1,70 @@
+Imports System
+
+Module Config
+    Public Dim RootFileSystem as String
+    Public Dim RootDisk as String
+
+    Public Sub ParseArgs(args as PtrByteArray)
+        Dim len as UInt16
+        Dim i as UInt16
+        Dim mode as UInt16
+        Dim arg as String
+        Dim txt as PtrByteArray
+        Dim tmp as UInt8
+        arg = New
+        len = args
+        @args++
+        mode = 0
+        For i = 1 to len
+            If mode == 0 Then
+                If args <> 32 Then
+                    mode = 1
+                    txt = arg
+                    @txt++
+                    tmp = args
+                    txt = tmp
+                    @txt++
+                    txt = 0
+                End
+            ElseIf mode == 1 Then
+                If args <> 61 Then
+                    tmp = args
+                    txt = tmp
+                    @txt++
+                    txt = 0
+                Else
+                    If String.Equals(arg, "Disco") Then
+                        mode = 2
+                        txt = RootDisk
+                        @txt++
+                        txt = 0
+                    ElseIf String.Equals(arg, "SisArq") Then
+                        mode = 2
+                        txt = RootFileSystem
+                        @txt++
+                        txt = 0
+                    Else
+                        mode = 2
+                        txt = arg
+                        @txt++
+                        txt = 0
+                        Console.Write "Aviso: Argumento '"
+                        Console.Write arg
+                        Console.WriteLine "' desconhecido."
+                    End
+                End
+            ElseIf mode == 2 Then
+                If args <> 32 Then
+                    tmp = args
+                    txt = tmp
+                    @txt++
+                    txt = 0
+                Else
+                    mode = 0
+                End
+            Else
+            End
+            @args++
+        End
+    End
+End

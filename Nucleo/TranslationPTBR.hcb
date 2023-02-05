@@ -1,0 +1,29 @@
+Module Translation
+    Public Dim Kernel as PtrByteArray
+    Public Dim Starting as PtrByteArray
+    Public Dim Mounting as PtrByteArray
+    Public Dim DiskNotFound as PtrByteArray
+    Public Dim CorruptedFileSystem as PtrByteArray
+    Public Dim Ok as PtrByteArray
+    Public Dim FatalError as PtrByteArray
+    Public Dim SystemHalted as PtrByteArray
+    Public Dim Loading as PtrByteArray
+    Public Dim BrazilianOperatingSystem as PtrByteArray
+    Public Dim RequiresCGA as PtrByteArray
+
+    Public Sub Initialize
+        Kernel = "Núcleo"
+        Starting = "Iniciando"
+        Mounting = "Montando"
+        DiskNotFound = "Disco não encontrado"
+        CorruptedFileSystem = "Sistema de Arquivos Corrompido"
+        Ok = " [ OK ]"
+        FatalError = "Erro Fatal:"
+        SystemHalted = "<SISTEMA PARALIZADO>"
+        Loading = "Carregando "
+        BrazilianOperatingSystem = "Sistema Operacional Brasileiro =)"
+        RequiresCGA = "Modo de Video nao detectado, Requer CGA ou superior"
+    End
+
+    
+End
