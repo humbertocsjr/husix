@@ -14,7 +14,7 @@ Module HusixVersion
         ver.Version = 2023
         ver.SubVersion = 2
         ver.Revision =  3522
-        ver.Release = "Alpha"
+        ver.Release = "Alfa"
     End
 End
 
