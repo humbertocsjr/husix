@@ -57,6 +57,7 @@ Module File
         Dim txt as PtrByteArray
         txt = token
         @txt++
+        Throw NotImplementedError
         Return 0xffff
     End
 End
