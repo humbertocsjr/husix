@@ -25,9 +25,9 @@ TotalBlocosItens:
 TamListaItens:
     dw 0
 Destino:
-    dw 0x600 + (256 / 16)
+    dw 0x100 + (256 / 16)
 Chamar:
-    dw 0x600
+    dw 0x100
 ChamarIP:
     dw 256
 

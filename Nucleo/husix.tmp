@@ -4352,7 +4352,7 @@ es mov [di+2], ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/Version.hcb:16:9 ===---
 ; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/Version.hcb:16:25 ===---
-mov ax, 3519
+mov ax, 3521
 es mov [di+4], ax
 ; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/Version.hcb:17:9 ===---
@@ -10078,28 +10078,28 @@ pop bp
 FIM_list_add:
 retf
 ; MODULO FIM: list
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:124:8 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:126:8 ===---
 ; MODULO: memory
 _memory:
 db 17
 db 83,121,115,116,101,109,46,77,101,109,111,114,121,46,104,99,98
 db 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:125:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:127:9 ===---
 _memory_firstblockptr:
 times 4 db 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:126:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:128:9 ===---
 _memory_inuse:
 times 8 db 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:128:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:130:16 ===---
 _memory_initialize:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:129:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:131:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:129:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:131:25 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:129:76 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:131:76 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:129:47 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:131:47 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_multithreading_kernelthread+2]
 pop es
@@ -10112,12 +10112,12 @@ add sp, 6
 push es
 cs pop word [_memory_firstblockptr+2]
 cs mov [_memory_firstblockptr], di
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:130:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:132:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:130:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:132:37 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:130:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:132:30 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_memory_inuse+2]
 pop es
@@ -10130,7 +10130,7 @@ add sp, 6
 ROTULO884:
 FIM_memory_initialize:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:133:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:135:21 ===---
 _memory_alloc:
 push bp
 mov bp, sp
@@ -10146,30 +10146,30 @@ call _os_stackcheck
 ; ARG: block TAM: 4 POS: BP--16 
 ; ARG: len TAM: 2 POS: BP--18 
 ; ARG: kibs TAM: 2 POS: BP--20 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:133:27 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:134:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:135:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:135:27 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:136:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:137:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:138:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:139:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:140:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:141:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:23 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:18 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:25 ===---
 mov ax, 64
 cmp ax, 0
 jne ROTULO886
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:142:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:25 ===---
 mov ax, _memory
 mov [bp+-8], ax
-mov ax, 142
+mov ax, 144
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -10179,20 +10179,20 @@ pop ax
 xor dx, dx
 div bx
 mov [bp+-2], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:12 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:12 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:21 ===---
 mov ax, 64
 cmp ax, 0
 jne ROTULO889
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:21 ===---
 mov ax, _memory
 mov [bp+-8], ax
-mov ax, 143
+mov ax, 145
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -10206,17 +10206,17 @@ cmp ax, 0
 jne ROTULO887
 jmp ROTULO888
 ROTULO887:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:143:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:29 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
 ROTULO888:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:19 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:12 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:19 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:12 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:144:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:21 ===---
 mov ax, 10
 mov bx, ax
 pop ax
@@ -10233,25 +10233,25 @@ cmp ax, 0
 jne ROTULO890
 jmp ROTULO891
 ROTULO890:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:13 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:34 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:36 ===---
 mov ax, 16
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:26 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:21 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:28 ===---
 mov ax, 1024
 cmp ax, 0
 jne ROTULO895
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:145:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:28 ===---
 mov ax, _memory
 mov [bp+-8], ax
-mov ax, 145
+mov ax, 147
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -10263,20 +10263,20 @@ div bx
 pop bx
 add ax, bx
 mov [bp+-20], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:25 ===---
 mov ax, 1024
 cmp ax, 0
 jne ROTULO898
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:25 ===---
 mov ax, _memory
 mov [bp+-8], ax
-mov ax, 146
+mov ax, 148
 mov [bp+-10], ax
 mov ax, 1
 cs jmp word [_os_trycode]
@@ -10290,19 +10290,19 @@ cmp ax, 0
 jne ROTULO896
 jmp ROTULO897
 ROTULO896:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:146:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:35 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-20]
 ROTULO897:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:149:13 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:19 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:149:19 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:70 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:149:70 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-20]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:147:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:149:41 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_multithreading_kernelthread+2]
 pop es
@@ -10315,23 +10315,23 @@ add sp, 6
 push es
 pop word [bp+-12+2]
 mov [bp+-12], di
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:148:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:150:13 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 es mov byte [di+0], 1
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:149:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:151:14 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 16
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:150:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:150:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:152:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:152:20 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-12+2]
 pop es
 mov di, [bp+-12]
 jmp ROTULO885
 ROTULO891:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:152:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:154:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:152:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:154:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_memory_inuse+2]
 pop es
@@ -10341,15 +10341,15 @@ push di
 push cs
 call _semaphore_waitone
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:153:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:155:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:154:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:156:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-18], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:155:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:157:9 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:155:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:157:17 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_memory_firstblockptr+2]
 pop es
@@ -10357,28 +10357,28 @@ cs mov di, [_memory_firstblockptr]
 push es
 pop word [bp+-16+2]
 mov [bp+-16], di
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:156:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:9 ===---
 ROTULO899:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:156:15 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:15 ===---
 mov ax, 1
 cmp ax, 0
 jne ROTULO900
 jmp ROTULO901
 ROTULO900:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:157:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:159:14 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-16], 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
 ROTULO902:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
 mov ax, 15
 mov bx, ax
 pop ax
@@ -10395,24 +10395,24 @@ cmp ax, 0
 jne ROTULO903
 jmp ROTULO904
 ROTULO903:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:159:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:159:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:161:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:161:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 cmp ax, 0
 jne ROTULO908
 jmp ROTULO909
 ROTULO908:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:162:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:162:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:162:24 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:162:33 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -10429,27 +10429,27 @@ cmp ax, 0
 jne ROTULO910
 jmp ROTULO911
 ROTULO910:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:161:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:163:25 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-18]
 jmp ROTULO915
 ROTULO911:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:163:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:165:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 0
 ROTULO915:
 jmp ROTULO916
 ROTULO909:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:166:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:166:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:166:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:24 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:166:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:33 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -10466,33 +10466,33 @@ cmp ax, 0
 jne ROTULO917
 jmp ROTULO918
 ROTULO917:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:167:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:169:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-18], 1
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:170:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:35 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:170:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:170:37 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:168:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:170:33 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 pop bx
 sub ax, bx
 mov [bp+-6], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:169:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:171:25 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-8], 1
 ROTULO918:
 ROTULO916:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:172:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:172:24 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:172:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-18]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:172:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:27 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 mov bx, ax
@@ -10510,41 +10510,41 @@ cmp ax, 0
 jne ROTULO922
 jmp ROTULO923
 ROTULO922:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:173:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:22 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:173:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:29 ===---
 ; ACAO LEITURA - Le segmento em variavel
 mov ax, [bp+-16+2]
 mov word [bp+-12+2], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:32 ===---
 mov ax, 64
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:174:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:28 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 pop bx
 mul bx
 mov [bp+-12], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:45 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:47 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:45 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:47 ===---
 mov ax, 64
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:38 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 pop bx
 mul bx
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:35 ===---
 xor ax, ax
 xor ah, ah
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:175:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:30 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-12+2]
 pop es
@@ -10554,35 +10554,35 @@ push di
 push cs
 call _memory_setbytes
 add sp, 8
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:32 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:41 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:43 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:43 ===---
 mov ax, 2
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:35 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 pop bx
 mul bx
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:176:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:30 ===---
 mov ax, 4
 pop bx
 add ax, bx
 mov [bp+-16], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
 ROTULO927:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 mov bx, ax
@@ -10600,13 +10600,13 @@ cmp ax, 0
 jne ROTULO928
 jmp ROTULO929
 ROTULO928:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:25 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:180:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:180:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:180:28 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:178:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:180:33 ===---
 mov ax, 1
 mov bx, ax
 pop ax
@@ -10623,7 +10623,7 @@ cmp ax, 0
 jne ROTULO933
 jmp ROTULO934
 ROTULO933:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:181:29 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
@@ -10631,27 +10631,27 @@ mov di, [bp+-16]
 es mov word [di+0], 1
 jmp ROTULO938
 ROTULO934:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:181:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:183:29 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov word [di+0], 2
 ROTULO938:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:183:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:185:26 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:184:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:186:26 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:177:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:179:34 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
 jmp ROTULO927
 ROTULO929:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:186:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:188:21 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:186:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:188:39 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_memory_inuse+2]
 pop es
@@ -10661,38 +10661,38 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:187:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:187:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:189:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:189:28 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-12+2]
 pop es
 mov di, [bp+-12]
 jmp ROTULO885
 ROTULO923:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:189:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:191:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:190:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:192:18 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-16]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:158:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:160:26 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
 jmp ROTULO902
 ROTULO904:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:192:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:194:14 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-16], 2
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:193:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:193:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:193:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:16 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
 mov di, [bp+-16]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:193:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:25 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -10709,14 +10709,14 @@ cmp ax, 0
 jne ROTULO939
 jmp ROTULO940
 ROTULO939:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:194:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:196:17 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:194:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:196:23 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:194:74 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:196:74 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:194:45 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:196:45 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_multithreading_kernelthread+2]
 pop es
@@ -10729,9 +10729,9 @@ add sp, 6
 push es
 pop word [bp+-12+2]
 mov [bp+-12], di
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:197:17 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:195:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:197:26 ===---
 ; ACAO LEITURA - Le segmento em variavel
 mov ax, [bp+-12+2]
 push word [bp+-16+2]
@@ -10740,9 +10740,9 @@ mov di, [bp+-16]
 es mov [di+0], ax
 jmp ROTULO944
 ROTULO940:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:197:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:199:18 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:197:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:199:26 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-16+2]
 pop es
@@ -10752,9 +10752,9 @@ mov word [bp+-16+2], ax
 ROTULO944:
 jmp ROTULO899
 ROTULO901:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:200:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:202:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:200:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:202:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_memory_inuse+2]
 pop es
@@ -10769,99 +10769,99 @@ mov sp, bp
 pop bp
 FIM_memory_alloc:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:204:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:206:16 ===---
 _memory_setbytes:
 push bp
 mov bp, sp
 ; ARG: ptr TAM: 4 POS: BP+6 
 ; ARG: value TAM: 2 POS: BP+10 
 ; ARG: len TAM: 2 POS: BP+12 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:204:25 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:204:46 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:204:62 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:205:13 ===---
-cld
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:206:13 ===---
-mov ax, [bp+8]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:206:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:206:46 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:206:62 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:207:13 ===---
-mov es, ax
+cld
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:208:13 ===---
-mov di, [bp+6]
+mov ax, [bp+8]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:209:13 ===---
-mov ax, [bp+10]
+mov es, ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:210:13 ===---
-mov cx, [bp+12]
+mov di, [bp+6]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:211:13 ===---
+mov ax, [bp+10]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:212:13 ===---
+mov cx, [bp+12]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:213:13 ===---
 rep stosb
 ROTULO945:
 mov sp, bp
 pop bp
 FIM_memory_setbytes:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:214:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:216:16 ===---
 _memory_setwords:
 push bp
 mov bp, sp
 ; ARG: ptr TAM: 4 POS: BP+6 
 ; ARG: value TAM: 2 POS: BP+10 
 ; ARG: len TAM: 2 POS: BP+12 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:214:25 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:214:46 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:214:62 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:215:13 ===---
-cld
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:216:13 ===---
-mov ax, [bp+8]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:216:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:216:46 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:216:62 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:217:13 ===---
-mov es, ax
+cld
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:218:13 ===---
-mov di, [bp+6]
+mov ax, [bp+8]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:219:13 ===---
-mov ax, [bp+10]
+mov es, ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:220:13 ===---
-mov cx, [bp+12]
+mov di, [bp+6]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:221:13 ===---
+mov ax, [bp+10]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:222:13 ===---
+mov cx, [bp+12]
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:223:13 ===---
 rep stosw
 ROTULO946:
 mov sp, bp
 pop bp
 FIM_memory_setwords:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:224:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:226:16 ===---
 _memory_copy:
 push bp
 mov bp, sp
 ; ARG: dest TAM: 4 POS: BP+6 
 ; ARG: orig TAM: 4 POS: BP+10 
 ; ARG: len TAM: 2 POS: BP+14 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:224:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:224:43 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:224:65 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:225:13 ===---
-cld
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:226:13 ===---
-push ds
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:226:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:226:43 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:226:65 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:227:13 ===---
-push si
+cld
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:228:13 ===---
-mov ax, [bp+8]
+push ds
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:229:13 ===---
-mov es, ax
+push si
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:230:13 ===---
-mov di, [bp+6]
+mov ax, [bp+8]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:231:13 ===---
-mov ax, [bp+12]
+mov es, ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:232:13 ===---
-mov ds, ax
+mov di, [bp+6]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:233:13 ===---
-mov si, [bp+10]
+mov ax, [bp+12]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:234:13 ===---
-mov cx, [bp+14]
+mov ds, ax
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:235:13 ===---
-rep movsb
+mov si, [bp+10]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:236:13 ===---
-pop si
+mov cx, [bp+14]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:237:13 ===---
+rep movsb
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:238:13 ===---
+pop si
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:239:13 ===---
 pop ds
 ROTULO947:
 mov sp, bp
@@ -10924,22 +10924,20 @@ cmp ax, 0
 jne ROTULO949
 jmp ROTULO950
 ROTULO949:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:14:17 ===---
-push es
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:15:17 ===---
-mov ax, cs
+push es
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:16:17 ===---
-dec ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:17:17 ===---
-mov es, ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:18:17 ===---
-es mov bx, [3]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:19:17 ===---
 mov ax, cs
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:17:17 ===---
+dec ax
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:18:17 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:19:17 ===---
+es mov bx, [3]
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:20:17 ===---
-add ax, bx
+mov ax, cs
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:21:17 ===---
-shr ax, 1
+add ax, bx
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:22:17 ===---
 shr ax, 1
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:23:17 ===---
@@ -10951,46 +10949,48 @@ shr ax, 1
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:26:17 ===---
 shr ax, 1
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:27:17 ===---
-cs mov [_globalmemory_memorysizekib], ax
+shr ax, 1
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:28:17 ===---
+cs mov [_globalmemory_memorysizekib], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:29:17 ===---
 pop es
 jmp ROTULO953
 ROTULO950:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:30:17 ===---
-xor ax, ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:31:17 ===---
-int 0x12
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:32:17 ===---
+xor ax, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:33:17 ===---
+int 0x12
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:34:17 ===---
 cs mov [_globalmemory_memorysizekib], ax
 ROTULO953:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:35:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:10 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:35:36 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:35:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:38 ===---
 mov ax, 4096
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:35:19 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:19 ===---
 ; ACAO CHAMADA - Chama rotina
 push cs
 call _os_codesegment
 pop bx
 add ax, bx
 cs mov [_globalmemory_mapptr+2], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:36:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_globalmemory_mapptr], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:35 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:37 ===---
 mov ax, 2
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:28 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:28 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:21 ===---
 ; ACAO LEITURA - Le segmento em variavel
 cs mov ax, [_globalmemory_mapptr+2]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:37:32 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:32 ===---
 mov ax, 6
 mov cx, ax
 pop ax
@@ -10998,17 +10998,17 @@ shr ax, cl
 pop bx
 add ax, bx
 mov [bp+-2], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 1
 ROTULO954:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
@@ -11026,13 +11026,13 @@ cmp ax, 0
 jne ROTULO955
 jmp ROTULO956
 ROTULO955:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:18 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:20 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 mov bx, ax
@@ -11050,7 +11050,7 @@ cmp ax, 0
 jne ROTULO960
 jmp ROTULO961
 ROTULO960:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:33 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
@@ -11058,27 +11058,27 @@ cs mov di, [_globalmemory_mapptr]
 es mov byte [di+0], 129
 jmp ROTULO965
 ROTULO961:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:39:51 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:41:51 ===---
 ; ACAO GRAVACAO - Gravacao de numero em ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
 cs mov di, [_globalmemory_mapptr]
 es mov byte [di+0], 0
 ROTULO965:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:42:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:38:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:40:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
 jmp ROTULO954
 ROTULO956:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:42:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:44:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:42:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:44:37 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:42:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:44:30 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11093,7 +11093,7 @@ mov sp, bp
 pop bp
 FIM_globalmemory_initialize:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:45:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:47:21 ===---
 _globalmemory_allockib:
 push bp
 mov bp, sp
@@ -11107,29 +11107,29 @@ call _os_stackcheck
 ; ARG: first TAM: 2 POS: BP--8 
 ; ARG: len TAM: 2 POS: BP--10 
 ; ARG: searching TAM: 2 POS: BP--12 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:45:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:45:43 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:46:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:47:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:47:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:47:43 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:48:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:49:13 ===---
 ;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:50:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:51:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:51:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:52:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:10 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
 mov word [bp+-4+2], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:52:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:12 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:12 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:19 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:19 ===---
 mov ax, 127
 mov bx, ax
 pop ax
@@ -11146,21 +11146,21 @@ cmp ax, 0
 jne ROTULO967
 jmp ROTULO968
 ROTULO967:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:53:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:34 ===---
 mov ax, _globalmemory
 mov [bp+-8], ax
-mov ax, 53
+mov ax, 55
 mov [bp+-10], ax
 mov ax, 4
 cs jmp word [_os_trycode]
 ROTULO968:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:12 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:12 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:22 ===---
 mov ax, 64
 mov bx, ax
 pop ax
@@ -11177,20 +11177,20 @@ cmp ax, 0
 jne ROTULO972
 jmp ROTULO973
 ROTULO972:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:54:36 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:36 ===---
 mov ax, _globalmemory
 mov [bp+-8], ax
-mov ax, 54
+mov ax, 56
 mov [bp+-10], ax
 mov ax, 12
 cs jmp word [_os_trycode]
 ROTULO973:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:55:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:57:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:58:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:56:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:58:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11200,23 +11200,23 @@ push di
 push cs
 call _semaphore_waitone
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:57:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_globalmemory_mapptr], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:58:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:60:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
 ROTULO977:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
@@ -11234,17 +11234,17 @@ cmp ax, 0
 jne ROTULO978
 jmp ROTULO979
 ROTULO978:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:60:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:60:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:62:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:62:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-12]
 cmp ax, 0
 jne ROTULO983
 jmp ROTULO984
 ROTULO983:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:27 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:63:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:63:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:63:20 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
@@ -11252,7 +11252,7 @@ cs mov di, [_globalmemory_mapptr]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:63:30 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -11269,20 +11269,20 @@ cmp ax, 0
 jne ROTULO985
 jmp ROTULO986
 ROTULO985:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:62:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:64:21 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-10]
 jmp ROTULO990
 ROTULO986:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:64:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:66:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 0
 ROTULO990:
 jmp ROTULO991
 ROTULO984:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:67:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:67:27 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:67:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:20 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
@@ -11290,7 +11290,7 @@ cs mov di, [_globalmemory_mapptr]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:67:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:30 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -11307,33 +11307,33 @@ cmp ax, 0
 jne ROTULO992
 jmp ROTULO993
 ROTULO992:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:68:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:70:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-10], 1
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:71:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:31 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:71:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:71:33 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:69:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:71:29 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 pop bx
 sub ax, bx
 mov [bp+-8], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:70:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:72:21 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-12], 1
 ROTULO993:
 ROTULO991:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:73:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:73:20 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:73:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:20 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-10]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:73:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:23 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 mov bx, ax
@@ -11351,42 +11351,42 @@ cmp ax, 0
 jne ROTULO997
 jmp ROTULO998
 ROTULO997:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:74:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:18 ===---
 ; ACAO GRAVACAO - Grava segmento em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:74:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:74:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:24 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:74:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:34 ===---
 mov ax, 6
 mov cx, ax
 pop ax
 shl ax, cl
 mov word [bp+-4+2], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:17 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:58 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:60 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:58 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:60 ===---
 mov ax, 1
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:47 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:49 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:47 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:49 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:42 ===---
 mov ax, 1024
 pop bx
 mul bx
 pop bx
 sub ax, bx
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:38 ===---
 xor ax, ax
 xor ah, ah
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:75:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:33 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-4+2]
 pop es
@@ -11396,23 +11396,23 @@ push di
 push cs
 call _memory_setbytes
 add sp, 8
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:18 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:18 ===---
 ; ACAO GRAVACAO - Grava em variavel
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:76:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:27 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-8]
 cs mov [_globalmemory_mapptr], ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-6], 1
 ROTULO1002:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+10]
 mov bx, ax
@@ -11430,13 +11430,13 @@ cmp ax, 0
 jne ROTULO1003
 jmp ROTULO1004
 ROTULO1003:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:21 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:26 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:80:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:80:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:80:24 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-6]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:78:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:80:29 ===---
 mov ax, 1
 mov bx, ax
 pop ax
@@ -11453,17 +11453,17 @@ cmp ax, 0
 jne ROTULO1008
 jmp ROTULO1009
 ROTULO1008:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:25 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:39 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:39 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:34 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+6+2]
 pop es
 mov di, [bp+6]
 es mov ax, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:42 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:42 ===---
 mov ax, 128
 mov bx, ax
 pop ax
@@ -11474,9 +11474,9 @@ cs mov di, [_globalmemory_mapptr]
 es mov [di+0], al
 jmp ROTULO1016
 ROTULO1009:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:83:25 ===---
 ; ACAO GRAVACAO - Gravacao em ponteiro
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:81:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:83:34 ===---
 ; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
 push word [bp+6+2]
 pop es
@@ -11487,17 +11487,17 @@ pop es
 cs mov di, [_globalmemory_mapptr]
 es mov [di+0], al
 ROTULO1016:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:83:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:85:22 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:77:30 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:79:30 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-6]
 jmp ROTULO1002
 ROTULO1004:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:85:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:87:17 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:85:35 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:87:35 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11507,25 +11507,25 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:86:17 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:86:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:88:17 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:88:24 ===---
 ; ACAO LEITURA - Le ponteiro
 push word [bp+-4+2]
 pop es
 mov di, [bp+-4]
 jmp ROTULO966
 ROTULO998:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:88:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:90:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:59:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:61:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-6]
 jmp ROTULO977
 ROTULO979:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:90:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:92:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:90:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:92:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11535,10 +11535,10 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:91:15 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:93:15 ===---
 mov ax, _globalmemory
 mov [bp+-8], ax
-mov ax, 91
+mov ax, 93
 mov [bp+-10], ax
 mov ax, 3
 cs jmp word [_os_trycode]
@@ -11547,7 +11547,7 @@ mov sp, bp
 pop bp
 FIM_globalmemory_allockib:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:94:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:96:21 ===---
 _globalmemory_getavailkib:
 push bp
 mov bp, sp
@@ -11556,14 +11556,14 @@ push cs
 call _os_stackcheck
 ; ARG: ret TAM: 2 POS: BP--2 
 ; ARG: i TAM: 2 POS: BP--4 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:95:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:96:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:97:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:97:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:98:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:99:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:98:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:98:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11573,20 +11573,20 @@ push di
 push cs
 call _semaphore_waitone
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:99:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_globalmemory_mapptr], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 0
 ROTULO1018:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
@@ -11604,9 +11604,9 @@ cmp ax, 0
 jne ROTULO1019
 jmp ROTULO1020
 ROTULO1019:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:23 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:103:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:103:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:103:16 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
@@ -11614,7 +11614,7 @@ cs mov di, [_globalmemory_mapptr]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:103:26 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -11631,21 +11631,21 @@ cmp ax, 0
 jne ROTULO1024
 jmp ROTULO1025
 ROTULO1024:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:101:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:103:33 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
 ROTULO1025:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:104:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:100:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:102:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
 jmp ROTULO1018
 ROTULO1020:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:104:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:106:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:104:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:106:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11655,8 +11655,8 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:105:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:105:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:107:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:107:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 jmp ROTULO1017
@@ -11665,7 +11665,7 @@ mov sp, bp
 pop bp
 FIM_globalmemory_getavailkib:
 retf
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:108:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:110:21 ===---
 _globalmemory_getusedkib:
 push bp
 mov bp, sp
@@ -11674,14 +11674,14 @@ push cs
 call _os_stackcheck
 ; ARG: ret TAM: 2 POS: BP--2 
 ; ARG: i TAM: 2 POS: BP--4 
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:109:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:110:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:111:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:111:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:112:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:113:9 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-2], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:112:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:112:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11691,20 +11691,20 @@ push di
 push cs
 call _semaphore_waitone
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:113:10 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:10 ===---
 ; ACAO GRAVACAO - Grava em variavel
 cs mov word [_globalmemory_mapptr], 0
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
 ; ACAO GRAVACAO - Grava em variavel
 mov word [bp+-4], 0
 ROTULO1030:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-4]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
 ; ACAO LEITURA - Le variavel
 cs mov ax, [_globalmemory_memorysizekib]
 mov bx, ax
@@ -11722,9 +11722,9 @@ cmp ax, 0
 jne ROTULO1031
 jmp ROTULO1032
 ROTULO1031:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:13 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:23 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:117:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:117:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:117:16 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_mapptr+2]
 pop es
@@ -11732,7 +11732,7 @@ cs mov di, [_globalmemory_mapptr]
 xor ax, ax
 es mov al, [di+0]
 push ax
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:26 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:117:26 ===---
 xor ax, ax
 mov bx, ax
 pop ax
@@ -11749,21 +11749,21 @@ cmp ax, 0
 jne ROTULO1036
 jmp ROTULO1037
 ROTULO1036:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:115:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:117:33 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-2]
 ROTULO1037:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:14 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:118:14 ===---
 ; ACAO INC - Incrementa variavel
 cs inc word [_globalmemory_mapptr]
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:114:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:116:22 ===---
 ; ACAO INC - Incrementa variavel
 inc word [bp+-4]
 jmp ROTULO1030
 ROTULO1032:
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:118:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:120:9 ===---
 ; ACAO CHAMADA - Chama rotina
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:118:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:120:27 ===---
 ; ACAO LEITURA - Le ponteiro
 cs push word [_globalmemory_inuse+2]
 pop es
@@ -11773,8 +11773,8 @@ push di
 push cs
 call _semaphore_release
 add sp, 4
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:119:9 ===---
-;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:119:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:121:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Nucleo/System.Memory.hcb:121:16 ===---
 ; ACAO LEITURA - Le variavel
 mov ax, [bp+-2]
 jmp ROTULO1029
