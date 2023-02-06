@@ -11,8 +11,11 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
 **Situação atual:** Implementando abertura de arquivo a partir de um endereço e carregamento de um executável tipo HSX.
 
 **Tradução EN-US**
+
 ![Tradução EN-US](Imagens/v2023.2r3522-enus.png)
+
 **Tradução PT-BR**
+
 ![Tradução PT-BR](Imagens/v2023.2r3522-ptbr.png)
 
 # Objetivos para Versão 1.0
