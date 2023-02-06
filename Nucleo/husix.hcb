@@ -100,11 +100,20 @@ Module Program
         WriteDot
         Console.WriteLine Translation.Ok
 
+        Dim kernelThread as Thread
+        kernelThread = MultiThreading.KernelThread
+        kernelThread.WorkDirectory = Memory.Alloc(SizeOf(DirectoryInfo))
+        FileSystem.GetRoot kernelThread.WorkDirectory
+
         Console.WriteEnter
 
         Console.Write Translation.AvailMemory
         Console.WriteUInt16 GlobalMemory.GetAvailKiB()
-        Console.WriteLine " KIB"
+        Console.WriteLine " KiB"
+
+        Console.Write Translation.KernelSize
+        Console.WriteUInt16 OS.KernelSize() shr 10 + 1
+        Console.WriteLine " KiB"
 
         Console.WriteEnter
         

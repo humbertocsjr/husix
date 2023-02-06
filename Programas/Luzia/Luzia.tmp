@@ -159,15 +159,37 @@ push bp
 mov bp, sp
 ; ARG: args TAM: 4 POS: BP+6 
 ;     ---=== Luzia.hcb:7:21 ===---
-;     ---=== Luzia.hcb:9:9 ===---
+;     ---=== Luzia.hcb:8:13 ===---
+mov ah, 0xe
+;     ---=== Luzia.hcb:9:13 ===---
+mov al, 'L'
+;     ---=== Luzia.hcb:10:13 ===---
+int 0x10
+;     ---=== Luzia.hcb:11:13 ===---
+mov al, 'U'
+;     ---=== Luzia.hcb:12:13 ===---
+int 0x10
+;     ---=== Luzia.hcb:13:13 ===---
+mov al, 'Z'
+;     ---=== Luzia.hcb:14:13 ===---
+int 0x10
+;     ---=== Luzia.hcb:15:13 ===---
+mov al, 'I'
+;     ---=== Luzia.hcb:16:13 ===---
+int 0x10
+;     ---=== Luzia.hcb:17:13 ===---
+mov al, 'A'
+;     ---=== Luzia.hcb:18:13 ===---
+int 0x10
+;     ---=== Luzia.hcb:20:9 ===---
 ROTULO10:
-;     ---=== Luzia.hcb:9:15 ===---
+;     ---=== Luzia.hcb:20:15 ===---
 mov ax, 1
 cmp ax, 0
 jne ROTULO11
 jmp ROTULO12
 ROTULO11:
-;     ---=== Luzia.hcb:9:21 ===---
+;     ---=== Luzia.hcb:20:21 ===---
 int 0x81
 jmp ROTULO10
 ROTULO12:

@@ -16,7 +16,15 @@ Module OS
     End
 
     Sub StackCheck
-        
+        asm "mov ax, ss"
+        asm "mov bx, ax"
+        asm "mov ax, cs"
+        asm "cmp ax, bx"
+        asm "jne .fim"
+        asm "cmp sp, END"
+        asm "ja .fim"
+        Throw StackOverflowError
+        asm ".fim"
     End
 
     Sub Start2
@@ -115,7 +123,15 @@ Module OS
         asm "mov ax, ss"
     End
 
-    public function RealocTable() as uint16
+    Public Function StackPointer() as UInt16
+        asm "mov ax, ss"
+    End
+
+    Public Function RealocTable() as UInt16
         asm "mov ax, REALOC_TABLE"
-    end
+    End
+
+    Public Function KernelSize() as UInt16
+        asm "mov ax, END"
+    End
 End

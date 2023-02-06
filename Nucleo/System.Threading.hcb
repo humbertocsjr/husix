@@ -1,6 +1,7 @@
 Imports System
 Imports System.IO
 Imports System.IO.Console
+Imports System.IO.File
 
 ' Representa uma tarefa, função próxima do .Net
 Structure Thread
@@ -14,6 +15,7 @@ Structure Thread
     Dim StackPointer as UInt16
     Dim Next as PtrByteArray
     Dim Previous as PtrByteArray
+    Dim WorkDirectory as PtrByteArray
 End
 
 ' Representa um semaforo, serve para limitar o acesso simultaneo a um recurso/rotina
@@ -72,6 +74,9 @@ Module MultiThreading
         List = Memory.Alloc(SizeOf(Thread) * 128)
         Dim i as UInt16
         Dim ptr as PtrByteArray
+        Dim ptrZero as PtrByteArray
+        #ptrZero = 0
+        @ptrZero = 0
         Dim t as Thread
         For i = 1 to 128
             ptr = Item(i)
@@ -82,6 +87,7 @@ Module MultiThreading
             t.NewStack = 0
             t.Next = t
             t.Previous = t
+            t.WorkDirectory = ptrZero
             If i == 1 Then
                 #KernelThread = #ptr
                 @KernelThread = @ptr
@@ -221,7 +227,7 @@ Module Thread
     End
 
     ' Inicia a tarefa solicitada, informando o tamanho da pilha que deve ser reservada e a rotina a ser executada em paralelo
-    Public Sub Start(t as Thread, stackSizeKiB as UInt16, action as PtrByteArray)
+    Public Sub Start(t as Thread, stackSizeKiB as UInt16, workDir as DirectoryInfo, action as PtrByteArray)
         Dim stack as PtrWordArray
         Dim ptr as PtrByteArray
         t.Suspended = 0
@@ -231,6 +237,7 @@ Module Thread
         t.StackSegment = #stack
         t.NewStack = 1
         t.Action = action
+        t.WorkDirectory = workDir
         MultiThreading.StartThread t
     End
 

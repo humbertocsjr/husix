@@ -48,3 +48,15 @@ Module DirectoryInfo
         dir.GetDirectoryInfo = ptr
     End
 End
+
+Module File
+
+    Public Function Open(filename as String, s as Stream) as UInt16
+        Dim token as String
+        token = New
+        Dim txt as PtrByteArray
+        txt = token
+        @txt++
+        Return 0xffff
+    End
+End
