@@ -13,6 +13,7 @@ Module Translation
     Public Dim ModeDOS as PtrByteArray
     Public Dim AvailMemory as PtrByteArray
     Public Dim KernelSize as PtrByteArray
+    Public Dim InitFile as PtrByteArray
 
     Public Sub Initialize
         Kernel = "Kernel"
@@ -29,6 +30,7 @@ Module Translation
         ModeDOS = "Operating Environment Mode over DOS"
         AvailMemory = "Available Memory....: "
         KernelSize =  "Kernel Size.........: "
+        InitFile = "/System/Luzia"
     End
 
     

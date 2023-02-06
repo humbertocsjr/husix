@@ -118,7 +118,7 @@ Module Program
         Console.WriteEnter
         
         Console.Write Translation.Loading
-        Console.Write "Luzia" ' Referencia a Brasileira mais antiga encontrada
+        Console.Write Translation.InitFile ' Luzia - Referencia a Brasileira mais antiga encontrada
 
 
         Console.WriteLine ""
