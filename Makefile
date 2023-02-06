@@ -1,6 +1,6 @@
 MAKE = make --no-print-directory
 
-all: alfa
+all: alfa_ptbr
 
 distro:
 	@-mv -f Nucleo/ConfigDefault.hcb Nucleo/ConfigDefault.old
@@ -13,7 +13,7 @@ subdistro:
 	@$(MAKE) $(TRADUCAO)
 	@$(MAKE) clean
 	@$(MAKE) config_pc
-	@$(MAKE) producao
+	@$(MAKE) producao_$(TRADUCAO)
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/$(TRADUCAO)360PC.img
 	@mv -f Distro/720TEST.img Distro/$(TRADUCAO)720PC.img
@@ -21,7 +21,7 @@ subdistro:
 	@mv -f Distro/1440TEST.img Distro/$(TRADUCAO)1440PC.img
 	@$(MAKE) clean
 	@$(MAKE) config_xt
-	@$(MAKE) producao
+	@$(MAKE) producao_$(TRADUCAO)
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/$(TRADUCAO)360XT.img
 	@mv -f Distro/720TEST.img Distro/$(TRADUCAO)720XT.img
@@ -29,7 +29,7 @@ subdistro:
 	@mv -f Distro/1440TEST.img Distro/$(TRADUCAO)1440XT.img
 	@$(MAKE) clean
 	@$(MAKE) config_at
-	@$(MAKE) producao
+	@$(MAKE) producao_$(TRADUCAO)
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/$(TRADUCAO)360AT.img
 	@mv -f Distro/720TEST.img Distro/$(TRADUCAO)720AT.img
@@ -37,7 +37,7 @@ subdistro:
 	@mv -f Distro/1440TEST.img Distro/$(TRADUCAO)1440AT.img
 	@$(MAKE) clean
 	@$(MAKE) config_custom
-	@$(MAKE) producao
+	@$(MAKE) producao_$(TRADUCAO)
 	@$(MAKE) discos
 	@mv -f Distro/360TEST.img Distro/$(TRADUCAO)360Custom.img
 	@mv -f Distro/720TEST.img Distro/$(TRADUCAO)720Custom.img
@@ -75,22 +75,42 @@ clean:
 	@$(MAKE) -C Programas clean
 	@(rm Distro/*TEST.img 2>> /dev/null) || true
 
-alfa:
+alfa_ptbr:
 	@$(MAKE) ferramentas
 	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb Alfa
 	@$(MAKE) compilar
 
-beta:
+beta_ptbr:
 	@$(MAKE) ferramentas
 	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb Beta
 	@$(MAKE) compilar
 
-preproducao:
+preproducao_ptbr:
 	@$(MAKE) ferramentas
 	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb "Pré-Produção"
 	@$(MAKE) compilar
 
-producao:
+producao_ptbr:
+	@$(MAKE) ferramentas
+	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb "Final"
+	@$(MAKE) compilar
+
+alfa_enus:
+	@$(MAKE) ferramentas
+	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb Alpha
+	@$(MAKE) compilar
+
+beta_enus:
+	@$(MAKE) ferramentas
+	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb Beta
+	@$(MAKE) compilar
+
+preproducao_enus:
+	@$(MAKE) ferramentas
+	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb "Pre-Release"
+	@$(MAKE) compilar
+
+producao_enus:
 	@$(MAKE) ferramentas
 	@Ferramentas/GeraVersao/gera_ver Nucleo/Version.hcb "Final"
 	@$(MAKE) compilar
@@ -146,7 +166,7 @@ teste-qemu:
 	@$(MAKE) clean
 	@$(MAKE) ptbr
 	@$(MAKE) config_pc
-	@$(MAKE) all
+	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
 	@echo -= Iniciando emulacao [QEMU] =-
 	@qemu-system-i386 -fda Distro/1440TEST.img -serial stdio
@@ -155,7 +175,7 @@ teste-qemu-enus:
 	@$(MAKE) clean
 	@$(MAKE) enus
 	@$(MAKE) config_pc
-	@$(MAKE) all
+	@$(MAKE) alfa_enus
 	@TRADUCAO=enus $(MAKE) discos
 	@echo -= Iniciando emulacao [QEMU] =-
 	@qemu-system-i386 -fda Distro/1440TEST.img -serial stdio
@@ -164,7 +184,7 @@ teste-bochs:
 	@$(MAKE) clean
 	@$(MAKE) ptbr
 	@$(MAKE) config_pc
-	@$(MAKE) all
+	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
 	@echo -= Iniciando emulacao [Bochs] =-
 	@bochs -q
@@ -173,7 +193,7 @@ teste-dosbox:
 	@$(MAKE) clean
 	@$(MAKE) ptbr
 	@$(MAKE) config_pc
-	@$(MAKE) all
+	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
 	@echo -= Iniciando emulacao [DOSBox] =-
 	@dosbox -C "IMGMOUNT 0 Distro/1440TEST.img -size 512,18,2,80 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "c:\husix Mode=DOS Disk=BIOSDisk000" > /dev/null

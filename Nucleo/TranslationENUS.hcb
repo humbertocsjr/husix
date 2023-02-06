@@ -28,7 +28,7 @@ Module Translation
         RequiresCGA = "Video Mode not detected. Requires CGA or Higher"
         ModeDOS = "Operating Environment Mode over DOS"
         AvailMemory = "Available Memory....: "
-        KernelSize =  "Tamanho do Núcleo...: "
+        KernelSize =  "Kernel Size.........: "
     End
 
     

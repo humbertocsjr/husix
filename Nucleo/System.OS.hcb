@@ -24,7 +24,7 @@ Module OS
         asm "cmp sp, END"
         asm "ja .fim"
         Throw StackOverflowError
-        asm ".fim"
+        asm ".fim:"
     End
 
     Sub Start2
