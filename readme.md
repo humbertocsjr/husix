@@ -8,7 +8,7 @@ Então quero montar algo simples de usar, focado na interface gráfica, preto e 
 
 Para testar este projeto sem compilar basa usar um disquete com o nome terminado em TEST.IMG no diretorio Distro
 
-**Para compilar requer SEMPRE a última versão do HCBasic, de preferência compilada direto do repositório**
+**Para compilar requer SEMPRE a última versão do HCBasic, de preferência compilada direto do repositório, Normalmente a versão no repositório é compilável sem problemas, se der erro de compilação experimente atualizar o HCBasic instalado**
 
 ## Novidades
 
