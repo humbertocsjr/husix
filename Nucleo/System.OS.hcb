@@ -131,6 +131,14 @@ Module OS
         asm "mov ax, REALOC_TABLE"
     End
 
+    Public Function ImportTable() as UInt16
+        asm "mov ax, IMPORT_TABLE"
+    End
+
+    Public Function ExportTable() as UInt16
+        asm "mov ax, EXPORT_TABLE"
+    End
+
     Public Function KernelSize() as UInt16
         asm "mov ax, END"
     End

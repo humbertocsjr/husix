@@ -10,12 +10,18 @@ Imports System.Timer
 Imports System.IO.Disk
 Imports System.Collections
 Imports System.IO.FileSystem
+Imports System.Reflection
 Imports Version
 Imports Config
 Imports ConfigDefault
 Imports Translation
 
+Structure InterruptTable
+    Spacing 1024
+End
+
 Module Program
+    Dim BackupIntTable as InterruptTable
 
     Sub WriteDot
         Console.Write " ."
@@ -23,8 +29,11 @@ Module Program
 
     Public Sub Main(args as PtrByteArray)
         Dim ptr as PtrByteArray
-        Dim ver as Version
+        #ptr = 0
+        @ptr = 0
+        Memory.Copy BackupIntTable, ptr, SizeOf(InterruptTable)
         Translation.Initialize
+        Dim ver as Version
         ver = new
         HusixVersion.GetVersion ver
         Console.Initialize
@@ -79,9 +88,9 @@ Module Program
         ' Inicia o Gerenciador de Sistema de Arquivos
         FileSystem.Initialize
         WriteDot
-        Console.WriteLine Translation.Ok
         ' Inicia Modulos Anexados pela Configuração
         ConfigDefault.LoadModules
+        Console.WriteLine Translation.Ok
 
         ' Monta Sistema de Arquivos
         Console.Write Translation.Mounting
@@ -107,6 +116,9 @@ Module Program
 
         Console.WriteEnter
 
+        Console.Write Translation.VideoCardDetected
+        Console.WriteLine Console.VideoCardName
+
         Console.Write Translation.AvailMemory
         Console.WriteUInt16 GlobalMemory.GetAvailKiB()
         Console.WriteLine " KiB"
@@ -119,15 +131,34 @@ Module Program
         
         Console.Write Translation.Loading
         Console.Write Translation.InitFile ' Luzia - Referencia a Brasileira mais antiga encontrada
+        
+        Dim assm as Assembly
+        assm = New
+        WriteDot
+        Assembly.LoadAssembly assm, Translation.InitFile
+        Console.WriteLine Translation.Ok
+        ' Executa Luzia
+        Assembly.Run assm, Console.VideoCardName
+        
+        ' Desliga computador
+        Shutdown
+    End
 
-
-        Console.WriteLine ""
-        While 1
-            Console.WriteChar 13
-            Console.WriteUInt16 Clock.Minute
-            Console.Write ":"
-            Console.WriteUInt16 Clock.Second
-            Thread.Sleep 1000
+    Public Sub Shutdown
+        If String.Equals(Config.OperatingMode, "DOS") Then
+            Console.WriteLine Translation.SystemHalted
+            MultiThreading.Suspend
+            asm "cli"
+            Dim ptr as PtrByteArray
+            #ptr = 0
+            @ptr = 0
+            Memory.Copy ptr, BackupIntTable, SizeOf(InterruptTable)
+            asm "sti"
+            asm "int 0x20"
+        Else
+            Console.Mode80x25x4
+            Console.WriteLine ""
+            Console.WriteLine Translation.SystemHalted
         End
     End
 

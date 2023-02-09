@@ -164,6 +164,7 @@ Module MinixFS
             tmp = block
             @tmp = @tmp + ((pos mod 32) * SizeOf(MinixFSItemRef))
             Memory.Copy outputRef, tmp, SizeOf(MinixFSItemRef)
+            If outputRef.Id == 0 Then Throw NotFoundError
             LoadItem mfs, outputRef.Id, outputItem
         Catch Error
             Semaphore.Release InUse
@@ -205,6 +206,7 @@ Module MinixFS
                 End
             End
         End
+        Return 0
     End
 
     Function GetFileInfo(parent as DirectoryInfo, pos as UInt16, output as FileInfo) as UInt16
@@ -238,6 +240,7 @@ Module MinixFS
                 End
             End
         End
+        Return 0
     End
 
     Sub ReadBlockFromStream(s as Stream, blockNum as UInt16)
@@ -264,6 +267,9 @@ Module MinixFS
         s.Id = file.Id
         s.MountedFileSystem = file.MountedFileSystem
         s.ReadRaw = AddressOf(ReadRaw)
+        s.LengthLow = AddressOf(LengthLow)
+        s.LengthHigh = AddressOf(LengthHigh)
+        s.Close = AddressOf(Close)
         s.Buffer = GlobalMemory.AllocKiB(Thread.Current(), 1)
         s.InternalInfo = Memory.Alloc(SizeOf(MinixFSItem))
         LoadItem file.MountedFileSystem, file.Id, s.InternalInfo
@@ -272,6 +278,11 @@ Module MinixFS
         If item.Zone0 <> 0 Then
             ReadBlockFromStream s, 0
         End
+    End
+
+    Function Close(s as Stream) as UInt16
+        'TODO: Desalocar memoria do Buffer e etc
+        Return 0xffff
     End
 
     Function ReadRaw(s as Stream, data as PtrByteArray, len as UInt16) as UInt16
@@ -297,6 +308,18 @@ Module MinixFS
             ret++
         End
         Return ret
+    End
+
+    Function LengthLow(s as Stream) as UInt16
+        Dim item as MinixFSItem
+        item = s.InternalInfo
+        Return item.SizeLow
+    End
+
+    Function LengthHigh(s as Stream) as UInt16
+        Dim item as MinixFSItem
+        item = s.InternalInfo
+        Return item.SizeHigh
     End
 
 End

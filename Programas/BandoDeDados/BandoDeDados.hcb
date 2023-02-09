@@ -1,0 +1,7 @@
+Imports System
+Imports Table
+
+Module Program
+    Friend Sub Main(args as String)
+    End
+End

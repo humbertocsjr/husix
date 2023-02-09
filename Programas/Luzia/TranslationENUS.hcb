@@ -2,6 +2,6 @@ Module Translation
     Public Dim InitSystem as PtrByteArray
 
     Public Sub Initialize
-        InitSystem = "Init System"
+        InitSystem = "Luzia Init System"
     End
 End

@@ -1,23 +1,15 @@
 ' Luzia é o fóssil mais antigo de uma Brasileira encontrada até então
 ' Então nada melhor que Luzia para iniciar tudo
 Imports System
+Imports System.IO.Console
+Imports Translation
 
 Module Program
 
     Public Sub Main(args as String)
-        asm "mov ah, 0xe"
-        asm "mov al, 'L'"
-        asm "int 0x10"
-        asm "mov al, 'U'"
-        asm "int 0x10"
-        asm "mov al, 'Z'"
-        asm "int 0x10"
-        asm "mov al, 'I'"
-        asm "int 0x10"
-        asm "mov al, 'A'"
-        asm "int 0x10"
-
-        While 1 asm "int 0x81"
+        Translation.Initialize
+        Console.WriteLine Translation.InitSystem
+        While 1 asm "hlt"
     End
 
 End

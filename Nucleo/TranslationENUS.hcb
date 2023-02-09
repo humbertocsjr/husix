@@ -14,6 +14,7 @@ Module Translation
     Public Dim AvailMemory as PtrByteArray
     Public Dim KernelSize as PtrByteArray
     Public Dim InitFile as PtrByteArray
+    Public Dim VideoCardDetected as PtrByteArray
 
     Public Sub Initialize
         Kernel = "Kernel"
@@ -28,9 +29,10 @@ Module Translation
         BrazilianOperatingSystem = "Brazilian Operating System =)"
         RequiresCGA = "Video Mode not detected. Requires CGA or Higher"
         ModeDOS = "Operating Environment Mode over DOS"
-        AvailMemory = "Available Memory....: "
-        KernelSize =  "Kernel Size.........: "
-        InitFile = "/System/Luzia"
+        AvailMemory =        "Available Memory....: "
+        KernelSize =         "Kernel Size.........: "
+        InitFile = "/System/Luzia.hsx"
+        VideoCardDetected =  "Video Card..........: "
     End
 
     

@@ -8,7 +8,16 @@ Então quero montar algo simples de usar, focado na interface gráfica, preto e 
 
 Para testar este projeto sem compilar basa usar um disquete com o nome terminado em TEST.IMG no diretorio Distro
 
-**Situação atual:** Implementando abertura de arquivo a partir de um endereço e carregamento de um executável tipo HSX.
+**Para compilar requer SEMPRE a última versão do HCBasic, de preferência compilada direto do repositório**
+
+## Novidades
+
+- Consegue carregar e iniciar um executável do disco
+- Consegue importar modulos do nucleo, deixando o executável pequeno por não incluir nada desnecessário
+- Exportado System.IO.Console e System.String do Núcleo
+
+
+**Situação atual:** Implementando carregamento de outras bibliotecas extras que não o núcleo.
 
 **Tradução EN-US**
 
@@ -21,7 +30,7 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
 # Objetivos para Versão 1.0
 
 - [ ] Implementar Interpretação dos Argumentos passados pelo BootLoader para o Kernel
-    - [ ] Definir o Disco inicial
+    - [x] Definir o Disco inicial
     - [ ] Definir o Arquivo que deve ser executado primeiro
     - [ ] Definir o Controlador de Vídeo que deve ser carregado
 - [ ] Implementar System.Collections List
@@ -54,10 +63,10 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
     - [ ] Implementar SeekCurrent/SeekEnd/SeekBegin
     - [ ] Implementar Close
 - [ ] Implementar System.IO.File
-    - [ ] Usando System.IO.FileSystem, implementar abertura de Arquivos
+    - [x] Usando System.IO.FileSystem, implementar abertura de Arquivos
 - [ ] Implementar System.Reflection para carregar e executar arquivos
-    - [ ] Implementar no compilador lista de modulos/rotinas públicas
-    - [ ] Implementar bibliotecas externas (Criar .DLL)
+    - [x] Implementar no compilador lista de modulos/rotinas públicas
+    - [x] Implementar bibliotecas externas (Criar .DLL)
     - [ ] Implementar carregamento de bibliotecas externas automaticamente
     - [ ] Implementar chamada dinamica de uma rotina
 - [ ] Implementar System.IO.SerialPort (Basear no .NET) para comunicação binária

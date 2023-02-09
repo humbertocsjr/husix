@@ -1,7 +1,7 @@
 Imports System
 Imports System.Text
 
-Module Console
+Public Module Console
     Dim SupportLevel as UInt16
 
     Public Function CanVGA() as UInt16
@@ -20,17 +20,26 @@ Module Console
         Return SupportLevel >= 0
     End
 
+    Public Function CanHercules() as UInt16
+        Return SupportLevel == -1
+    End
+
     Public Function CanTextOnly() as UInt16
         Return SupportLevel == 0
     End
 
+    Public Dim VideoCardName as PtrByteArray
 
-    Public Sub Initialize
+    Friend Sub Initialize
         Dim teste as UInt16
+        Dim teste2 as UInt16
         SupportLevel = 0
         teste = 0
+        teste2 = 0
+        VideoCardName = "VGA"
+        ' Apenas placas VGA ou superior tem o serviço AH=0x1a
         asm "xor bx, bx"
-        asm "mov ax, 0x1a00"
+        asm "mov ah, 0x1a"
         asm "int 0x10"
         asm "mov [bp-2], bx"
         If (teste == 7) OrElse (teste == 8) Then 
@@ -38,7 +47,9 @@ Module Console
             Return
         End
 
-        asm "mov ax, 0x1200"
+        VideoCardName = "EGA"
+        ' Apenas placas EGA ou superior tem o serviço AH=0x12
+        asm "mov al, 0x12"
         asm "mov bl, 0x10"
         asm "int 0x10"
         asm "mov [bp-2], bx"
@@ -47,20 +58,42 @@ Module Console
             Return
         End
 
+        ' Apenas placas MDA/Hercules por padrão na BIOS usam Modo 7, as demais normalmente usam Modo 3
         asm "mov ax, 0xf00"
         asm "int 0x10"
         asm "xor ah, ah"
         asm "mov [bp-2], ax"
 
-        If teste == 3 Then
+        If teste <> 7 Then
+            VideoCardName = "VGA"
             SupportLevel = 1
         Else
+            VideoCardName = "Hercules"
+            Dim i as UInt16
+            teste = IO.InputByte(0x3ba)
+            teste2 = teste
+            For i = 1 to 32768
+                teste = IO.InputByte(0x3ba)
+                ' Detecta Sinal de Reentrancia Vertical
+                ' Apenas placas Hercules tem este sinal, MDA original tem o bit setado sempre
+                ' e algumas placas similares ao MDA tem o bit zerado sempre
+                ' Então para detectar roda um loop grande lendo a porta para ver se o sinal alterna-se
+                If (teste and 128) <> (teste2 and 128) Then
+                    SupportLevel = -1
+                    Return
+                End
+            End
+            VideoCardName = "MGA"
             SupportLevel = 0
         End
     End
 
     Public Sub Mode80x25x4
-        IO.SetVideoMode 3
+        If CanHercules() Then
+            IO.SetVideoMode 7
+        Else
+            IO.SetVideoMode 3
+        End
     End
 
     Public Function ReadChar() as UInt8

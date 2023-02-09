@@ -150,6 +150,8 @@ discos_copia_ptbr:
 	@minixfs mkdir img.img /Config
 	@minixfs mkdir img.img /Sistema
 	@minixfs add img.img Programas/Luzia/Luzia.hsx /Sistema/Luzia.hsx
+	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /Sistema/BandoDeDados.hsx
+	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programas/Sefudias.hsx
 	@minixfs add img.img LICENSE /Licença
 
 discos_copia_enus:
@@ -160,6 +162,8 @@ discos_copia_enus:
 	@minixfs mkdir img.img /Config
 	@minixfs mkdir img.img /System
 	@minixfs add img.img Programas/Luzia/Luzia.hsx /System/Luzia.hsx
+	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /System/BandoDeDados.hsx
+	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programs/Sefudias.hsx
 	@minixfs add img.img LICENSE /License
 
 teste-qemu:

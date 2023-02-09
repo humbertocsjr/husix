@@ -1,6 +1,7 @@
 
 
 all:
+	@echo -= Compilando Sistema de Inicialização Luzia =-
 	@hcbasic Luzia.hcb Luzia.tmp ../../Incluir/
 	@nasm -f bin -o Luzia.hsx Luzia.tmp
 

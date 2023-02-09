@@ -1,0 +1,93 @@
+Imports System
+
+
+Structure Table
+    Dim Version as UInt8
+    Dim UpdateYear as UInt8
+    Dim UpdateMonth as UInt8
+    Dim UpdateDay as UInt8
+    Dim TotalRecordsLow as UInt16
+    Dim TotalRecordsHigh as UInt16
+    Dim HeaderSize as UInt16
+    Dim RecordSize as UInt16
+    Dim Fields as PtrByteArray
+    Dim CurrentItemID as UInt16
+    Dim CurrentItemRaw as PtrByteArray
+    Dim CurrentItemConverted as PtrByteArray
+    Dim Filters as PtrByteArray
+    Dim InMemory as UInt16
+    Dim MemoryRecords as PtrByteArray
+End
+
+Structure TableField
+    Spacing 13
+    Dim Name as PtrByteArray
+    Dim Type as UInt8
+    Dim Length as UInt8
+    Dim NextField as PtrByteArray
+End
+
+Structure TableFilter
+    Spacing 257
+    Dim FieldID as UInt8
+    Dim Comparsion as UInt8
+    Dim Value as PtrByteArray
+    Dim NextFilter as PtrByteArray
+End
+
+Public Module Table
+    Friend Sub Initialize(table as Table)
+
+    End
+
+    Public Sub CreateInMemory(table as Table)
+        table.Version = 0x80
+        table.InMemory = 1
+        table.TotalRecordsHigh = 0
+        table.TotalRecordsLow = 0
+        table.HeaderSize = 0
+        table.RecordSize = 0
+    End
+
+    Public Sub Create(filename as String, table as Table)
+    End
+
+    Public Sub Open(filename as String, table as Table)
+    End
+
+    Public Sub Close(table as Table)
+    End
+
+    Public Sub AddField(table as Table, name as String, type as String, len as UInt8)
+    End
+
+    Public Sub DelField(table as Table, name as String)
+    End
+
+    Public Sub GotoID(table as Table, id as UInt16)
+    End
+
+    Public Function GetCurrentID(table as Table) as UInt16
+    End
+
+    Public Function Next(table as Table) as UInt16
+    End
+
+    Public Function Previous(table as Table) as UInt16
+    End
+
+    Public Sub GetItem(table as Table, struct as PtrByteArray, structSize as UInt16)
+    End
+
+    Public Sub UpdateItem(table as Table, struct as PtrByteArray)
+    End
+
+    Public Sub FilterReset(table as Table)
+    End
+
+    Public Sub FilterAddEqual(table as Table, field as String, value as String)
+    End
+
+    Public Sub FilterAddNotEqual(table as Table, field as String, value as String)
+    End
+End

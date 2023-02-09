@@ -1,0 +1,16 @@
+Imports System
+
+Structure LocalNoMapa
+    Dim DBTable as PtrByteArray
+    Dim Id as UInt16
+    Dim DescricaoCurta as PtrByteArray
+    Dim DescricaoLonga as PtrByteArray
+    Dim AcaoAvancar as UInt16
+    Dim AcaoRetornar as UInt16
+    Dim AcaoDireita as UInt16
+    Dim AcaoEsquerda as UInt16
+    Dim AcaoDescer as UInt16
+    Dim AcaoSubir as UInt16
+    Dim Item1Nome as PtrByteArray
+    Dim Item1Olhar as UInt16
+End

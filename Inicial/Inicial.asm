@@ -166,7 +166,7 @@ Inicio:
     mov es, ax
     ; Exibe mensagem
     call Escreva
-    db 10, 13, "Mounting", 0
+    db 10, 13, "Montando", 0
     ; Carrega bloco extensao
     mov ax, 1
     xor dx, dx
@@ -490,7 +490,7 @@ EscrevaCHS:
 
 times 952-($-$$) db 0
 Argumento:
-db " Disk=BIOSDisk"
+db " Disk=DiskBIOS"
 ArgumentoDisco:
 db "000"
 

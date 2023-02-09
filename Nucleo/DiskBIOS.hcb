@@ -3,7 +3,7 @@ Imports System.IO
 Imports System.IO.Disk
 Imports System.Threading
 
-Module BIOSDisk
+Module DiskBIOS
     Pointer Dim FloppyA as DiskInfo
     Pointer Dim FloppyB as DiskInfo
     Dim Buffer as Block512B
@@ -11,10 +11,10 @@ Module BIOSDisk
 
     Public Sub Initialize
         Semaphore.Initialize InUse, 1
-        FloppyA  = Disk.RegisterNew("BIOSDisk000", 0, 40, 2, 9, 512)
+        FloppyA  = Disk.RegisterNew("DiskBIOS000", 0, 40, 2, 9, 512)
         FloppyA.ReadBlock = AddressOf(ReadBlock)
         FloppyA.WriteBlock = AddressOf(WriteBlock)
-        FloppyB  = Disk.RegisterNew("BIOSDisk001", 1, 40, 2, 9, 512)
+        FloppyB  = Disk.RegisterNew("DiskBIOS001", 1, 40, 2, 9, 512)
         FloppyB.ReadBlock = AddressOf(ReadBlock)
         FloppyB.WriteBlock = AddressOf(WriteBlock)
     End

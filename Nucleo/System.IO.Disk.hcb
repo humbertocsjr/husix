@@ -41,7 +41,7 @@ End
 Module Disk
     Dim Disks as List
 
-    Public Sub Initialize
+    Friend Sub Initialize
         List.Initialize Disks, SizeOf(DiskInfo)
     End
     
@@ -81,7 +81,7 @@ Module Disk
         Throw NotImplementedError
     End
 
-    Function Exist(name as String) as UInt16
+    Public Function Exist(name as String) as UInt16
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo
@@ -93,7 +93,7 @@ Module Disk
         Return 0
     End
 
-    Function Item(name as String) as DiskInfo
+    Public Function Item(name as String) as DiskInfo
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo
@@ -103,11 +103,11 @@ Module Disk
         Throw NotFoundError
     End
 
-    Function Count() as UInt16
+    Public Function Count() as UInt16
         Return List.Count(Disks)
     End
 
-    Function GetBlockSize(name as String) as UInt16
+    Public Function GetBlockSize(name as String) as UInt16
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo
@@ -117,11 +117,11 @@ Module Disk
         Throw NotFoundError
     End
 
-    Sub ReadBlock(d as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+    Public Sub ReadBlock(d as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
         d.ReadBlock.Invoke data, addressLow, addressHigh
     End
 
-    Sub ReadBlockByName(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+    Public Sub ReadBlockByName(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
         Dim i as UInt16
         For i = 1 to List.Count(Disks)
             Dim d as DiskInfo

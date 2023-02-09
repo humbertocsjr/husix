@@ -1,0 +1,20 @@
+Imports System
+
+Module Console From "husix"
+    Public Function CanVGA() as UInt16
+    Public Function CanEGA() as UInt16
+    Public Function CanCGA() as UInt16
+    Public Function CanMGA() as UInt16
+    Public Function CanHercules() as UInt16
+    Public Sub Mode80x25x4
+    Public Function ReadChar() as UInt8
+    Public Sub ReadLine(txt as PtrByteArray)
+    Public Sub WriteChar(c as UInt8)
+    Public Sub Write(txt as PtrByteArray)
+    Public Sub WriteLine(txt as PtrByteArray)
+    Public Sub WriteEnter()
+    Public Sub WriteUInt16(nro as UInt16)
+    Public Sub WriteInt16(nro as Int16)
+    Public Sub WriteUInt8(nro as UInt8)
+    Public Sub WriteInt8(nro as Int8)
+End

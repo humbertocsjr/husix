@@ -1,37 +1,199 @@
 Imports System
+Imports System.IO.File
+Imports System.Threading
 
 Structure AssemblyHeader
-    Dim Jmp0 as UInt16
-    Dim Jmp1 as UInt16
-    Dim Signature as UInt16
-    Dim VersionAPI as UInt16
-    Dim NameLocalPtr as UInt16
-    Dim Version as UInt16
-    Dim SubVersion as UInt16
-    Dim Revision as UInt16
+    Dim Signature0 as UInt16
+    Dim Signature1 as UInt8
+    Dim Type as UInt8
+    Dim HeaderVersion as UInt16
+    Dim APIVersion as UInt16
+    Dim StartLocalPtr as UInt16
+    Dim CodeSize as UInt16
+    Dim StackSize as UInt16
+    Dim RealocLocalPtr as UInt16
     Dim ImportsLocalPtr as UInt16
     Dim ExportsLocalPtr as UInt16
 End
 
 Structure AssemblyImpExpReg
-    Dim RegType as UInt16
-    Dim Id as UInt16
+    Dim Type as UInt8
     Dim LocalPtr as UInt16
 End
 
 Structure Assembly
     Dim Thread as PtrByteArray
     Dim Contents as PtrByteArray
+    Dim StackSize as UInt16
+    Dim WorkDirectory as PtrByteArray
+    Dim StartingCode as PtrByteArray
 End
 
 Module Assembly
 
     Public Sub LoadAssembly(assm as Assembly, filename as PtrByteArray)
+        Dim t as Thread
+        Dim s as Stream
+        Dim i as UInt16
+        Dim kib as UInt16
+        Dim header as AssemblyHeader
+        Dim tmp as PtrByteArray
+        s = New
+        t = Thread.RequestNew()
+        ' Abre executavel
+        File.Open filename, s
+        ' Calcula tamanho em KiBs
+        kib = (Stream.LengthLow(s) + 256) / 1024 + 1
+        ' Monta estrutura do Assembly
+        assm.Thread = t
+        ' Aloca espaco do binario
+        assm.Contents = GlobalMemory.AllocKiB(t, kib)
+        tmp = assm.Contents
+        ' Carrega executavel
+        #tmp = #tmp + 16
+        ' Converte em cabecalho
+        header = tmp
+        For i = 1 to kib
+            Stream.ReadRaw s, tmp, 1024
+            #tmp = #tmp + 64
+        End
+        Stream.Close s
+        ' Verifica assinatura
+        If header.Signature0 <> 0x5348 OrElse header.Signature1 <> 0x58 Then
+            'TODO: Desalocar memoria
+            Throw InvalidFormatError
+        End
+        ' Realoca executavel
+        Dim realoc as PtrWordArray
+        Dim ptr as PtrWordArray
+        Dim tipoRealoc as UInt16
+        Dim desvio as UInt16
+        Dim soma as UInt16
+        #realoc = #header
+        #ptr = #header
+        @realoc = header.RealocLocalPtr
+        while realoc <> 0
+            tipoRealoc = realoc
+            @realoc ++
+            @realoc ++
+            @ptr = realoc
+            @realoc ++
+            @realoc ++
+            desvio = realoc
+            @realoc ++
+            @realoc ++
+            soma = realoc
+            @realoc ++
+            @realoc ++
+            if tipoRealoc == 3 then
+                desvio = desvio + @ptr
+                ptr = desvio
+                @ptr ++
+                @ptr ++
+                ptr = #header + soma
+            end
+            if tipoRealoc == 2 then
+                @ptr = @ptr + desvio
+                'ptr = StackSegment() + soma
+                Throw NotImplementedError
+            end
+            if tipoRealoc == 1 then
+                @ptr = @ptr + desvio
+                ptr = #header + soma
+            end
+        end
+        ' Aloca a pilha
+        assm.StackSize = header.StackSize / 1024
+        ' Leia o diretorio atual
+        assm.WorkDirectory = Memory.Alloc(SizeOf(DirectoryInfo))
+        Path.GetParentDirInfo assm.WorkDirectory, filename
+        ' Define o ponto de inicio do codigo
+        Dim startPtr as PtrByteArray
+        startPtr = assm.Contents
+        @startPtr = @startPtr + header.StartLocalPtr
+        assm.StartingCode = startPtr
+        ' Processa tabela de Importação do executável
+        Dim exportTable as PtrByteArray
+        #exportTable = OS.CodeSegment()
+        @exportTable = OS.ExportTable()
+        Dim regImp as AssemblyImpExpReg
+        Dim regExp as AssemblyImpExpReg
+        Dim ptrExp as PtrWordArray
+        Dim modExp as PtrWordArray
+        Dim found as UInt16
+        regExp = exportTable
+        #regImp = #assm.Contents
+        #ptr = #assm.Contents
+        @regImp = header.ImportsLocalPtr
+        ' Processa todos os registros de importação
+        '
+        '  Um executável tem uma lista de Arquivos, Módulos e Rotinas que 
+        '  quer importar, para isto se lista os arquivos, dentro deles os 
+        '  módulos e dentro as rotinas.
+        '
+        '
+        While regImp.Type <> 0
+            If regImp.Type == 1 Then ' Arquivo
+                @ptr = regImp.LocalPtr
+                If String.Equals(ptr, "husix") Then
+                    #exportTable = OS.CodeSegment()
+                    @exportTable = OS.ExportTable()
+                Else
+                    Throw NotFoundError
+                End
+            ElseIf regImp.Type == 2 Then ' Módulo
+                @ptr = regImp.LocalPtr
+                found = 0
+                regExp = exportTable
+                While (found == 0) AndAlso (regExp.Type <> 0)
+                    ptrExp = regExp
+                    @ptrExp = regExp.LocalPtr
+                    If regExp.Type == regImp.Type AndAlso String.Equals(ptr, ptrExp) Then
+                        found = 1
+                        modExp = regExp
+                        @modExp = @modExp + SizeOf(AssemblyImpExpReg)
+                    End
+                    @regExp = @regExp + SizeOf(AssemblyImpExpReg)
+                End
+                If found == 0 Then Throw NotFoundError
+            ElseIf regImp.Type == 3 Then ' Rotina
+                @ptr = regImp.LocalPtr + 4
+                found = 0
+                regExp = modExp
+                While (found == 0) AndAlso (regExp.Type == regImp.Type)
+                    ptrExp = regExp
+                    @ptrExp = regExp.LocalPtr + 3
+                    If regExp.Type == regImp.Type AndAlso String.Equals(ptr, ptrExp) Then
+                        found = 1
+                        @ptr = regImp.LocalPtr
+                        ptr = regExp.LocalPtr
+                        @ptr++
+                        @ptr++
+                        ptr = #regExp
+                    End
+                    @regExp = @regExp + SizeOf(AssemblyImpExpReg)
+                End
+                If found == 0 Then Throw NotFoundError
+            Else
+                Console.WriteUInt16 regImp.Type
+            End
+            @regImp = @regImp + SizeOf(AssemblyImpExpReg)
+        End
 
+        
     End
 
-    Public Function GetMethod(assm as Assembly, moduleName as String, methodName as String) as PtrByteArray
-        
+    Public Function Run(assm as Assembly, args as String) as UInt16
+        Dim ptr as PtrByteArray
+        Dim t as Thread
+        ptr = assm.Contents
+        ptr = 253
+        String.Copy ptr, args
+        t = assm.Thread
+        t.WaitReturnCode = 1
+        Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
+        While t.WaitReturnCode == 1 Thread.Yield
+        Return t.ReturnCode
     End
 
 End

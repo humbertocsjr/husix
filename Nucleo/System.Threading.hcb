@@ -16,6 +16,8 @@ Structure Thread
     Dim Next as PtrByteArray
     Dim Previous as PtrByteArray
     Dim WorkDirectory as PtrByteArray
+    Dim WaitReturnCode as UInt16
+    Dim ReturnCode as UInt16
 End
 
 ' Representa um semaforo, serve para limitar o acesso simultaneo a um recurso/rotina
@@ -152,6 +154,7 @@ Module MultiThreading
                 t.Active = 1
                 t.Suspended = 1
                 t.Allocated = 0
+                t.WaitReturnCode = 0
                 Semaphore.Release InUse
                 Return t
             End
@@ -245,6 +248,8 @@ Module Thread
     Sub EndThread()
         Dim t as Thread
         t = Current()
+        If t.WaitReturnCode == 1 Then t.WaitReturnCode = 2
+        While t.WaitReturnCode Thread.Yield
         t.Active = 0
         t.Suspended = 1
         While 1 Thread.Yield

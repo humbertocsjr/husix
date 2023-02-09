@@ -31,6 +31,11 @@ Module FileInfo
         dir.MountedFileSystem = ptr
         dir.Open = ptr
     End
+
+    Public Sub Duplicate(output as FileInfo, input as FileInfo)
+        Memory.Copy output, input, SizeOf(FileInfo)
+        output.Name = output
+    End
 End
 
 Module DirectoryInfo
@@ -47,17 +52,263 @@ Module DirectoryInfo
         dir.GetFileInfo = ptr
         dir.GetDirectoryInfo = ptr
     End
+
+    Public Sub Duplicate(output as DirectoryInfo, input as DirectoryInfo)
+        Memory.Copy output, input, SizeOf(DirectoryInfo)
+        output.Name = output
+    End
 End
 
 Module File
 
     Public Function Open(filename as String, s as Stream) as UInt16
+        Dim file as FileInfo
+        file = New
+        Path.GetFileInfo file, filename
+        Return file.Open.Invoke(s)
+    End
+End
+
+Module Path
+
+    Public Function IsAbsolutePath(path as PtrByteArray) as UInt16
+        @path++
+        Return path == 47 ' /
+    End
+
+    Public Function IsRelativePath(path as PtrByteArray) as UInt16
+        @path++
+        Return path <> 47 ' /
+    End
+
+    Public Sub Combine(output as String, path as String)
+        Dim ptr as ptrbytearray
+        Dim txt as String
+        Dim tmp as UInt16
+        txt = New
+        ptr = output
+        @ptr = @ptr + ptr
+        If ptr <> 47 Then String.Concat output, "/"
+        ptr = path
+        tmp = ptr
+        @ptr++
+        If ptr == 47 Then
+            ptr = tmp - 1
+        End
+        String.Concat output, ptr
+    End
+
+    Public Function GetToken(output as String, path as String, pos as UInt16) as UInt16
+        Dim token as String
+        Dim len as UInt16
+        Dim ptr as PtrByteArray
+        Dim ptrOut as PtrByteArray
+        token = New
+        Dim i as UInt16
+        Dim j as UInt16
+        Dim current as UInt16
+        Dim tmp as UInt16
+        ptr = path
+        len = ptr
+        @ptr++
+        j = 0
+        current = 1
+        If pos == 0 Then Throw OutOfBoundsError
+        For i = 1 To len
+            If (ptr <> 47) AndAlso (current == pos) Then
+                If j == 0 Then
+                    j++
+                    ptrOut = output
+                    @ptrOut++
+                    tmp = ptr
+                    ptrOut = tmp
+                    @ptrOut++
+                Else
+                    tmp = ptr
+                    ptrOut = tmp
+                    @ptrOut++
+                    ptrOut = 0
+                    j++
+                End
+            End
+            If (i == 1) AndAlso (pos == 1) AndAlso (ptr == 47) Then
+                String.Copy output, "/"
+                Return 0xffff
+            End
+            If ptr == 47 Then
+                current++
+            End
+            If current > pos Then
+                Return 0xffff
+            End
+            @ptr++
+        End
+        If j > 0 Then
+            Return 0xffff
+        Else
+            Return 0
+        End
+    End
+
+
+    Public Function GetTokenCount(path as String) as UInt16
+        Dim len as UInt16
+        Dim ptr as PtrByteArray
+        Dim i as UInt16
+        Dim current as UInt16
+        ptr = path
+        len = ptr
+        @ptr++
+        current = 1
+        For i = 1 To len
+            If ptr == 47 Then
+                current++
+            End
+            @ptr++
+        End
+        Return current
+    End
+
+    Public Sub GetParentDirInfo(dir as DirectoryInfo, path as String)
+        DirectoryInfo.Initialize dir
         Dim token as String
         token = New
-        Dim txt as PtrByteArray
-        txt = token
-        @txt++
-        Throw NotImplementedError
-        Return 0xffff
+        Dim i as UInt16
+        Dim j as UInt16
+        Dim len as UInt16
+        Dim parent as DirectoryInfo
+        Dim current as DirectoryInfo
+        Dim found as UInt16
+        parent = New
+        current = New
+        len = GetTokenCount(path)
+        If IsRelativePath(path) Then Throw InvalidFormatError
+        If len == 1 Then
+            FileSystem.GetRoot dir
+            Return
+        End
+        FileSystem.GetRoot parent
+        For i = 2 To len - 1
+            GetToken token, path, i
+            If i < len Then
+                j = 1
+                found = 0
+                While (found == 0) AndAlso FileSystem.GetDirectoryInfo(parent, j, current)
+                    If String.Equals(token, current.Name) Then
+                        DirectoryInfo.Duplicate parent, current
+                        found = 1
+                    End
+                    j++
+                End
+            Else
+                j = 1
+                found = 0
+                While (found == 0) AndAlso FileSystem.GetDirectoryInfo(parent, j, current)
+                    If String.Equals(token, current.Name) Then
+                        DirectoryInfo.Duplicate dir, current
+                        Return
+                    End
+                    j++
+                End
+            End
+            If found == 0 Then Throw NotFoundError
+            i++
+        End
+    End
+
+    Public Sub GetDirectoryInfo(dir as DirectoryInfo, path as String)
+        DirectoryInfo.Initialize dir
+        Dim token as String
+        token = New
+        Dim i as UInt16
+        Dim j as UInt16
+        Dim len as UInt16
+        Dim parent as DirectoryInfo
+        Dim current as DirectoryInfo
+        Dim found as UInt16
+        parent = New
+        current = New
+        len = GetTokenCount(path)
+        If IsRelativePath(path) Then Throw InvalidFormatError
+        If len == 1 Then
+            FileSystem.GetRoot dir
+            Return
+        End
+        FileSystem.GetRoot parent
+        For i = 2 To len
+            GetToken token, path, i
+            If i < len Then
+                j = 1
+                found = 0
+                While (found == 0) AndAlso FileSystem.GetDirectoryInfo(parent, j, current)
+                    If String.Equals(token, current.Name) Then
+                        DirectoryInfo.Duplicate parent, current
+                        found = 1
+                    End
+                    j++
+                End
+            Else
+                j = 1
+                found = 0
+                While (found == 0) AndAlso FileSystem.GetDirectoryInfo(parent, j, current)
+                    If String.Equals(token, current.Name) Then
+                        DirectoryInfo.Duplicate dir, current
+                        Return
+                    End
+                    j++
+                End
+            End
+            If found == 0 Then Throw NotFoundError
+            i++
+        End
+    End
+
+    Public Sub GetFileInfo(file as FileInfo, path as String)
+        FileInfo.Initialize file
+        Dim token as String
+        token = New
+        Dim i as UInt16
+        Dim j as UInt16
+        Dim len as UInt16
+        Dim parent as DirectoryInfo
+        Dim current as DirectoryInfo
+        Dim child as FileInfo
+        Dim found as UInt16
+        parent = New
+        current = New
+        child = New
+        found = 0
+        len = GetTokenCount(path)
+        If IsRelativePath(path) Then Throw InvalidFormatError
+        If len == 1 Then
+            Throw NotFoundError
+        End
+        FileSystem.GetRoot parent
+        For i = 2 To len
+            GetToken token, path, i
+            If i < len Then
+                j = 1
+                found = 0
+                While (found == 0) AndAlso FileSystem.GetDirectoryInfo(parent, j, current)
+                    If String.Equals(token, current.Name) Then
+                        DirectoryInfo.Duplicate parent, current
+                        found = 1
+                    End
+                    j++
+                End
+            Else
+                j = 1
+                found = 0
+                While FileSystem.GetFileInfo(parent, j, child)
+                    If String.Equals(token, child.Name) Then
+                        FileInfo.Duplicate file, child
+                        Return
+                    End
+                    j++
+                End
+            End
+            If found == 0 Then Throw NotFoundError
+        End
+        Throw NotFoundError
     End
 End

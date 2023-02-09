@@ -1,0 +1,9 @@
+Imports System
+Imports System.IO.Console
+
+Module Program
+    Friend Sub Main(args as String)
+        Console.WriteLine "Sefudias O Aventureiro"
+    End
+
+End

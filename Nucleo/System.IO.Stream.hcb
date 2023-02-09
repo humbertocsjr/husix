@@ -10,6 +10,8 @@ Structure Stream
     Dim SeekCurrent as Func(Of Stream, UInt16, UInt16)
     Dim SeekStart as Func(Of Stream, UInt16, UInt16)
     Dim SeekEnd as Func(Of Stream, UInt16, UInt16)
+    Dim LengthLow as Func(Of Stream, UInt16)
+    Dim LengthHigh as Func(Of Stream, UInt16)
     Dim MountedFileSystem as PtrByteArray
     Dim Buffer as PtrByteArray
     Dim BufferSize as UInt16
@@ -32,6 +34,8 @@ Module Stream
         s.SeekCurrent = ptr
         s.SeekStart = ptr
         s.SeekEnd = ptr
+        s.LengthLow = ptr
+        s.LengthHigh = ptr
         s.Buffer = ptr
         s.InternalInfo = ptr
         s.CurrentBlock = 0
@@ -94,5 +98,15 @@ Module Stream
     Public Function SeekStart(s as Stream, pos as UInt16) as UInt16
         If #s.SeekStart == 0 Then Throw NotImplementedError
         Return s.SeekStart.Invoke(pos)
+    End
+    
+    Public Function LengthLow(s as Stream) as UInt16
+        If #s.LengthLow == 0 Then Throw NotImplementedError
+        Return s.LengthLow.Invoke()
+    End
+    
+    Public Function LengthHigh(s as Stream) as UInt16
+        If #s.LengthHigh == 0 Then Throw NotImplementedError
+        Return s.LengthHigh.Invoke()
     End
 End
