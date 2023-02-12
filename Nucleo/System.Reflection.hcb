@@ -1,6 +1,7 @@
 Imports System
 Imports System.IO.File
 Imports System.Threading
+Imports Translation
 
 Structure AssemblyHeader
     Dim Signature0 as UInt16
@@ -29,7 +30,7 @@ Structure Assembly
     Dim StartingCode as PtrByteArray
 End
 
-Module Assembly
+Public Module Assembly
 
     Public Sub LoadAssembly(assm as Assembly, filename as PtrByteArray)
         Dim t as Thread
@@ -38,8 +39,12 @@ Module Assembly
         Dim kib as UInt16
         Dim header as AssemblyHeader
         Dim tmp as PtrByteArray
+        Dim fileinfo as FileInfo
+        fileinfo = New
         s = New
         t = Thread.RequestNew()
+        Path.GetFileInfo fileinfo, filename
+        String.Copy t.Name, fileinfo.Name
         ' Abre executavel
         File.Open filename, s
         ' Calcula tamanho em KiBs
@@ -63,45 +68,6 @@ Module Assembly
             'TODO: Desalocar memoria
             Throw InvalidFormatError
         End
-        ' Realoca executavel
-        Dim realoc as PtrWordArray
-        Dim ptr as PtrWordArray
-        Dim tipoRealoc as UInt16
-        Dim desvio as UInt16
-        Dim soma as UInt16
-        #realoc = #header
-        #ptr = #header
-        @realoc = header.RealocLocalPtr
-        while realoc <> 0
-            tipoRealoc = realoc
-            @realoc ++
-            @realoc ++
-            @ptr = realoc
-            @realoc ++
-            @realoc ++
-            desvio = realoc
-            @realoc ++
-            @realoc ++
-            soma = realoc
-            @realoc ++
-            @realoc ++
-            if tipoRealoc == 3 then
-                desvio = desvio + @ptr
-                ptr = desvio
-                @ptr ++
-                @ptr ++
-                ptr = #header + soma
-            end
-            if tipoRealoc == 2 then
-                @ptr = @ptr + desvio
-                'ptr = StackSegment() + soma
-                Throw NotImplementedError
-            end
-            if tipoRealoc == 1 then
-                @ptr = @ptr + desvio
-                ptr = #header + soma
-            end
-        end
         ' Aloca a pilha
         assm.StackSize = header.StackSize / 1024
         ' Leia o diretorio atual
@@ -132,6 +98,7 @@ Module Assembly
         '  módulos e dentro as rotinas.
         '
         '
+        Dim ptr as PtrWordArray
         While regImp.Type <> 0
             If regImp.Type == 1 Then ' Arquivo
                 @ptr = regImp.LocalPtr
@@ -139,7 +106,37 @@ Module Assembly
                     #exportTable = OS.CodeSegment()
                     @exportTable = OS.ExportTable()
                 Else
-                    Throw NotFoundError
+                    Dim i as UInt16
+                    Dim threadItem as Thread
+                    found = 0
+                    i = 1
+                    While (found == 0) AndAlso (i < MultiThreading.Capacity())
+                        threadItem = MultiThreading.Item(i)
+                        If (threadItem.Active) AndAlso String.Equals(threadItem.Name, ptr) Then
+                            Dim threadHeader as AssemblyHeader
+                            threadHeader = threadItem.Action
+                            @threadHeader = 256
+                            #exportTable = #threadHeader
+                            @exportTable = threadHeader.ExportsLocalPtr
+                            found = 1
+                        End
+                        i++
+                    End
+                    If found == 0 Then
+                        Dim assmNew as Assembly
+                        assmNew = New
+                        Dim filenameNew as String
+                        filenameNew = New
+                        Dim headerNew as AssemblyHeader
+                        String.Copy filenameNew, Translation.LibrarysPath
+                        String.Concat filenameNew, ptr
+                        LoadAssembly assmNew, filenameNew
+                        Start assmNew, ""
+                        exportTable = assmNew.Contents
+                        @exportTable = @exportTable + 256
+                        headerNew = exportTable
+                        @exportTable = headerNew.ExportsLocalPtr
+                    End
                 End
             ElseIf regImp.Type == 2 Then ' Módulo
                 @ptr = regImp.LocalPtr
@@ -155,7 +152,9 @@ Module Assembly
                     End
                     @regExp = @regExp + SizeOf(AssemblyImpExpReg)
                 End
-                If found == 0 Then Throw NotFoundError
+                If found == 0 Then
+                    Throw NotFoundError
+                End
             ElseIf regImp.Type == 3 Then ' Rotina
                 @ptr = regImp.LocalPtr + 4
                 found = 0
@@ -194,6 +193,19 @@ Module Assembly
         Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
         While t.WaitReturnCode == 1 Thread.Yield
         Return t.ReturnCode
+    End
+
+
+    Public Sub Start(assm as Assembly, args as String)
+        Dim ptr as PtrByteArray
+        Dim t as Thread
+        ptr = assm.Contents
+        ptr = 253
+        String.Copy ptr, args
+        t = assm.Thread
+        t.WaitReturnCode = 0
+        Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
+        Thread.Yield
     End
 
 End

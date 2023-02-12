@@ -17,7 +17,7 @@ Structure DirectoryInfo
     Dim GetDirectoryInfo as Func(Of DirectoryInfo, UInt16, DirectoryInfo, UInt16)
 End
 
-Module FileInfo
+Public Module FileInfo
     Public Sub Initialize(dir as FileInfo)
         dir.Name = dir
         Dim ptr as PtrByteArray
@@ -38,7 +38,7 @@ Module FileInfo
     End
 End
 
-Module DirectoryInfo
+Public Module DirectoryInfo
     Public Sub Initialize(dir as DirectoryInfo)
         dir.Name = dir
         Dim ptr as PtrByteArray
@@ -59,7 +59,7 @@ Module DirectoryInfo
     End
 End
 
-Module File
+Public Module File
 
     Public Function Open(filename as String, s as Stream) as UInt16
         Dim file as FileInfo

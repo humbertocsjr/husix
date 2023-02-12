@@ -1,7 +1,9 @@
 Module Translation
     Public Dim InitSystem as PtrByteArray
+    Public Dim SystemPath as PtrByteArray
 
     Public Sub Initialize
         InitSystem = "Sistema de Inicialização Luzia"
+        SystemPath = "/Sistema/"
     End
 End

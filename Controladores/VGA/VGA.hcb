@@ -1,11 +1,14 @@
 Imports System
 Imports System.Drawing
 Imports System.Threading
+Imports System.IO.Console
 
 Module Program
-    Public Sub Main(args as String)
+    Friend Sub Main(args as String)
         VGA.Mode640x480x2
-        Video.ClearScreen Colors.Black()
+        Graphics.DrawPixel 40, 10, 1
+        Graphics.DrawPixel 40, 11, 0
+        Graphics.DrawPixel 40, 12, 1
         While 1 Thread.Yield
     End
 End
@@ -14,17 +17,22 @@ Module VGA
     Dim Video as VideoMode
 
     Public Sub Mode640x480x2
-        IO.SetVideoMode 0x11
+        asm "mov ax, 0x11"
+        asm "int 0x10"
         Video.Width = 640
         Video.Height = 480
         Video.Colors = 2
         Video.DrawPixel = AddressOf(DrawPixel)
         GenericVideo.RegisterDrawLine Video
-        GenericVideo.RegisterDrawEllipse Video
+        GenericVideo.RegisterDrawCircle Video
         Video.DrawRectangle = AddressOf(DrawRectangle)
         Video.ClearScreen = AddressOf(ClearScreen)
+        Video.Refresh = AddressOf(Refresh)
         Graphics.ModeManual Video
         GenericVideo.Register2ColorsPalette
+    End
+
+    Sub Refresh(mode as VideoMode)
     End
 
     Sub DrawPixel(mode as VideoMode, x as UInt16, y as UInt16, color as UInt16)
@@ -51,8 +59,9 @@ Module VGA
         asm "es or [di], al"
         asm "jmp .fim"
         asm ".inverte:"
+        asm "mov al, 1"
         asm "ror al, cl"
-        asm "not ax"
+        asm "not al"
         asm "es and [di], al"
         asm ".fim:"
     End
@@ -93,6 +102,26 @@ Module VGA
         asm "rep stosb"
     End
 
+    Function ConvertMask(first as UInt16, last as UInt16) as UInt8
+        Dim ret as UInt8
+        Dim i as UInt16
+        ret = 0
+        For i = first and 7 to last and 7
+            ret = ret or (128 shr i)
+        End
+        Return ret
+    End
+
+    Function ConvertInverseMask(first as UInt16, last as UInt16) as UInt8
+        Dim ret as UInt8
+        Dim i as UInt16
+        ret = 0
+        For i = first and 7 to last and 7
+            ret = ret or (128 shl i)
+        End
+        Return Not ret
+    End
+
     Sub DrawRectangle(mode as VideoMode, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, borderColor as UInt16, backgroundColor as UInt16)
         Dim y as UInt16
         Dim x as UInt16
@@ -101,29 +130,40 @@ Module VGA
         Dim tmpor as UInt8
         Dim tmpand as UInt8
         Dim diff as UInt16
+        If (x2 - x1) < 24 Then
+            If backgroundColor <> 0xffff Then
+                For y = y1+1 to y2-1
+                    Graphics.DrawLine x1 + 1, y, x2 - 1, y, backgroundColor
+                End
+            End
+            Graphics.DrawLine x1, y1, x2, y1, borderColor
+            Graphics.DrawLine x1, y2, x2, y2, borderColor
+            Graphics.DrawLine x1, y1, x1, y2, borderColor
+            Graphics.DrawLine x2, y1, x2, y2, borderColor
+            Return
+        End
         comp = (x1 and 7) - (x2 and 7)
         diff = 0
         if comp == 0 then diff = -1
         if comp < 0 then diff = -1
+        tmp = (x1 and 7)
         tmpor = 0
-        tmpand = 0xff
-        tmp = 7 - (x1 and 7)
-        For x = 0 to tmp
-            If x == tmp Then
-                tmpand = tmpand or ((1 shl x))
-                If borderColor and 1 Then
-                    tmpor  = tmpor or ((1 shl x))
-                End
-            Else
-                If backgroundColor <> 0xffff Then
-                    tmpand = tmpand or ((1 shl x))
-                    If backgroundColor and 1 Then
-                        tmpor  = tmpor or ((1 shl x))
-                    End
-                End
-            End
+        If tmp > 0 Then tmpand = ConvertMask(0, tmp-1) Else tmpand = 0
+        If borderColor and 1 Then 
+            tmpor = ConvertMask(tmp, tmp)
+            ByteAndOr mode, x1, y1, tmpand, ConvertMask(tmp, 7)
+            ByteAndOr mode, x1, y2, tmpand, ConvertMask(tmp, 7)
+        Else
+            ByteAndOr mode, x1, y1, tmpand, 0
+            ByteAndOr mode, x1, y2, tmpand, 0
         End
-        tmpand = not tmpand
+        If backgroundColor <> 0xffff Then
+            If backgroundColor and 1 Then
+                tmpor = tmpor or ConvertMask(tmp+1, 7)
+            End
+        Else
+            tmpand = tmpand or ConvertMask(tmp+1, 7)
+        End
         For y = y1 + 1 to y2 - 1
             ByteAndOr mode, x1, y, tmpand, tmpor
         End
@@ -138,49 +178,29 @@ Module VGA
             End
         End
 
+        tmp = (x2 and 7)
         tmpor = 0
-        tmpand = 0xff
-        tmp = x2 and 7
-        For x = 0 to tmp
-            If x == tmp Then
-                tmpand = tmpand or ((128 shr x))
-                If borderColor and 1 Then
-                    tmpor  = tmpor or ((128 shr x))
+        If tmp < 7 Then tmpand = ConvertMask(tmp+1, 7) Else tmpand = ConvertMask(tmp, tmp)
+        If borderColor and 1 Then 
+            tmpor = ConvertMask(tmp, tmp)
+            ByteAndOr mode, x2, y1, tmpand, ConvertMask(0, tmp)
+            ByteAndOr mode, x2, y2, tmpand, ConvertMask(0, tmp)
+        Else
+            ByteAndOr mode, x2, y1, tmpand, 0
+            ByteAndOr mode, x2, y2, tmpand, 0
+        End
+        If tmp > 1 Then
+            If backgroundColor <> 0xffff Then
+                If backgroundColor and 1 Then
+                    tmpor = tmpor or ConvertMask(0, tmp-1)
                 End
             Else
-                If backgroundColor <> 0xffff Then
-                    tmpand = tmpand or ((128 shr x))
-                    If backgroundColor and 1 Then
-                        tmpor  = tmpor or ((128 shr x))
-                    End
-                End
+                tmpand = tmpand or ConvertMask(0, tmp-1)
             End
         End
         For y = y1 + 1 to y2 - 1
             ByteAndOr mode, x2, y, tmpand, tmpor
         End
-        tmpor = 0
-        tmpand = 0xff
-        tmp = 7 - (x1 and 7)
-        For x = 0 to tmp
-            tmpand = tmpand or ((1 shl x))
-            If borderColor and 1 Then
-                tmpor  = tmpor or ((1 shl x))
-            End
-        End
-        ByteAndOr mode, x1, y1, tmpand, tmpor
-        ByteAndOr mode, x1, y2, tmpand, tmpor
-        tmpor = 0
-        tmpand = 0xff
-        tmp = x2 and 7
-        For x = 0 to tmp
-            tmpand = tmpand or ((128 shr x))
-            If borderColor and 1 Then
-                tmpor  = tmpor or ((128 shr x))
-            End
-        End
-        ByteAndOr mode, x2, y1, tmpand, tmpor
-        ByteAndOr mode, x2, y2, tmpand, tmpor
         If borderColor and 1 Then
             tmpand = 0xff
         Else
@@ -193,12 +213,12 @@ Module VGA
     Sub ClearScreen(mode as VideoMode, color as UInt16)
         Dim tmp as UInt8
         Dim y as UInt16
-        If color and 1 Then
-            tmp = 0xff
-        Else
-            tmp = 0
-        End
+        tmp = 0
         For y = 0 to 479
+            If color and 1 Then tmp = 0xaa
+            ByteSet mode, 0, y, tmp, 80
+            y++
+            If color and 1 Then tmp = 0x55
             ByteSet mode, 0, y, tmp, 80
         End
     End

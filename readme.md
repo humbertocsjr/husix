@@ -27,6 +27,40 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
 
 ![Tradução PT-BR](Imagens/v2023.2r3522-ptbr.png)
 
+# Funcionamento / Pontos de Interesse
+
+Esta lista é focada em quem quer entender o funcionamento do sistema, e serve como guia para navegar pelo código fonte:
+
+- Todo disco é formatado usando MinixFS (Versão 1 - 30 Caracteres de Nome de Arq/Dir), compatível com Linux/Minix
+- Cada tradução tem os nomes de toda a hierarquia de diretorios devidamente traduzida
+- A Hierarquia de arquivos centrais ao HUSIX é rígida, seguindo as regras para criação do sistema de arquivos da distribuição:
+    - /System ou /Sistema: Onde fica os executáveis dos controladores de dispositivos e do sistema de inicialização
+    - /Library ou /Biblioteca: Onde ficam TODAS as bibliotecas, o Kernel apenas busca neste diretório para carregar as bibliotecas
+    - /Config: Onde fica os arquivos de configuração
+- Existem extensões padrão do sistema para arquivos:
+    - .hsx: Executável do HUSIX
+    - .dll: Biblioteca de carregamento dinâmico
+- Ao ligar o computador é executado o BootLoader que está no /Inicial/Inicial[Tipo do Disco].asm
+- O BootLoader monta o disco, busca o arquivo chamado 'husix' na raiz do disco, carrega e executa
+- O Kernel do HUSIX (/Nucleo/husix.hcb) é executado
+    - Inicializa o mapa de memória (/Nucleo/System.Memory.hcb)
+    - Inicializa as estruturas do Kernel
+    - Inicializa e inclui os Drivers embutidos selecionados no arquivo de configuração (/Nucleo/ConfigDefault.hcb que é um ponteiro para o arquivo selecionado)
+    - Inicializa os Drivers embutidos (Ex.: /Nucleo/DiskBIOS)
+    - Monta a raiz segundo parametros fornecidos pelo BootLoader
+    - Executa a Luzia (Sistema de Inicialização do HUSIX)
+- Sistema de Inicialização Luzia (/Programas/Luzia/Luzia.hcb)
+    - Carrega o Driver de Video
+    - Inicia o modo gráfico
+    - Exibe mensagem de Carregemento
+    - Inicia os Executáveis responsáveis pelo ambiente gráfico
+    - Entra em loop economizando CPU
+
+
+# Bugs Conhecidos
+
+- Quando uma rotina chama outra em outro segmento e nesta segunda emite um erro, existe uma falha no Try que caso seja multisegmento ele perde o segmento do erro e perde os ponteiros ErrorLine() e ErrorFile()
+
 # Objetivos para Versão 1.0
 
 - [ ] Implementar Interpretação dos Argumentos passados pelo BootLoader para o Kernel

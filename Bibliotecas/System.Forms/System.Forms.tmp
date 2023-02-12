@@ -1,0 +1,7034 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:25:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:27:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:28:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:29:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:30:13 ===---
+db 'HSX',1 ; Library
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:31:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:32:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:33:13 ===---
+dw .start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:34:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:35:13 ===---
+dw 10240 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:36:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:37:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:38:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:39:13 ===---
+.start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:40:13 ===---
+mov word [_os_minstackptr], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:41:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:42:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:43:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:44:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:45:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:18:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 11
+db 76,105,98,114,97,114,121,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:19:9 ===---
+_os_trystack:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:20:9 ===---
+_os_trycode:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:21:9 ===---
+_os_trybase:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:22:9 ===---
+_os_tryfatal:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:23:9 ===---
+_os_minstackptr:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:25:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:48:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:49:13 ===---
+cmp sp, 128
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:50:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:51:15 ===---
+mov ax, _os
+mov [bp+-8], ax
+mov ax, 51
+mov [bp+-10], ax
+mov ax, 2
+cs jmp word [_os_trycode]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:52:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:55:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: realoc TAM: 4 POS: BP--4 
+; ARG: ptr TAM: 4 POS: BP--8 
+; ARG: tiporealoc TAM: 2 POS: BP--10 
+; ARG: desvio TAM: 2 POS: BP--12 
+; ARG: soma TAM: 2 POS: BP--14 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:57:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:58:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:59:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:60:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:61:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:62:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:62:19 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-4+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:63:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:63:16 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-8+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:64:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:64:19 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_realoctable
+mov [bp+-4], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:65:9 ===---
+ROTULO3:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:65:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:65:15 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+0]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:65:25 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO6
+jmp near ROTULO7
+ROTULO6:
+mov ax, 65535
+jmp near ROTULO8
+ROTULO7:
+xor ax, ax
+ROTULO8:
+cmp ax, 0
+jne ROTULO4
+jmp near ROTULO5
+ROTULO4:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:66:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:66:26 ===---
+; ACAO LEITURA - Le ponteiro
+es mov ax, [di+0]
+mov [bp+-10], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:67:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:68:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:69:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:69:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+0]
+mov [bp+-8], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:70:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:71:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:72:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:72:22 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+0]
+mov [bp+-12], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:73:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:74:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:75:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:75:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+0]
+mov [bp+-14], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:76:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:77:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:78:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:78:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:78:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:78:30 ===---
+mov ax, 3
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO11
+jmp near ROTULO12
+ROTULO11:
+mov ax, 65535
+jmp near ROTULO13
+ROTULO12:
+xor ax, ax
+ROTULO13:
+cmp ax, 0
+jne ROTULO9
+jmp near ROTULO10
+ROTULO9:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:79:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:79:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:79:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:79:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+pop bx
+add ax, bx
+mov [bp+-12], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:80:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:80:23 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+0], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:81:18 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-8]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:82:18 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-8]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:83:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:83:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:83:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:83:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+0], ax
+ROTULO10:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:85:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:85:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:85:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:85:30 ===---
+mov ax, 2
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO16
+jmp near ROTULO17
+ROTULO16:
+mov ax, 65535
+jmp near ROTULO18
+ROTULO17:
+xor ax, ax
+ROTULO18:
+cmp ax, 0
+jne ROTULO14
+jmp near ROTULO15
+ROTULO14:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:86:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:86:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:86:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:86:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+add ax, bx
+mov [bp+-8], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:87:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:87:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:87:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:87:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_stacksegment
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+0], ax
+ROTULO15:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:89:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:89:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:89:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:89:30 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO21
+jmp near ROTULO22
+ROTULO21:
+mov ax, 65535
+jmp near ROTULO23
+ROTULO22:
+xor ax, ax
+ROTULO23:
+cmp ax, 0
+jne ROTULO19
+jmp near ROTULO20
+ROTULO19:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:90:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:90:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:90:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:90:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+add ax, bx
+mov [bp+-8], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:91:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:91:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:91:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:91:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+0], ax
+ROTULO20:
+jmp near ROTULO3
+ROTULO5:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:94:9 ===---
+ROTULO24:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:94:15 ===---
+mov ax, 1
+cmp ax, 0
+jne ROTULO25
+jmp near ROTULO26
+ROTULO25:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:95:17 ===---
+int 0x81
+jmp near ROTULO24
+ROTULO26:
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:99:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:100:13 ===---
+mov ax, cs
+ROTULO27:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:103:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:104:13 ===---
+mov ax, ss
+ROTULO28:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:107:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:108:13 ===---
+mov ax, REALOC_TABLE
+ROTULO29:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== System.Forms.hcb:68:15 ===---
+; MODULO: control
+NAME_control:
+db 7
+db 99,111,110,116,114,111,108
+db 0
+_control:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:69:16 ===---
+NAME_control_initialize:
+jmp near _control_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_control_initialize:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:69:27 ===---
+;     ---=== System.Forms.hcb:70:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:70:21 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'font'
+cs call far [_font_getdefault]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+19]
+es pop word [di+19+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:71:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:71:20 ===---
+xor ax, ax
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:72:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:72:21 ===---
+xor ax, ax
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:73:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:73:22 ===---
+mov ax, 10
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:74:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:74:23 ===---
+mov ax, 10
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:75:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:75:24 ===---
+xor ax, ax
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:76:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:76:26 ===---
+xor ax, ax
+es mov [di+15], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:77:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:77:26 ===---
+mov ax, 1
+es mov [di+16], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:78:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:78:37 ===---
+mov ax, 1
+es mov [di+17], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:79:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:79:25 ===---
+xor ax, ax
+es mov [di+18], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:80:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:80:29 ===---
+push cs
+pop es
+mov di, _control_genericcontrolpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:81:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:81:36 ===---
+push cs
+pop es
+mov di, _control_genericcontrolfocuschanged
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+35]
+es pop word [di+35+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:82:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:82:42 ===---
+push cs
+pop es
+mov di, _control_genericcontrolkeyboardinteracion
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+31]
+es pop word [di+31+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:83:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:83:40 ===---
+push cs
+pop es
+mov di, _control_genericcontrolmouseinteraction
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+27]
+es pop word [di+27+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:84:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:84:24 ===---
+push cs
+pop es
+mov di, _control_genericonclick
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+39]
+es pop word [di+39+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:85:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:85:24 ===---
+push cs
+pop es
+mov di, _control_genericonfocus
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:86:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:86:27 ===---
+push cs
+pop es
+mov di, _control_genericonkeypress
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+43]
+es pop word [di+43+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:87:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:87:29 ===---
+push cs
+pop es
+mov di, _control_genericonkeyrelease
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+47]
+es pop word [di+47+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:88:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:88:28 ===---
+push cs
+pop es
+mov di, _control_genericonlostfocus
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+55]
+es pop word [di+55+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:89:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:89:26 ===---
+xor ax, ax
+es mov [di+59], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:90:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:90:25 ===---
+xor ax, ax
+es mov [di+64], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:91:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:91:31 ===---
+xor ax, ax
+es mov [di+69], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:92:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:92:30 ===---
+xor ax, ax
+es mov [di+76], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:93:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:93:28 ===---
+xor ax, ax
+es mov [di+78], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:94:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:94:29 ===---
+xor ax, ax
+es mov [di+80], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:95:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:95:27 ===---
+xor ax, ax
+es mov [di+74], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:96:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:96:21 ===---
+push cs
+pop es
+mov di, ROTULO32
+jmp near ROTULO31
+ROTULO32:
+db 0
+times 1 db 0
+ROTULO31:
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:97:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:97:22 ===---
+xor ax, ax
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:98:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:98:28 ===---
+xor ax, ax
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO30:
+mov sp, bp
+pop bp
+FIM_control_initialize:
+retf
+;     ---=== System.Forms.hcb:101:9 ===---
+_control_genericcontrolpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:101:29 ===---
+;     ---=== System.Forms.hcb:101:46 ===---
+ROTULO33:
+mov sp, bp
+pop bp
+FIM_control_genericcontrolpaint:
+retf
+;     ---=== System.Forms.hcb:104:9 ===---
+_control_genericcontrolmouseinteraction:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:104:40 ===---
+;     ---=== System.Forms.hcb:104:57 ===---
+;     ---=== System.Forms.hcb:105:9 ===---
+;     ---=== System.Forms.hcb:105:28 ===---
+;     ---=== System.Forms.hcb:105:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov ax, [di+4]
+push ax
+;     ---=== System.Forms.hcb:105:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+mov bx, ax
+pop ax
+or ax, bx
+cmp ax, 0
+jne ROTULO35
+jmp near ROTULO36
+ROTULO35:
+;     ---=== System.Forms.hcb:106:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:106:33 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:106:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+39]
+add sp, 8
+ROTULO36:
+ROTULO34:
+mov sp, bp
+pop bp
+FIM_control_genericcontrolmouseinteraction:
+retf
+;     ---=== System.Forms.hcb:110:9 ===---
+_control_genericcontrolkeyboardinteracion:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:110:42 ===---
+;     ---=== System.Forms.hcb:110:59 ===---
+;     ---=== System.Forms.hcb:111:9 ===---
+;     ---=== System.Forms.hcb:111:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 5
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov ax, [di+5]
+cmp ax, 0
+jne ROTULO41
+jmp near ROTULO42
+ROTULO41:
+;     ---=== System.Forms.hcb:112:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:112:36 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:112:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+43]
+add sp, 8
+jmp near ROTULO43
+ROTULO42:
+;     ---=== System.Forms.hcb:114:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:114:38 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== System.Forms.hcb:114:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+47]
+add sp, 8
+ROTULO43:
+ROTULO40:
+mov sp, bp
+pop bp
+FIM_control_genericcontrolkeyboardinteracion:
+retf
+;     ---=== System.Forms.hcb:118:9 ===---
+_control_genericcontrolfocuschanged:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focus TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:118:36 ===---
+;     ---=== System.Forms.hcb:118:53 ===---
+;     ---=== System.Forms.hcb:119:9 ===---
+;     ---=== System.Forms.hcb:119:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+cmp ax, 0
+jne ROTULO45
+jmp near ROTULO46
+ROTULO45:
+;     ---=== System.Forms.hcb:120:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:120:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+51]
+add sp, 4
+jmp near ROTULO47
+ROTULO46:
+;     ---=== System.Forms.hcb:122:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:122:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+55]
+add sp, 4
+ROTULO47:
+ROTULO44:
+mov sp, bp
+pop bp
+FIM_control_genericcontrolfocuschanged:
+retf
+;     ---=== System.Forms.hcb:126:9 ===---
+_control_genericonclick:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:126:24 ===---
+;     ---=== System.Forms.hcb:126:41 ===---
+ROTULO48:
+mov sp, bp
+pop bp
+FIM_control_genericonclick:
+retf
+;     ---=== System.Forms.hcb:129:9 ===---
+_control_genericonkeypress:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:129:27 ===---
+;     ---=== System.Forms.hcb:129:44 ===---
+ROTULO49:
+mov sp, bp
+pop bp
+FIM_control_genericonkeypress:
+retf
+;     ---=== System.Forms.hcb:132:9 ===---
+_control_genericonkeyrelease:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:132:29 ===---
+;     ---=== System.Forms.hcb:132:46 ===---
+ROTULO50:
+mov sp, bp
+pop bp
+FIM_control_genericonkeyrelease:
+retf
+;     ---=== System.Forms.hcb:135:9 ===---
+_control_genericonfocus:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:135:24 ===---
+ROTULO51:
+mov sp, bp
+pop bp
+FIM_control_genericonfocus:
+retf
+;     ---=== System.Forms.hcb:138:9 ===---
+_control_genericonlostfocus:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:138:28 ===---
+ROTULO52:
+mov sp, bp
+pop bp
+FIM_control_genericonlostfocus:
+retf
+;     ---=== System.Forms.hcb:141:16 ===---
+NAME_control_setparent:
+jmp near _control_setparent
+db 9
+db 115,101,116,112,97,114,101,110,116
+times 1 db 0
+_control_setparent:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: parent TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:141:26 ===---
+;     ---=== System.Forms.hcb:141:43 ===---
+;     ---=== System.Forms.hcb:142:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:142:26 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+59], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:143:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:143:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+60]
+es pop word [di+60+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO53:
+mov sp, bp
+pop bp
+FIM_control_setparent:
+retf
+;     ---=== System.Forms.hcb:146:21 ===---
+NAME_control_getparent:
+jmp near _control_getparent
+db 9
+db 103,101,116,112,97,114,101,110,116
+times 1 db 0
+_control_getparent:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:146:31 ===---
+;     ---=== System.Forms.hcb:147:9 ===---
+;     ---=== System.Forms.hcb:147:27 ===---
+;     ---=== System.Forms.hcb:147:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 59
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+59]
+push ax
+;     ---=== System.Forms.hcb:147:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO57
+jmp near ROTULO58
+ROTULO57:
+mov ax, 65535
+jmp near ROTULO59
+ROTULO58:
+xor ax, ax
+ROTULO59:
+cmp ax, 0
+jne ROTULO55
+jmp near ROTULO56
+ROTULO55:
+;     ---=== System.Forms.hcb:147:43 ===---
+mov ax, _control
+mov [bp+-8], ax
+mov ax, 147
+mov [bp+-10], ax
+mov ax, 5
+cs jmp word [_os_trycode]
+ROTULO56:
+;     ---=== System.Forms.hcb:148:9 ===---
+;     ---=== System.Forms.hcb:148:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+jmp near ROTULO54
+ROTULO54:
+mov sp, bp
+pop bp
+FIM_control_getparent:
+retf
+;     ---=== System.Forms.hcb:151:16 ===---
+NAME_control_add:
+jmp near _control_add
+db 3
+db 97,100,100
+times 1 db 0
+_control_add:
+push bp
+mov bp, sp
+sub sp, 8
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: child TAM: 4 POS: BP+10 
+; ARG: tmp TAM: 4 POS: BP--4 
+; ARG: parent TAM: 4 POS: BP--8 
+;     ---=== System.Forms.hcb:151:20 ===---
+;     ---=== System.Forms.hcb:151:37 ===---
+;     ---=== System.Forms.hcb:152:13 ===---
+;     ---=== System.Forms.hcb:153:13 ===---
+;     ---=== System.Forms.hcb:154:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:154:18 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+pop word [bp+-8+2]
+mov [bp+-8], di
+;     ---=== System.Forms.hcb:155:9 ===---
+;     ---=== System.Forms.hcb:155:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 64
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+64]
+cmp ax, 0
+jne ROTULO61
+jmp near ROTULO62
+ROTULO61:
+;     ---=== System.Forms.hcb:156:14 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:156:21 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+67]
+mov word [bp+-4+2], ax
+;     ---=== System.Forms.hcb:157:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:157:21 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+65]
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:158:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:158:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov [bp+6], ax
+;     ---=== System.Forms.hcb:159:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:159:22 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-4+2]
+mov word [bp+6+2], ax
+;     ---=== System.Forms.hcb:160:13 ===---
+ROTULO63:
+;     ---=== System.Forms.hcb:160:19 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 69
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+69]
+cmp ax, 0
+jne ROTULO64
+jmp near ROTULO65
+ROTULO64:
+;     ---=== System.Forms.hcb:161:18 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:161:25 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+72]
+mov word [bp+-4+2], ax
+;     ---=== System.Forms.hcb:162:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:162:25 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+70]
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:163:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:163:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov [bp+6], ax
+;     ---=== System.Forms.hcb:164:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:164:26 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-4+2]
+mov word [bp+6+2], ax
+jmp near ROTULO63
+ROTULO65:
+;     ---=== System.Forms.hcb:166:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:166:35 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+69], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:167:14 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:167:21 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+10+2]
+mov word [bp+-4+2], ax
+;     ---=== System.Forms.hcb:168:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:168:21 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:169:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:169:32 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+70]
+es pop word [di+70+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:170:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:170:31 ===---
+mov ax, 1
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov [di+59], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:171:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:171:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+push es
+push di
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es pop word [di+60]
+es pop word [di+60+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+jmp near ROTULO66
+ROTULO62:
+;     ---=== System.Forms.hcb:173:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:173:29 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+64], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:174:14 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:174:21 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+10+2]
+mov word [bp+-4+2], ax
+;     ---=== System.Forms.hcb:175:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:175:21 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:176:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:176:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+65]
+es pop word [di+65+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:177:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:177:31 ===---
+mov ax, 1
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov [di+59], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:178:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:178:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+push es
+push di
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es pop word [di+60]
+es pop word [di+60+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO66:
+ROTULO60:
+mov sp, bp
+pop bp
+FIM_control_add:
+retf
+;     ---=== System.Forms.hcb:182:21 ===---
+NAME_control_count:
+jmp near _control_count
+db 5
+db 99,111,117,110,116
+times 1 db 0
+_control_count:
+push bp
+mov bp, sp
+sub sp, 6
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: ret TAM: 2 POS: BP--2 
+; ARG: ptr TAM: 4 POS: BP--6 
+;     ---=== System.Forms.hcb:182:27 ===---
+;     ---=== System.Forms.hcb:183:13 ===---
+;     ---=== System.Forms.hcb:184:13 ===---
+;     ---=== System.Forms.hcb:185:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 0
+;     ---=== System.Forms.hcb:186:9 ===---
+;     ---=== System.Forms.hcb:186:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 64
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+64]
+cmp ax, 0
+jne ROTULO68
+jmp near ROTULO69
+ROTULO68:
+;     ---=== System.Forms.hcb:187:13 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+;     ---=== System.Forms.hcb:188:14 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:188:21 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+67]
+mov word [bp+-6+2], ax
+;     ---=== System.Forms.hcb:189:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:189:21 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+65]
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:190:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:190:22 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-6+2]
+mov word [bp+6+2], ax
+;     ---=== System.Forms.hcb:191:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:191:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+mov [bp+6], ax
+;     ---=== System.Forms.hcb:192:13 ===---
+ROTULO70:
+;     ---=== System.Forms.hcb:192:19 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 69
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+69]
+cmp ax, 0
+jne ROTULO71
+jmp near ROTULO72
+ROTULO71:
+;     ---=== System.Forms.hcb:193:17 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+;     ---=== System.Forms.hcb:194:18 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:194:25 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+72]
+mov word [bp+-6+2], ax
+;     ---=== System.Forms.hcb:195:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:195:25 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+70]
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:196:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:196:26 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-6+2]
+mov word [bp+6+2], ax
+;     ---=== System.Forms.hcb:197:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:197:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+mov [bp+6], ax
+jmp near ROTULO70
+ROTULO72:
+ROTULO69:
+;     ---=== System.Forms.hcb:200:9 ===---
+;     ---=== System.Forms.hcb:200:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+jmp near ROTULO67
+ROTULO67:
+mov sp, bp
+pop bp
+FIM_control_count:
+retf
+;     ---=== System.Forms.hcb:203:21 ===---
+NAME_control_item:
+jmp near _control_item
+db 4
+db 105,116,101,109
+times 1 db 0
+_control_item:
+push bp
+mov bp, sp
+sub sp, 6
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: position TAM: 2 POS: BP+10 
+; ARG: i TAM: 2 POS: BP--2 
+; ARG: ptr TAM: 4 POS: BP--6 
+;     ---=== System.Forms.hcb:203:26 ===---
+;     ---=== System.Forms.hcb:203:43 ===---
+;     ---=== System.Forms.hcb:204:13 ===---
+;     ---=== System.Forms.hcb:205:13 ===---
+;     ---=== System.Forms.hcb:206:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 0
+;     ---=== System.Forms.hcb:207:9 ===---
+;     ---=== System.Forms.hcb:207:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 64
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+64]
+cmp ax, 0
+jne ROTULO74
+jmp near ROTULO75
+ROTULO74:
+;     ---=== System.Forms.hcb:208:13 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+;     ---=== System.Forms.hcb:209:14 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:209:21 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+67]
+mov word [bp+-6+2], ax
+;     ---=== System.Forms.hcb:210:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:210:21 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+65]
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:211:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:211:22 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-6+2]
+mov word [bp+6+2], ax
+;     ---=== System.Forms.hcb:212:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:212:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+mov [bp+6], ax
+;     ---=== System.Forms.hcb:213:13 ===---
+;     ---=== System.Forms.hcb:213:18 ===---
+;     ---=== System.Forms.hcb:213:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== System.Forms.hcb:213:21 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO78
+jmp near ROTULO79
+ROTULO78:
+mov ax, 65535
+jmp near ROTULO80
+ROTULO79:
+xor ax, ax
+ROTULO80:
+cmp ax, 0
+jne ROTULO76
+jmp near ROTULO77
+ROTULO76:
+;     ---=== System.Forms.hcb:213:35 ===---
+;     ---=== System.Forms.hcb:213:42 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+jmp near ROTULO73
+ROTULO77:
+;     ---=== System.Forms.hcb:214:13 ===---
+ROTULO81:
+;     ---=== System.Forms.hcb:214:19 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 69
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+69]
+cmp ax, 0
+jne ROTULO82
+jmp near ROTULO83
+ROTULO82:
+;     ---=== System.Forms.hcb:215:17 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+;     ---=== System.Forms.hcb:216:18 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:216:25 ===---
+; ACAO STRUCTURE - Leitura de Segmento de Ponteiro
+es mov ax, [di+72]
+mov word [bp+-6+2], ax
+;     ---=== System.Forms.hcb:217:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:217:25 ===---
+; ACAO STRUCTURE - Leitura de Desvio de Ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+70]
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:218:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== System.Forms.hcb:218:26 ===---
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-6+2]
+mov word [bp+6+2], ax
+;     ---=== System.Forms.hcb:219:18 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:219:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+mov [bp+6], ax
+;     ---=== System.Forms.hcb:220:17 ===---
+;     ---=== System.Forms.hcb:220:22 ===---
+;     ---=== System.Forms.hcb:220:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== System.Forms.hcb:220:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO86
+jmp near ROTULO87
+ROTULO86:
+mov ax, 65535
+jmp near ROTULO88
+ROTULO87:
+xor ax, ax
+ROTULO88:
+cmp ax, 0
+jne ROTULO84
+jmp near ROTULO85
+ROTULO84:
+;     ---=== System.Forms.hcb:220:39 ===---
+;     ---=== System.Forms.hcb:220:46 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+jmp near ROTULO73
+ROTULO85:
+jmp near ROTULO81
+ROTULO83:
+ROTULO75:
+;     ---=== System.Forms.hcb:223:15 ===---
+mov ax, _control
+mov [bp+-8], ax
+mov ax, 223
+mov [bp+-10], ax
+mov ax, 5
+cs jmp word [_os_trycode]
+ROTULO73:
+mov sp, bp
+pop bp
+FIM_control_item:
+retf
+;     ---=== System.Forms.hcb:226:16 ===---
+NAME_control_redraw:
+jmp near _control_redraw
+db 6
+db 114,101,100,114,97,119
+times 1 db 0
+_control_redraw:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:226:23 ===---
+;     ---=== System.Forms.hcb:227:9 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:227:34 ===---
+xor ax, ax
+push ax
+;     ---=== System.Forms.hcb:227:9 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+23]
+add sp, 6
+ROTULO89:
+mov sp, bp
+pop bp
+FIM_control_redraw:
+retf
+;     ---=== System.Forms.hcb:230:16 ===---
+NAME_control_redrawonlyfocus:
+jmp near _control_redrawonlyfocus
+db 15
+db 114,101,100,114,97,119,111,110,108,121,102,111,99,117,115
+times 1 db 0
+_control_redrawonlyfocus:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:230:32 ===---
+;     ---=== System.Forms.hcb:231:9 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:231:34 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:231:9 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+23]
+add sp, 6
+ROTULO90:
+mov sp, bp
+pop bp
+FIM_control_redrawonlyfocus:
+retf
+;     ---=== System.Forms.hcb:234:16 ===---
+NAME_control_settext:
+jmp near _control_settext
+db 7
+db 115,101,116,116,101,120,116
+times 1 db 0
+_control_settext:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: txt TAM: 4 POS: BP+10 
+;     ---=== System.Forms.hcb:234:24 ===---
+;     ---=== System.Forms.hcb:234:41 ===---
+;     ---=== System.Forms.hcb:235:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:235:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO91:
+mov sp, bp
+pop bp
+FIM_control_settext:
+retf
+;     ---=== System.Forms.hcb:238:21 ===---
+NAME_control_gettext:
+jmp near _control_gettext
+db 7
+db 103,101,116,116,101,120,116
+times 1 db 0
+_control_gettext:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:238:29 ===---
+;     ---=== System.Forms.hcb:239:9 ===---
+;     ---=== System.Forms.hcb:239:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+jmp near ROTULO92
+ROTULO92:
+mov sp, bp
+pop bp
+FIM_control_gettext:
+retf
+;     ---=== System.Forms.hcb:242:16 ===---
+NAME_control_drawchildren:
+jmp near _control_drawchildren
+db 12
+db 100,114,97,119,99,104,105,108,100,114,101,110
+times 1 db 0
+_control_drawchildren:
+push bp
+mov bp, sp
+sub sp, 8
+push cs
+call _os_stackcheck
+; ARG: parent TAM: 4 POS: BP+6 
+; ARG: i TAM: 2 POS: BP--2 
+; ARG: qtd TAM: 2 POS: BP--4 
+; ARG: child TAM: 4 POS: BP--8 
+;     ---=== System.Forms.hcb:242:29 ===---
+;     ---=== System.Forms.hcb:243:13 ===---
+;     ---=== System.Forms.hcb:244:13 ===---
+;     ---=== System.Forms.hcb:245:13 ===---
+;     ---=== System.Forms.hcb:246:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:246:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:246:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_count
+add sp, 4
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:247:9 ===---
+;     ---=== System.Forms.hcb:247:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+cmp ax, 0
+jne ROTULO94
+jmp near ROTULO95
+ROTULO94:
+;     ---=== System.Forms.hcb:248:26 ===---
+;     ---=== System.Forms.hcb:248:26 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 1
+ROTULO96:
+;     ---=== System.Forms.hcb:248:26 ===---
+;     ---=== System.Forms.hcb:248:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== System.Forms.hcb:248:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO99
+jmp near ROTULO100
+ROTULO99:
+mov ax, 65535
+jmp near ROTULO101
+ROTULO100:
+xor ax, ax
+ROTULO101:
+cmp ax, 0
+jne ROTULO97
+jmp near ROTULO98
+ROTULO97:
+;     ---=== System.Forms.hcb:249:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:249:25 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:249:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== System.Forms.hcb:249:38 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_item
+add sp, 6
+push es
+pop word [bp+-8+2]
+mov [bp+-8], di
+;     ---=== System.Forms.hcb:250:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:250:65 ===---
+;     ---=== System.Forms.hcb:250:67 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+es mov ax, [di+2]
+push ax
+;     ---=== System.Forms.hcb:250:51 ===---
+;     ---=== System.Forms.hcb:250:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+2]
+push ax
+;     ---=== System.Forms.hcb:250:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 78
+es mov ax, [di+78]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+82], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:251:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:251:63 ===---
+;     ---=== System.Forms.hcb:251:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:251:50 ===---
+;     ---=== System.Forms.hcb:251:52 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:251:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 74
+es mov ax, [di+74]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+84], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:252:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:252:78 ===---
+;     ---=== System.Forms.hcb:252:80 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== System.Forms.hcb:252:65 ===---
+;     ---=== System.Forms.hcb:252:67 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+es mov ax, [di+2]
+push ax
+;     ---=== System.Forms.hcb:252:51 ===---
+;     ---=== System.Forms.hcb:252:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+2]
+push ax
+;     ---=== System.Forms.hcb:252:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 78
+es mov ax, [di+78]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+86], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:253:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:253:75 ===---
+;     ---=== System.Forms.hcb:253:77 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== System.Forms.hcb:253:63 ===---
+;     ---=== System.Forms.hcb:253:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:253:50 ===---
+;     ---=== System.Forms.hcb:253:52 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:253:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 74
+es mov ax, [di+74]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+88], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:254:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:254:37 ===---
+mov ax, 1
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:255:17 ===---
+;     ---=== System.Forms.hcb:255:33 ===---
+;     ---=== System.Forms.hcb:255:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:255:63 ===---
+;     ---=== System.Forms.hcb:255:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 80
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+80]
+push ax
+;     ---=== System.Forms.hcb:255:48 ===---
+;     ---=== System.Forms.hcb:255:50 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== System.Forms.hcb:255:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+es mov ax, [di+2]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO104
+jmp near ROTULO105
+ROTULO104:
+mov ax, 65535
+jmp near ROTULO106
+ROTULO105:
+xor ax, ax
+ROTULO106:
+cmp ax, 0
+jne ROTULO102
+jmp near ROTULO103
+ROTULO102:
+;     ---=== System.Forms.hcb:256:21 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:256:63 ===---
+;     ---=== System.Forms.hcb:256:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 80
+es mov ax, [di+80]
+push ax
+;     ---=== System.Forms.hcb:256:48 ===---
+;     ---=== System.Forms.hcb:256:50 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== System.Forms.hcb:256:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+es mov ax, [di+2]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+86], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO103:
+;     ---=== System.Forms.hcb:258:17 ===---
+;     ---=== System.Forms.hcb:258:33 ===---
+;     ---=== System.Forms.hcb:258:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:258:63 ===---
+;     ---=== System.Forms.hcb:258:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 76
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+76]
+push ax
+;     ---=== System.Forms.hcb:258:47 ===---
+;     ---=== System.Forms.hcb:258:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== System.Forms.hcb:258:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+es mov ax, [di+0]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO109
+jmp near ROTULO110
+ROTULO109:
+mov ax, 65535
+jmp near ROTULO111
+ROTULO110:
+xor ax, ax
+ROTULO111:
+cmp ax, 0
+jne ROTULO107
+jmp near ROTULO108
+ROTULO107:
+;     ---=== System.Forms.hcb:259:21 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:259:63 ===---
+;     ---=== System.Forms.hcb:259:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 76
+es mov ax, [di+76]
+push ax
+;     ---=== System.Forms.hcb:259:47 ===---
+;     ---=== System.Forms.hcb:259:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== System.Forms.hcb:259:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+es mov ax, [di+0]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+88], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO108:
+;     ---=== System.Forms.hcb:261:17 ===---
+;     ---=== System.Forms.hcb:261:33 ===---
+;     ---=== System.Forms.hcb:261:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+82]
+push ax
+;     ---=== System.Forms.hcb:261:63 ===---
+;     ---=== System.Forms.hcb:261:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 80
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+80]
+push ax
+;     ---=== System.Forms.hcb:261:48 ===---
+;     ---=== System.Forms.hcb:261:50 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== System.Forms.hcb:261:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+es mov ax, [di+2]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO114
+jmp near ROTULO115
+ROTULO114:
+mov ax, 65535
+jmp near ROTULO116
+ROTULO115:
+xor ax, ax
+ROTULO116:
+cmp ax, 0
+jne ROTULO112
+jmp near ROTULO113
+ROTULO112:
+;     ---=== System.Forms.hcb:262:21 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:262:41 ===---
+xor ax, ax
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO113:
+;     ---=== System.Forms.hcb:264:17 ===---
+;     ---=== System.Forms.hcb:264:33 ===---
+;     ---=== System.Forms.hcb:264:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:264:63 ===---
+;     ---=== System.Forms.hcb:264:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 76
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+76]
+push ax
+;     ---=== System.Forms.hcb:264:47 ===---
+;     ---=== System.Forms.hcb:264:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== System.Forms.hcb:264:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+es mov ax, [di+0]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO119
+jmp near ROTULO120
+ROTULO119:
+mov ax, 65535
+jmp near ROTULO121
+ROTULO120:
+xor ax, ax
+ROTULO121:
+cmp ax, 0
+jne ROTULO117
+jmp near ROTULO118
+ROTULO117:
+;     ---=== System.Forms.hcb:265:21 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:265:41 ===---
+xor ax, ax
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO118:
+;     ---=== System.Forms.hcb:267:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:267:48 ===---
+;     ---=== System.Forms.hcb:267:50 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+82]
+push ax
+;     ---=== System.Forms.hcb:267:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+es mov [di+90], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:268:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:268:49 ===---
+;     ---=== System.Forms.hcb:268:51 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:268:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+es mov [di+92], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:269:17 ===---
+;     ---=== System.Forms.hcb:269:43 ===---
+;     ---=== System.Forms.hcb:269:38 ===---
+;     ---=== System.Forms.hcb:269:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 94
+es mov ax, [di+94]
+push ax
+;     ---=== System.Forms.hcb:269:41 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO127
+jmp near ROTULO128
+ROTULO127:
+mov ax, 65535
+jmp near ROTULO129
+ROTULO128:
+xor ax, ax
+ROTULO129:
+cmp ax, 0
+je ROTULO125
+;     ---=== System.Forms.hcb:269:65 ===---
+;     ---=== System.Forms.hcb:269:51 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 14
+xor ax, ax
+es mov al, [di+14]
+push ax
+;     ---=== System.Forms.hcb:269:68 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO130
+jmp near ROTULO131
+ROTULO130:
+mov ax, 65535
+jmp near ROTULO132
+ROTULO131:
+xor ax, ax
+ROTULO132:
+cmp ax, 0
+je ROTULO125
+ROTULO124:
+mov ax, 65535
+jmp near ROTULO126
+ROTULO125:
+xor ax, ax
+ROTULO126:
+cmp ax, 0
+jne ROTULO122
+jmp near ROTULO123
+ROTULO122:
+;     ---=== System.Forms.hcb:270:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:270:28 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO123:
+;     ---=== System.Forms.hcb:248:26 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+jmp near ROTULO96
+ROTULO98:
+ROTULO95:
+ROTULO93:
+mov sp, bp
+pop bp
+FIM_control_drawchildren:
+retf
+;     ---=== System.Forms.hcb:276:16 ===---
+NAME_control_focus:
+jmp near _control_focus
+db 5
+db 102,111,99,117,115
+times 1 db 0
+_control_focus:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: old TAM: 4 POS: BP--4 
+;     ---=== System.Forms.hcb:276:22 ===---
+;     ---=== System.Forms.hcb:277:13 ===---
+;     ---=== System.Forms.hcb:278:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:278:15 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_application_currentfocus+2]
+pop es
+cs mov di, [_application_currentfocus]
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:279:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:279:36 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+cs pop word [_application_currentfocus+2]
+cs mov [_application_currentfocus], di
+;     ---=== System.Forms.hcb:280:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:280:25 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+18], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:281:9 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:281:41 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:281:9 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+es call far [di+35]
+add sp, 6
+;     ---=== System.Forms.hcb:282:9 ===---
+;     ---=== System.Forms.hcb:282:17 ===---
+;     ---=== System.Forms.hcb:282:13 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+-4+2]
+push ax
+;     ---=== System.Forms.hcb:282:20 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO136
+jmp near ROTULO137
+ROTULO136:
+mov ax, 65535
+jmp near ROTULO138
+ROTULO137:
+xor ax, ax
+ROTULO138:
+cmp ax, 0
+jne ROTULO134
+jmp near ROTULO135
+ROTULO134:
+;     ---=== System.Forms.hcb:283:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:283:28 ===---
+xor ax, ax
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov [di+18], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:284:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:284:44 ===---
+xor ax, ax
+push ax
+;     ---=== System.Forms.hcb:284:13 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+es call far [di+35]
+add sp, 6
+;     ---=== System.Forms.hcb:285:13 ===---
+;     ---=== System.Forms.hcb:285:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 17
+xor ax, ax
+es mov al, [di+17]
+cmp ax, 0
+jne ROTULO139
+jmp near ROTULO140
+ROTULO139:
+;     ---=== System.Forms.hcb:285:46 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:285:62 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_redrawonlyfocus
+add sp, 4
+ROTULO140:
+ROTULO135:
+;     ---=== System.Forms.hcb:287:9 ===---
+;     ---=== System.Forms.hcb:287:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 17
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+17]
+cmp ax, 0
+jne ROTULO141
+jmp near ROTULO142
+ROTULO141:
+;     ---=== System.Forms.hcb:287:43 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:287:59 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_redrawonlyfocus
+add sp, 4
+ROTULO142:
+ROTULO133:
+mov sp, bp
+pop bp
+FIM_control_focus:
+retf
+;     ---=== System.Forms.hcb:290:16 ===---
+NAME_control_processkeyboard:
+jmp near _control_processkeyboard
+db 15
+db 112,114,111,99,101,115,115,107,101,121,98,111,97,114,100
+times 1 db 0
+_control_processkeyboard:
+push bp
+mov bp, sp
+sub sp, 8
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+; ARG: next TAM: 4 POS: BP--4 
+; ARG: i TAM: 2 POS: BP--6 
+; ARG: max TAM: 2 POS: BP--8 
+;     ---=== System.Forms.hcb:290:32 ===---
+;     ---=== System.Forms.hcb:290:49 ===---
+;     ---=== System.Forms.hcb:292:17 ===---
+;     ---=== System.Forms.hcb:302:21 ===---
+;     ---=== System.Forms.hcb:303:21 ===---
+;     ---=== System.Forms.hcb:291:9 ===---
+;     ---=== System.Forms.hcb:291:24 ===---
+;     ---=== System.Forms.hcb:291:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:291:27 ===---
+mov ax, 9
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO146
+jmp near ROTULO147
+ROTULO146:
+mov ax, 65535
+jmp near ROTULO148
+ROTULO147:
+xor ax, ax
+ROTULO148:
+cmp ax, 0
+jne ROTULO144
+jmp near ROTULO145
+ROTULO144:
+;     ---=== System.Forms.hcb:293:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:293:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:294:13 ===---
+ROTULO149:
+;     ---=== System.Forms.hcb:294:19 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 69
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+xor ax, ax
+es mov al, [di+69]
+cmp ax, 0
+jne ROTULO150
+jmp near ROTULO151
+ROTULO150:
+;     ---=== System.Forms.hcb:295:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:295:24 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 70
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+70+2]
+es push word [di+70]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:296:17 ===---
+;     ---=== System.Forms.hcb:296:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 16
+xor ax, ax
+es mov al, [di+16]
+cmp ax, 0
+jne ROTULO152
+jmp near ROTULO153
+ROTULO152:
+;     ---=== System.Forms.hcb:297:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:297:27 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_focus
+add sp, 4
+;     ---=== System.Forms.hcb:298:21 ===---
+;     ---=== System.Forms.hcb:298:26 ===---
+xor ax, ax
+jmp near ROTULO143
+ROTULO153:
+jmp near ROTULO149
+ROTULO151:
+;     ---=== System.Forms.hcb:301:13 ===---
+;     ---=== System.Forms.hcb:301:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 59
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+59]
+cmp ax, 0
+jne ROTULO154
+jmp near ROTULO155
+ROTULO154:
+;     ---=== System.Forms.hcb:304:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:304:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:304:29 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 60
+es push word [di+60+2]
+es push word [di+60]
+pop di
+pop es
+push es
+push di
+push cs
+call _control_count
+add sp, 4
+mov [bp+-8], ax
+;     ---=== System.Forms.hcb:305:30 ===---
+;     ---=== System.Forms.hcb:305:30 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-6], 1
+ROTULO156:
+;     ---=== System.Forms.hcb:305:30 ===---
+;     ---=== System.Forms.hcb:305:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== System.Forms.hcb:305:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO159
+jmp near ROTULO160
+ROTULO159:
+mov ax, 65535
+jmp near ROTULO161
+ROTULO160:
+xor ax, ax
+ROTULO161:
+cmp ax, 0
+jne ROTULO157
+jmp near ROTULO158
+ROTULO157:
+;     ---=== System.Forms.hcb:306:21 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:306:28 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:306:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== System.Forms.hcb:306:33 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 60
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+60+2]
+es push word [di+60]
+pop di
+pop es
+push es
+push di
+push cs
+call _control_item
+add sp, 6
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:307:21 ===---
+;     ---=== System.Forms.hcb:307:24 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 16
+xor ax, ax
+es mov al, [di+16]
+cmp ax, 0
+jne ROTULO162
+jmp near ROTULO163
+ROTULO162:
+;     ---=== System.Forms.hcb:308:25 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:308:31 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_focus
+add sp, 4
+;     ---=== System.Forms.hcb:309:25 ===---
+;     ---=== System.Forms.hcb:309:30 ===---
+xor ax, ax
+jmp near ROTULO143
+ROTULO163:
+;     ---=== System.Forms.hcb:305:30 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-6]
+jmp near ROTULO156
+ROTULO158:
+ROTULO155:
+jmp near ROTULO164
+ROTULO145:
+;     ---=== System.Forms.hcb:314:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:314:51 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== System.Forms.hcb:314:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+31]
+add sp, 8
+ROTULO164:
+ROTULO143:
+mov sp, bp
+pop bp
+FIM_control_processkeyboard:
+retf
+;     ---=== System.Forms.hcb:318:16 ===---
+NAME_control_show:
+jmp near _control_show
+db 4
+db 115,104,111,119
+times 1 db 0
+_control_show:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: parent TAM: 4 POS: BP--4 
+;     ---=== System.Forms.hcb:318:21 ===---
+;     ---=== System.Forms.hcb:325:13 ===---
+;     ---=== System.Forms.hcb:319:9 ===---
+;     ---=== System.Forms.hcb:319:27 ===---
+;     ---=== System.Forms.hcb:319:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 59
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+59]
+push ax
+;     ---=== System.Forms.hcb:319:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO168
+jmp near ROTULO169
+ROTULO168:
+mov ax, 65535
+jmp near ROTULO170
+ROTULO169:
+xor ax, ax
+ROTULO170:
+cmp ax, 0
+jne ROTULO166
+jmp near ROTULO167
+ROTULO166:
+;     ---=== System.Forms.hcb:320:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:320:39 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:320:17 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_add
+add sp, 8
+;     ---=== System.Forms.hcb:321:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:321:40 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+cs pop word [_application_currentfocus+2]
+cs mov [_application_currentfocus], di
+;     ---=== System.Forms.hcb:322:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:322:44 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+cs pop word [_application_currentfocusform+2]
+cs mov [_application_currentfocusform], di
+ROTULO167:
+;     ---=== System.Forms.hcb:324:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:324:24 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:326:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:326:18 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 60
+es push word [di+60+2]
+es push word [di+60]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:327:9 ===---
+;     ---=== System.Forms.hcb:327:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 94
+es mov ax, [di+94]
+cmp ax, 0
+jne ROTULO171
+jmp near ROTULO172
+ROTULO171:
+;     ---=== System.Forms.hcb:327:36 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:327:43 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO172:
+ROTULO165:
+mov sp, bp
+pop bp
+FIM_control_show:
+retf
+;     ---=== System.Forms.hcb:330:16 ===---
+NAME_control_hide:
+jmp near _control_hide
+db 4
+db 104,105,100,101
+times 1 db 0
+_control_hide:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: parent TAM: 4 POS: BP--4 
+;     ---=== System.Forms.hcb:330:21 ===---
+;     ---=== System.Forms.hcb:333:13 ===---
+;     ---=== System.Forms.hcb:331:9 ===---
+;     ---=== System.Forms.hcb:331:27 ===---
+;     ---=== System.Forms.hcb:331:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 59
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+59]
+push ax
+;     ---=== System.Forms.hcb:331:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO176
+jmp near ROTULO177
+ROTULO176:
+mov ax, 65535
+jmp near ROTULO178
+ROTULO177:
+xor ax, ax
+ROTULO178:
+cmp ax, 0
+jne ROTULO174
+jmp near ROTULO175
+ROTULO174:
+;     ---=== System.Forms.hcb:331:37 ===---
+;     ---=== System.Forms.hcb:331:42 ===---
+xor ax, ax
+jmp near ROTULO173
+ROTULO175:
+;     ---=== System.Forms.hcb:332:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:332:24 ===---
+xor ax, ax
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:334:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:334:18 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 60
+es push word [di+60+2]
+es push word [di+60]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:335:9 ===---
+;     ---=== System.Forms.hcb:335:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 94
+es mov ax, [di+94]
+cmp ax, 0
+jne ROTULO179
+jmp near ROTULO180
+ROTULO179:
+;     ---=== System.Forms.hcb:335:36 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:335:43 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO180:
+ROTULO173:
+mov sp, bp
+pop bp
+FIM_control_hide:
+retf
+; MODULO FIM: control
+;     ---=== System.Forms.hcb:583:15 ===---
+; MODULO: application
+NAME_application:
+db 11
+db 97,112,112,108,105,99,97,116,105,111,110
+db 0
+_application:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:584:9 ===---
+_application_currenttheme:
+times 14 db 0
+;     ---=== System.Forms.hcb:585:9 ===---
+_application_running:
+times 2 db 0
+;     ---=== System.Forms.hcb:586:16 ===---
+_application_currentfocus:
+times 100 db 0
+;     ---=== System.Forms.hcb:587:16 ===---
+_application_currentfocusform:
+times 100 db 0
+;     ---=== System.Forms.hcb:588:16 ===---
+_application_keyboardupdate:
+times 4 db 0
+;     ---=== System.Forms.hcb:589:16 ===---
+_application_mouseupdate:
+times 4 db 0
+;     ---=== System.Forms.hcb:590:16 ===---
+_application_exitstatus:
+times 2 db 0
+;     ---=== System.Forms.hcb:592:16 ===---
+NAME_application_applydarktheme:
+jmp near _application_applydarktheme
+db 14
+db 97,112,112,108,121,100,97,114,107,116,104,101,109,101
+times 1 db 0
+_application_applydarktheme:
+;     ---=== System.Forms.hcb:593:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:593:40 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_black]
+cs push word [_application_currenttheme+2]
+pop es
+cs mov di, [_application_currenttheme]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:594:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:594:34 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_white]
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:595:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:595:42 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_white]
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:596:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:596:36 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_black]
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:597:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:597:41 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_white]
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:598:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:598:33 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _systemcolors_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:599:9 ===---
+;     ---=== System.Forms.hcb:599:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_application_running]
+cmp ax, 0
+jne ROTULO182
+jmp near ROTULO183
+ROTULO182:
+;     ---=== System.Forms.hcb:599:25 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:599:40 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO183:
+ROTULO181:
+FIM_application_applydarktheme:
+retf
+;     ---=== System.Forms.hcb:602:16 ===---
+NAME_application_applydefaulttheme:
+jmp near _application_applydefaulttheme
+db 17
+db 97,112,112,108,121,100,101,102,97,117,108,116,116,104,101,109,101
+times 1 db 0
+_application_applydefaulttheme:
+;     ---=== System.Forms.hcb:603:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:603:40 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_white]
+cs push word [_application_currenttheme+2]
+pop es
+cs mov di, [_application_currenttheme]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:604:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:604:34 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_black]
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:605:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:605:42 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_black]
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:606:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:606:36 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_white]
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:607:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:607:41 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'colors'
+cs call far [_colors_black]
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:608:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:608:33 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _systemcolors_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:609:9 ===---
+;     ---=== System.Forms.hcb:609:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_application_running]
+cmp ax, 0
+jne ROTULO185
+jmp near ROTULO186
+ROTULO185:
+;     ---=== System.Forms.hcb:609:25 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:609:40 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO186:
+ROTULO184:
+FIM_application_applydefaulttheme:
+retf
+;     ---=== System.Forms.hcb:612:16 ===---
+NAME_application_initialize:
+jmp near _application_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_application_initialize:
+;     ---=== System.Forms.hcb:613:10 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava segmento em variavel
+cs mov word [_application_currentfocus+2], 0
+;     ---=== System.Forms.hcb:614:10 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_application_currentfocus], 0
+;     ---=== System.Forms.hcb:615:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_application_running], 0
+;     ---=== System.Forms.hcb:616:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_application_exitstatus], 0
+;     ---=== System.Forms.hcb:617:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _screen_initialize
+;     ---=== System.Forms.hcb:618:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _application_applydefaulttheme
+;     ---=== System.Forms.hcb:619:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:619:26 ===---
+push cs
+pop es
+mov di, _application_generickeyboardupdate
+push es
+cs pop word [_application_keyboardupdate+2]
+cs mov [_application_keyboardupdate], di
+;     ---=== System.Forms.hcb:620:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:620:23 ===---
+push cs
+pop es
+mov di, _application_genericmouseupdate
+push es
+cs pop word [_application_mouseupdate+2]
+cs mov [_application_mouseupdate], di
+ROTULO187:
+FIM_application_initialize:
+retf
+;     ---=== System.Forms.hcb:623:9 ===---
+_application_generickeyboardupdate:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP--4 
+;     ---=== System.Forms.hcb:623:31 ===---
+;     ---=== System.Forms.hcb:625:17 ===---
+;     ---=== System.Forms.hcb:624:9 ===---
+;     ---=== System.Forms.hcb:624:12 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'console'
+cs call far [_console_avail]
+cmp ax, 0
+jne ROTULO189
+jmp near ROTULO190
+ROTULO189:
+;     ---=== System.Forms.hcb:626:13 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 9
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:627:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:627:27 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'console'
+cs call far [_console_readchar]
+es mov [di+0], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:628:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:628:29 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+xor ax, ax
+es mov al, [di+0]
+es mov [di+1], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:629:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:629:30 ===---
+xor ax, ax
+es mov [di+3], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:630:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:630:24 ===---
+xor ax, ax
+es mov [di+7], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:631:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:631:25 ===---
+mov ax, 1
+es mov [di+5], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:632:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:632:43 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:632:37 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_processkeyboard
+add sp, 8
+ROTULO190:
+ROTULO188:
+mov sp, bp
+pop bp
+FIM_application_generickeyboardupdate:
+retf
+;     ---=== System.Forms.hcb:636:9 ===---
+_application_genericmouseupdate:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:636:28 ===---
+ROTULO191:
+mov sp, bp
+pop bp
+FIM_application_genericmouseupdate:
+retf
+;     ---=== System.Forms.hcb:639:16 ===---
+NAME_application_exit:
+jmp near _application_exit
+db 4
+db 101,120,105,116
+times 1 db 0
+_application_exit:
+push bp
+mov bp, sp
+; ARG: status TAM: 2 POS: BP+6 
+;     ---=== System.Forms.hcb:639:21 ===---
+;     ---=== System.Forms.hcb:640:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:640:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+cs mov [_application_exitstatus], ax
+;     ---=== System.Forms.hcb:641:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_application_running], 0
+ROTULO192:
+mov sp, bp
+pop bp
+FIM_application_exit:
+retf
+;     ---=== System.Forms.hcb:644:16 ===---
+NAME_application_run:
+jmp near _application_run
+db 3
+db 114,117,110
+times 1 db 0
+_application_run:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:644:20 ===---
+;     ---=== System.Forms.hcb:645:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:645:24 ===---
+mov ax, 1
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:646:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:646:43 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:646:21 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_add
+add sp, 8
+;     ---=== System.Forms.hcb:647:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:647:24 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+;     ---=== System.Forms.hcb:648:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:648:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_focus
+add sp, 4
+;     ---=== System.Forms.hcb:649:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_application_running], 1
+;     ---=== System.Forms.hcb:650:9 ===---
+ROTULO194:
+;     ---=== System.Forms.hcb:650:15 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_application_running]
+cmp ax, 0
+jne ROTULO195
+jmp near ROTULO196
+ROTULO195:
+;     ---=== System.Forms.hcb:651:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:651:35 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_application_currentfocus+2]
+pop es
+cs mov di, [_application_currentfocus]
+push es
+push di
+cs call far [_application_keyboardupdate]
+add sp, 4
+;     ---=== System.Forms.hcb:652:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:652:32 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+cs call far [_application_mouseupdate]
+add sp, 4
+;     ---=== System.Forms.hcb:653:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_yield]
+jmp near ROTULO194
+ROTULO196:
+ROTULO193:
+mov sp, bp
+pop bp
+FIM_application_run:
+retf
+; MODULO FIM: application
+;     ---=== System.Forms.hcb:555:15 ===---
+; MODULO: systemcolors
+NAME_systemcolors:
+db 12
+db 115,121,115,116,101,109,99,111,108,111,114,115
+db 0
+_systemcolors:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:556:17 ===---
+_systemcolors_current:
+times 4 db 0
+;     ---=== System.Forms.hcb:558:21 ===---
+NAME_systemcolors_backgroundcolor:
+jmp near _systemcolors_backgroundcolor
+db 15
+db 98,97,99,107,103,114,111,117,110,100,99,111,108,111,114
+times 1 db 0
+_systemcolors_backgroundcolor:
+;     ---=== System.Forms.hcb:559:9 ===---
+;     ---=== System.Forms.hcb:559:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+cs push word [_systemcolors_current+2]
+pop es
+cs mov di, [_systemcolors_current]
+es mov ax, [di+0]
+jmp near ROTULO197
+ROTULO197:
+FIM_systemcolors_backgroundcolor:
+retf
+;     ---=== System.Forms.hcb:562:21 ===---
+NAME_systemcolors_textcolor:
+jmp near _systemcolors_textcolor
+db 9
+db 116,101,120,116,99,111,108,111,114
+times 1 db 0
+_systemcolors_textcolor:
+;     ---=== System.Forms.hcb:563:9 ===---
+;     ---=== System.Forms.hcb:563:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+cs push word [_systemcolors_current+2]
+pop es
+cs mov di, [_systemcolors_current]
+es mov ax, [di+2]
+jmp near ROTULO198
+ROTULO198:
+FIM_systemcolors_textcolor:
+retf
+;     ---=== System.Forms.hcb:566:21 ===---
+NAME_systemcolors_windowbordercolor:
+jmp near _systemcolors_windowbordercolor
+db 17
+db 119,105,110,100,111,119,98,111,114,100,101,114,99,111,108,111,114
+times 1 db 0
+_systemcolors_windowbordercolor:
+;     ---=== System.Forms.hcb:567:9 ===---
+;     ---=== System.Forms.hcb:567:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+cs push word [_systemcolors_current+2]
+pop es
+cs mov di, [_systemcolors_current]
+es mov ax, [di+4]
+jmp near ROTULO199
+ROTULO199:
+FIM_systemcolors_windowbordercolor:
+retf
+;     ---=== System.Forms.hcb:570:21 ===---
+NAME_systemcolors_windowcolor:
+jmp near _systemcolors_windowcolor
+db 11
+db 119,105,110,100,111,119,99,111,108,111,114
+times 1 db 0
+_systemcolors_windowcolor:
+;     ---=== System.Forms.hcb:571:9 ===---
+;     ---=== System.Forms.hcb:571:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+cs push word [_systemcolors_current+2]
+pop es
+cs mov di, [_systemcolors_current]
+es mov ax, [di+6]
+jmp near ROTULO200
+ROTULO200:
+FIM_systemcolors_windowcolor:
+retf
+;     ---=== System.Forms.hcb:574:21 ===---
+NAME_systemcolors_windowtitlecolor:
+jmp near _systemcolors_windowtitlecolor
+db 16
+db 119,105,110,100,111,119,116,105,116,108,101,99,111,108,111,114
+times 1 db 0
+_systemcolors_windowtitlecolor:
+;     ---=== System.Forms.hcb:575:9 ===---
+;     ---=== System.Forms.hcb:575:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 8
+cs push word [_systemcolors_current+2]
+pop es
+cs mov di, [_systemcolors_current]
+es mov ax, [di+8]
+jmp near ROTULO201
+ROTULO201:
+FIM_systemcolors_windowtitlecolor:
+retf
+;     ---=== System.Forms.hcb:578:16 ===---
+NAME_systemcolors_initialize:
+jmp near _systemcolors_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_systemcolors_initialize:
+push bp
+mov bp, sp
+; ARG: newtheme TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:578:27 ===---
+;     ---=== System.Forms.hcb:579:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:579:19 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+cs pop word [_systemcolors_current+2]
+cs mov [_systemcolors_current], di
+ROTULO202:
+mov sp, bp
+pop bp
+FIM_systemcolors_initialize:
+retf
+; MODULO FIM: systemcolors
+;     ---=== System.Forms.hcb:340:15 ===---
+; MODULO: screen
+NAME_screen:
+db 6
+db 115,99,114,101,101,110
+db 0
+_screen:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:341:16 ===---
+_screen_screencontrol:
+times 100 db 0
+;     ---=== System.Forms.hcb:343:16 ===---
+NAME_screen_initialize:
+jmp near _screen_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_screen_initialize:
+;     ---=== System.Forms.hcb:344:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:344:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+push es
+push di
+push cs
+call _control_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:345:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:345:29 ===---
+xor ax, ax
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:346:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:346:30 ===---
+xor ax, ax
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:347:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:347:31 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+cs call far [_graphics_getwidth]
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:348:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:348:32 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+cs call far [_graphics_getheight]
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:349:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:349:33 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:350:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:350:37 ===---
+xor ax, ax
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:351:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:351:38 ===---
+push cs
+pop es
+mov di, _screen_controlpaint
+push es
+push di
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO203:
+FIM_screen_initialize:
+retf
+;     ---=== System.Forms.hcb:354:21 ===---
+NAME_screen_getcurrentscreen:
+jmp near _screen_getcurrentscreen
+db 16
+db 103,101,116,99,117,114,114,101,110,116,115,99,114,101,101,110
+times 1 db 0
+_screen_getcurrentscreen:
+;     ---=== System.Forms.hcb:355:9 ===---
+;     ---=== System.Forms.hcb:355:16 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+jmp near ROTULO204
+ROTULO204:
+FIM_screen_getcurrentscreen:
+retf
+;     ---=== System.Forms.hcb:358:9 ===---
+_screen_controlpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:358:22 ===---
+;     ---=== System.Forms.hcb:358:39 ===---
+;     ---=== System.Forms.hcb:359:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:359:37 ===---
+mov ax, 1
+cs push word [_screen_screencontrol+2]
+pop es
+cs mov di, [_screen_screencontrol]
+es mov [di+94], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:360:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:360:30 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_backgroundcolor
+push ax
+cs call far [_graphics_clearscreen]
+add sp, 2
+;     ---=== System.Forms.hcb:361:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:361:30 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_drawchildren
+add sp, 4
+ROTULO205:
+mov sp, bp
+pop bp
+FIM_screen_controlpaint:
+retf
+; MODULO FIM: screen
+;     ---=== System.Forms.hcb:365:15 ===---
+; MODULO: textbox
+NAME_textbox:
+db 7
+db 116,101,120,116,98,111,120
+db 0
+_textbox:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:366:16 ===---
+NAME_textbox_initialize:
+jmp near _textbox_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_textbox_initialize:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:366:27 ===---
+;     ---=== System.Forms.hcb:367:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:367:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:368:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:368:29 ===---
+push cs
+pop es
+mov di, _textbox_controlpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:369:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:369:42 ===---
+push cs
+pop es
+mov di, _textbox_controlkeyboardinteracion
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+31]
+es pop word [di+31+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO206:
+mov sp, bp
+pop bp
+FIM_textbox_initialize:
+retf
+;     ---=== System.Forms.hcb:372:9 ===---
+_textbox_controlkeyboardinteracion:
+push bp
+mov bp, sp
+sub sp, 10
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+; ARG: ptr TAM: 4 POS: BP--4 
+; ARG: len TAM: 2 POS: BP--6 
+; ARG: txt TAM: 4 POS: BP--10 
+;     ---=== System.Forms.hcb:372:35 ===---
+;     ---=== System.Forms.hcb:372:52 ===---
+;     ---=== System.Forms.hcb:374:17 ===---
+;     ---=== System.Forms.hcb:375:17 ===---
+;     ---=== System.Forms.hcb:390:25 ===---
+;     ---=== System.Forms.hcb:373:9 ===---
+;     ---=== System.Forms.hcb:373:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 5
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov ax, [di+5]
+cmp ax, 0
+jne ROTULO208
+jmp near ROTULO209
+ROTULO208:
+;     ---=== System.Forms.hcb:376:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:376:24 ===---
+xor ax, ax
+es mov [di+7], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:377:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:377:36 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:377:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+43]
+add sp, 8
+;     ---=== System.Forms.hcb:378:13 ===---
+;     ---=== System.Forms.hcb:378:25 ===---
+;     ---=== System.Forms.hcb:378:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 7
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov ax, [di+7]
+push ax
+;     ---=== System.Forms.hcb:378:28 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO212
+jmp near ROTULO213
+ROTULO212:
+mov ax, 65535
+jmp near ROTULO214
+ROTULO213:
+xor ax, ax
+ROTULO214:
+cmp ax, 0
+jne ROTULO210
+jmp near ROTULO211
+ROTULO210:
+;     ---=== System.Forms.hcb:379:17 ===---
+;     ---=== System.Forms.hcb:379:32 ===---
+;     ---=== System.Forms.hcb:379:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:379:35 ===---
+mov ax, 8
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO217
+jmp near ROTULO218
+ROTULO217:
+mov ax, 65535
+jmp near ROTULO219
+ROTULO218:
+xor ax, ax
+ROTULO219:
+cmp ax, 0
+jne ROTULO215
+jmp near ROTULO216
+ROTULO215:
+;     ---=== System.Forms.hcb:380:21 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:380:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:381:21 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:381:27 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'string'
+;     ---=== System.Forms.hcb:381:41 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+cs call far [_string_length]
+add sp, 4
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:382:21 ===---
+;     ---=== System.Forms.hcb:382:28 ===---
+;     ---=== System.Forms.hcb:382:24 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== System.Forms.hcb:382:30 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO222
+jmp near ROTULO223
+ROTULO222:
+mov ax, 65535
+jmp near ROTULO224
+ROTULO223:
+xor ax, ax
+ROTULO224:
+cmp ax, 0
+jne ROTULO220
+jmp near ROTULO221
+ROTULO220:
+;     ---=== System.Forms.hcb:383:26 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:383:37 ===---
+;     ---=== System.Forms.hcb:383:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== System.Forms.hcb:383:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+pop bx
+add ax, bx
+mov [bp+-4], ax
+;     ---=== System.Forms.hcb:384:25 ===---
+; ACAO GRAVACAO - Gravacao de numero em ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov byte [di+0], 0
+;     ---=== System.Forms.hcb:385:25 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:385:40 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO221:
+;     ---=== System.Forms.hcb:387:21 ===---
+;     ---=== System.Forms.hcb:387:26 ===---
+xor ax, ax
+jmp near ROTULO207
+ROTULO216:
+;     ---=== System.Forms.hcb:389:17 ===---
+;     ---=== System.Forms.hcb:389:40 ===---
+;     ---=== System.Forms.hcb:389:33 ===---
+;     ---=== System.Forms.hcb:389:21 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:389:36 ===---
+mov ax, 13
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO230
+jmp near ROTULO231
+ROTULO230:
+mov ax, 65535
+jmp near ROTULO232
+ROTULO231:
+xor ax, ax
+ROTULO232:
+cmp ax, 0
+je ROTULO228
+;     ---=== System.Forms.hcb:389:61 ===---
+;     ---=== System.Forms.hcb:389:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:389:64 ===---
+mov ax, 10
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO233
+jmp near ROTULO234
+ROTULO233:
+mov ax, 65535
+jmp near ROTULO235
+ROTULO234:
+xor ax, ax
+ROTULO235:
+cmp ax, 0
+je ROTULO228
+ROTULO227:
+mov ax, 65535
+jmp near ROTULO229
+ROTULO228:
+xor ax, ax
+ROTULO229:
+cmp ax, 0
+jne ROTULO225
+jmp near ROTULO226
+ROTULO225:
+;     ---=== System.Forms.hcb:391:21 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:391:27 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'string'
+;     ---=== System.Forms.hcb:391:41 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+cs call far [_string_length]
+add sp, 4
+mov [bp+-6], ax
+;     ---=== System.Forms.hcb:392:21 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:392:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:393:21 ===---
+;     ---=== System.Forms.hcb:393:28 ===---
+;     ---=== System.Forms.hcb:393:24 ===---
+; ACAO LEITURA - Le ponteiro
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:393:35 ===---
+;     ---=== System.Forms.hcb:393:37 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:393:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+pop bx
+add ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO238
+jmp near ROTULO239
+ROTULO238:
+mov ax, 65535
+jmp near ROTULO240
+ROTULO239:
+xor ax, ax
+ROTULO240:
+cmp ax, 0
+jne ROTULO236
+jmp near ROTULO237
+ROTULO236:
+;     ---=== System.Forms.hcb:393:45 ===---
+;     ---=== System.Forms.hcb:393:50 ===---
+xor ax, ax
+jmp near ROTULO207
+ROTULO237:
+;     ---=== System.Forms.hcb:394:21 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 129
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-10+2]
+mov [bp+-10], di
+es mov byte [di+0], 128
+es mov byte [di+1], 0
+;     ---=== System.Forms.hcb:395:21 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:395:27 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:396:22 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+inc di
+;     ---=== System.Forms.hcb:397:21 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:397:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+xor ax, ax
+es mov al, [di+0]
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov [di+0], al
+;     ---=== System.Forms.hcb:398:22 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+inc di
+;     ---=== System.Forms.hcb:399:21 ===---
+; ACAO GRAVACAO - Gravacao de numero em ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov byte [di+0], 0
+;     ---=== System.Forms.hcb:400:21 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'string'
+;     ---=== System.Forms.hcb:400:46 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+push es
+push di
+;     ---=== System.Forms.hcb:400:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+cs call far [_string_concat]
+add sp, 8
+;     ---=== System.Forms.hcb:401:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:401:36 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_redraw
+add sp, 4
+ROTULO226:
+ROTULO211:
+jmp near ROTULO241
+ROTULO209:
+;     ---=== System.Forms.hcb:405:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:405:38 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== System.Forms.hcb:405:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+47]
+add sp, 8
+ROTULO241:
+ROTULO207:
+mov sp, bp
+pop bp
+FIM_textbox_controlkeyboardinteracion:
+retf
+;     ---=== System.Forms.hcb:409:9 ===---
+_textbox_controlpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:409:22 ===---
+;     ---=== System.Forms.hcb:409:39 ===---
+;     ---=== System.Forms.hcb:410:9 ===---
+;     ---=== System.Forms.hcb:410:28 ===---
+;     ---=== System.Forms.hcb:410:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== System.Forms.hcb:410:31 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO245
+jmp near ROTULO246
+ROTULO245:
+mov ax, 65535
+jmp near ROTULO247
+ROTULO246:
+xor ax, ax
+ROTULO247:
+cmp ax, 0
+jne ROTULO243
+jmp near ROTULO244
+ROTULO243:
+;     ---=== System.Forms.hcb:411:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:411:122 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:411:88 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:411:75 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:411:62 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:411:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:411:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== System.Forms.hcb:412:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:412:147 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:412:121 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_textcolor
+push ax
+;     ---=== System.Forms.hcb:412:116 ===---
+;     ---=== System.Forms.hcb:412:118 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:412:104 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:412:99 ===---
+;     ---=== System.Forms.hcb:412:101 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:412:87 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:412:82 ===---
+;     ---=== System.Forms.hcb:412:84 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:412:70 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:412:65 ===---
+;     ---=== System.Forms.hcb:412:67 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:412:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:412:42 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+;     ---=== System.Forms.hcb:412:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 19
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+19+2]
+es push word [di+19]
+pop di
+pop es
+push es
+push di
+cs call far [_graphics_drawtext]
+add sp, 20
+ROTULO244:
+;     ---=== System.Forms.hcb:414:9 ===---
+;     ---=== System.Forms.hcb:414:26 ===---
+;     ---=== System.Forms.hcb:414:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 18
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+18]
+push ax
+;     ---=== System.Forms.hcb:414:29 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO250
+jmp near ROTULO251
+ROTULO250:
+mov ax, 65535
+jmp near ROTULO252
+ROTULO251:
+xor ax, ax
+ROTULO252:
+cmp ax, 0
+jne ROTULO248
+jmp near ROTULO249
+ROTULO248:
+;     ---=== System.Forms.hcb:415:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:415:99 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:415:94 ===---
+;     ---=== System.Forms.hcb:415:96 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:415:82 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:415:77 ===---
+;     ---=== System.Forms.hcb:415:79 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:415:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:415:60 ===---
+;     ---=== System.Forms.hcb:415:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:415:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:415:43 ===---
+;     ---=== System.Forms.hcb:415:45 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:415:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+jmp near ROTULO253
+ROTULO249:
+;     ---=== System.Forms.hcb:417:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:417:99 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:417:94 ===---
+;     ---=== System.Forms.hcb:417:96 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:417:82 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:417:77 ===---
+;     ---=== System.Forms.hcb:417:79 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:417:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:417:60 ===---
+;     ---=== System.Forms.hcb:417:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:417:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:417:43 ===---
+;     ---=== System.Forms.hcb:417:45 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:417:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+ROTULO253:
+ROTULO242:
+mov sp, bp
+pop bp
+FIM_textbox_controlpaint:
+retf
+; MODULO FIM: textbox
+;     ---=== System.Forms.hcb:422:15 ===---
+; MODULO: button
+NAME_button:
+db 6
+db 98,117,116,116,111,110
+db 0
+_button:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:423:16 ===---
+NAME_button_initialize:
+jmp near _button_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_button_initialize:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:423:27 ===---
+;     ---=== System.Forms.hcb:424:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:424:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:425:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:425:29 ===---
+push cs
+pop es
+mov di, _button_controlpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:426:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:426:42 ===---
+push cs
+pop es
+mov di, _button_controlkeyboardinteracion
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+31]
+es pop word [di+31+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO254:
+mov sp, bp
+pop bp
+FIM_button_initialize:
+retf
+;     ---=== System.Forms.hcb:429:9 ===---
+_button_controlkeyboardinteracion:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: e TAM: 4 POS: BP+10 
+; ARG: mouse TAM: 4 POS: BP--4 
+;     ---=== System.Forms.hcb:429:35 ===---
+;     ---=== System.Forms.hcb:429:52 ===---
+;     ---=== System.Forms.hcb:433:21 ===---
+;     ---=== System.Forms.hcb:430:9 ===---
+;     ---=== System.Forms.hcb:430:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 5
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+es mov ax, [di+5]
+cmp ax, 0
+jne ROTULO256
+jmp near ROTULO257
+ROTULO256:
+;     ---=== System.Forms.hcb:431:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:431:36 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:431:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+43]
+add sp, 8
+;     ---=== System.Forms.hcb:432:13 ===---
+;     ---=== System.Forms.hcb:432:63 ===---
+;     ---=== System.Forms.hcb:432:36 ===---
+;     ---=== System.Forms.hcb:432:29 ===---
+;     ---=== System.Forms.hcb:432:17 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:432:32 ===---
+mov ax, 13
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO266
+jmp near ROTULO267
+ROTULO266:
+mov ax, 65535
+jmp near ROTULO268
+ROTULO267:
+xor ax, ax
+ROTULO268:
+cmp ax, 0
+jne ROTULO263
+;     ---=== System.Forms.hcb:432:56 ===---
+;     ---=== System.Forms.hcb:432:44 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:432:59 ===---
+mov ax, 10
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO269
+jmp near ROTULO270
+ROTULO269:
+mov ax, 65535
+jmp near ROTULO271
+ROTULO270:
+xor ax, ax
+ROTULO271:
+cmp ax, 0
+je ROTULO264
+ROTULO263:
+mov ax, 65535
+jmp near ROTULO265
+ROTULO264:
+xor ax, ax
+ROTULO265:
+cmp ax, 0
+jne ROTULO260
+;     ---=== System.Forms.hcb:432:83 ===---
+;     ---=== System.Forms.hcb:432:71 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== System.Forms.hcb:432:86 ===---
+mov ax, 32
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO272
+jmp near ROTULO273
+ROTULO272:
+mov ax, 65535
+jmp near ROTULO274
+ROTULO273:
+xor ax, ax
+ROTULO274:
+cmp ax, 0
+je ROTULO261
+ROTULO260:
+mov ax, 65535
+jmp near ROTULO262
+ROTULO261:
+xor ax, ax
+ROTULO262:
+cmp ax, 0
+jne ROTULO258
+jmp near ROTULO259
+ROTULO258:
+;     ---=== System.Forms.hcb:434:17 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 12
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:435:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:435:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+82]
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:436:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:436:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:437:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:437:39 ===---
+mov ax, 1
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:438:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:438:41 ===---
+xor ax, ax
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:439:17 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:439:37 ===---
+xor ax, ax
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:440:17 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:440:37 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== System.Forms.hcb:440:17 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+39]
+add sp, 8
+ROTULO259:
+jmp near ROTULO275
+ROTULO257:
+;     ---=== System.Forms.hcb:443:13 ===---
+; ACAO CHAMADA - Chama indiretamente usando Invoke
+;     ---=== System.Forms.hcb:443:38 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+10+2]
+pop es
+mov di, [bp+10]
+push es
+push di
+;     ---=== System.Forms.hcb:443:13 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+es call far [di+47]
+add sp, 8
+ROTULO275:
+ROTULO255:
+mov sp, bp
+pop bp
+FIM_button_controlkeyboardinteracion:
+retf
+;     ---=== System.Forms.hcb:447:9 ===---
+_button_controlpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:447:22 ===---
+;     ---=== System.Forms.hcb:447:39 ===---
+;     ---=== System.Forms.hcb:448:9 ===---
+;     ---=== System.Forms.hcb:448:28 ===---
+;     ---=== System.Forms.hcb:448:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== System.Forms.hcb:448:31 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO279
+jmp near ROTULO280
+ROTULO279:
+mov ax, 65535
+jmp near ROTULO281
+ROTULO280:
+xor ax, ax
+ROTULO281:
+cmp ax, 0
+jne ROTULO277
+jmp near ROTULO278
+ROTULO277:
+;     ---=== System.Forms.hcb:449:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:449:116 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:449:88 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:449:75 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:449:62 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:449:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:449:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== System.Forms.hcb:450:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:450:91 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:450:78 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:450:73 ===---
+;     ---=== System.Forms.hcb:450:75 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:450:61 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:450:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:450:43 ===---
+;     ---=== System.Forms.hcb:450:45 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:450:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:451:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:451:91 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:451:78 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:451:73 ===---
+;     ---=== System.Forms.hcb:451:75 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:451:61 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:451:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:451:43 ===---
+;     ---=== System.Forms.hcb:451:45 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:451:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:452:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:452:91 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:452:86 ===---
+;     ---=== System.Forms.hcb:452:88 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:452:74 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:452:61 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+;     ---=== System.Forms.hcb:452:56 ===---
+;     ---=== System.Forms.hcb:452:58 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:452:44 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:452:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:453:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:453:91 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:453:86 ===---
+;     ---=== System.Forms.hcb:453:88 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:453:74 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:453:61 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:453:56 ===---
+;     ---=== System.Forms.hcb:453:58 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:453:44 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:453:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:454:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:454:66 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:454:61 ===---
+;     ---=== System.Forms.hcb:454:63 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:454:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:454:44 ===---
+;     ---=== System.Forms.hcb:454:46 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:454:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+;     ---=== System.Forms.hcb:455:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:455:66 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:455:61 ===---
+;     ---=== System.Forms.hcb:455:63 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:455:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:455:44 ===---
+;     ---=== System.Forms.hcb:455:46 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:455:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+;     ---=== System.Forms.hcb:456:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:456:66 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:456:61 ===---
+;     ---=== System.Forms.hcb:456:63 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:456:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:456:44 ===---
+;     ---=== System.Forms.hcb:456:46 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:456:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+;     ---=== System.Forms.hcb:457:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:457:66 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:457:61 ===---
+;     ---=== System.Forms.hcb:457:63 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:457:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:457:44 ===---
+;     ---=== System.Forms.hcb:457:46 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:457:32 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+;     ---=== System.Forms.hcb:458:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:458:147 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:458:121 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_textcolor
+push ax
+;     ---=== System.Forms.hcb:458:116 ===---
+;     ---=== System.Forms.hcb:458:118 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:458:104 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:458:99 ===---
+;     ---=== System.Forms.hcb:458:101 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:458:87 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:458:82 ===---
+;     ---=== System.Forms.hcb:458:84 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:458:70 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:458:65 ===---
+;     ---=== System.Forms.hcb:458:67 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:458:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:458:42 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+;     ---=== System.Forms.hcb:458:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 19
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+19+2]
+es push word [di+19]
+pop di
+pop es
+push es
+push di
+cs call far [_graphics_drawtext]
+add sp, 20
+ROTULO278:
+;     ---=== System.Forms.hcb:460:9 ===---
+;     ---=== System.Forms.hcb:460:26 ===---
+;     ---=== System.Forms.hcb:460:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 18
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+xor ax, ax
+es mov al, [di+18]
+push ax
+;     ---=== System.Forms.hcb:460:29 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO284
+jmp near ROTULO285
+ROTULO284:
+mov ax, 65535
+jmp near ROTULO286
+ROTULO285:
+xor ax, ax
+ROTULO286:
+cmp ax, 0
+jne ROTULO282
+jmp near ROTULO283
+ROTULO282:
+;     ---=== System.Forms.hcb:461:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:461:99 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:461:94 ===---
+;     ---=== System.Forms.hcb:461:96 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:461:82 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:461:77 ===---
+;     ---=== System.Forms.hcb:461:79 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:461:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:461:60 ===---
+;     ---=== System.Forms.hcb:461:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:461:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:461:43 ===---
+;     ---=== System.Forms.hcb:461:45 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:461:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+jmp near ROTULO287
+ROTULO283:
+;     ---=== System.Forms.hcb:463:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:463:99 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:463:94 ===---
+;     ---=== System.Forms.hcb:463:96 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:463:82 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:463:77 ===---
+;     ---=== System.Forms.hcb:463:79 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:463:65 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:463:60 ===---
+;     ---=== System.Forms.hcb:463:62 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:463:48 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+es mov ax, [di+88]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:463:43 ===---
+;     ---=== System.Forms.hcb:463:45 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:463:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+ROTULO287:
+ROTULO276:
+mov sp, bp
+pop bp
+FIM_button_controlpaint:
+retf
+; MODULO FIM: button
+;     ---=== System.Forms.hcb:468:15 ===---
+; MODULO: label
+NAME_label:
+db 5
+db 108,97,98,101,108
+db 0
+_label:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:469:16 ===---
+NAME_label_initialize:
+jmp near _label_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_label_initialize:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:469:27 ===---
+;     ---=== System.Forms.hcb:470:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:470:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:471:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:471:29 ===---
+push cs
+pop es
+mov di, _label_controlpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:472:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:472:26 ===---
+xor ax, ax
+es mov [di+16], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO288:
+mov sp, bp
+pop bp
+FIM_label_initialize:
+retf
+;     ---=== System.Forms.hcb:475:9 ===---
+_label_controlpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== System.Forms.hcb:475:22 ===---
+;     ---=== System.Forms.hcb:475:39 ===---
+;     ---=== System.Forms.hcb:476:9 ===---
+;     ---=== System.Forms.hcb:476:28 ===---
+;     ---=== System.Forms.hcb:476:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== System.Forms.hcb:476:31 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO292
+jmp near ROTULO293
+ROTULO292:
+mov ax, 65535
+jmp near ROTULO294
+ROTULO293:
+xor ax, ax
+ROTULO294:
+cmp ax, 0
+jne ROTULO290
+jmp near ROTULO291
+ROTULO290:
+;     ---=== System.Forms.hcb:477:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:477:116 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:477:88 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:477:75 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:477:62 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:477:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:477:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== System.Forms.hcb:478:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:478:131 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:478:105 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_textcolor
+push ax
+;     ---=== System.Forms.hcb:478:92 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:478:79 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:478:66 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:478:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+;     ---=== System.Forms.hcb:478:42 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+;     ---=== System.Forms.hcb:478:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 19
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+19+2]
+es push word [di+19]
+pop di
+pop es
+push es
+push di
+cs call far [_graphics_drawtext]
+add sp, 20
+ROTULO291:
+ROTULO289:
+mov sp, bp
+pop bp
+FIM_label_controlpaint:
+retf
+; MODULO FIM: label
+;     ---=== System.Forms.hcb:483:15 ===---
+; MODULO: form
+NAME_form:
+db 4
+db 102,111,114,109
+db 0
+_form:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,104,99,98
+db 0
+;     ---=== System.Forms.hcb:484:16 ===---
+NAME_form_initialize:
+jmp near _form_initialize
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+_form_initialize:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== System.Forms.hcb:484:27 ===---
+;     ---=== System.Forms.hcb:485:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:485:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_initialize
+add sp, 4
+;     ---=== System.Forms.hcb:486:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:486:29 ===---
+push cs
+pop es
+mov di, _form_controlpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:487:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:487:24 ===---
+push cs
+pop es
+mov di, _form_onfocus
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+51]
+es pop word [di+51+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:488:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:488:30 ===---
+mov ax, 2
+es mov [di+76], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:489:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:489:28 ===---
+mov ax, 2
+es mov [di+78], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:490:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:490:29 ===---
+mov ax, 2
+es mov [di+80], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO295:
+mov sp, bp
+pop bp
+FIM_form_initialize:
+retf
+;     ---=== System.Forms.hcb:493:9 ===---
+_form_onfocus:
+push bp
+mov bp, sp
+sub sp, 8
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: qtd TAM: 2 POS: BP--2 
+; ARG: i TAM: 2 POS: BP--4 
+; ARG: child TAM: 4 POS: BP--8 
+;     ---=== System.Forms.hcb:493:17 ===---
+;     ---=== System.Forms.hcb:494:13 ===---
+;     ---=== System.Forms.hcb:495:13 ===---
+;     ---=== System.Forms.hcb:499:17 ===---
+;     ---=== System.Forms.hcb:496:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:496:40 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+cs pop word [_application_currentfocusform+2]
+cs mov [_application_currentfocusform], di
+;     ---=== System.Forms.hcb:497:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:497:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:497:29 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_count
+add sp, 4
+mov [bp+-2], ax
+;     ---=== System.Forms.hcb:498:22 ===---
+;     ---=== System.Forms.hcb:498:22 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-4], 1
+ROTULO297:
+;     ---=== System.Forms.hcb:498:22 ===---
+;     ---=== System.Forms.hcb:498:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== System.Forms.hcb:498:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO300
+jmp near ROTULO301
+ROTULO300:
+mov ax, 65535
+jmp near ROTULO302
+ROTULO301:
+xor ax, ax
+ROTULO302:
+cmp ax, 0
+jne ROTULO298
+jmp near ROTULO299
+ROTULO298:
+;     ---=== System.Forms.hcb:500:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:500:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:500:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== System.Forms.hcb:500:34 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _control_item
+add sp, 6
+push es
+pop word [bp+-8+2]
+mov [bp+-8], di
+;     ---=== System.Forms.hcb:501:13 ===---
+;     ---=== System.Forms.hcb:501:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 16
+xor ax, ax
+es mov al, [di+16]
+cmp ax, 0
+jne ROTULO303
+jmp near ROTULO304
+ROTULO303:
+;     ---=== System.Forms.hcb:502:17 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:502:31 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_focus
+add sp, 4
+;     ---=== System.Forms.hcb:503:17 ===---
+;     ---=== System.Forms.hcb:503:22 ===---
+xor ax, ax
+jmp near ROTULO296
+ROTULO304:
+;     ---=== System.Forms.hcb:498:22 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+jmp near ROTULO297
+ROTULO299:
+ROTULO296:
+mov sp, bp
+pop bp
+FIM_form_onfocus:
+retf
+;     ---=== System.Forms.hcb:508:9 ===---
+_form_controlpaint:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+; ARG: fnt TAM: 4 POS: BP--4 
+; ARG: size TAM: 4 POS: BP--8 
+; ARG: lefttext TAM: 2 POS: BP--10 
+; ARG: righttext TAM: 2 POS: BP--12 
+; ARG: i TAM: 2 POS: BP--14 
+;     ---=== System.Forms.hcb:508:22 ===---
+;     ---=== System.Forms.hcb:508:39 ===---
+;     ---=== System.Forms.hcb:509:13 ===---
+;     ---=== System.Forms.hcb:510:13 ===---
+;     ---=== System.Forms.hcb:511:13 ===---
+;     ---=== System.Forms.hcb:512:13 ===---
+;     ---=== System.Forms.hcb:513:13 ===---
+;     ---=== System.Forms.hcb:514:9 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 4
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-8+2]
+mov [bp+-8], di
+;     ---=== System.Forms.hcb:515:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== System.Forms.hcb:515:15 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 19
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+19+2]
+es push word [di+19]
+pop di
+pop es
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== System.Forms.hcb:516:9 ===---
+;     ---=== System.Forms.hcb:516:28 ===---
+;     ---=== System.Forms.hcb:516:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 92
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+92]
+push ax
+;     ---=== System.Forms.hcb:516:30 ===---
+mov ax, 30
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO308
+jmp near ROTULO309
+ROTULO308:
+mov ax, 65535
+jmp near ROTULO310
+ROTULO309:
+xor ax, ax
+ROTULO310:
+cmp ax, 0
+jne ROTULO306
+jmp near ROTULO307
+ROTULO306:
+;     ---=== System.Forms.hcb:516:44 ===---
+mov ax, _form
+mov [bp+-8], ax
+mov ax, 516
+mov [bp+-10], ax
+mov ax, 4
+cs jmp word [_os_trycode]
+ROTULO307:
+;     ---=== System.Forms.hcb:517:9 ===---
+;     ---=== System.Forms.hcb:517:27 ===---
+;     ---=== System.Forms.hcb:517:12 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 90
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+90]
+push ax
+;     ---=== System.Forms.hcb:517:29 ===---
+mov ax, 50
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO313
+jmp near ROTULO314
+ROTULO313:
+mov ax, 65535
+jmp near ROTULO315
+ROTULO314:
+xor ax, ax
+ROTULO315:
+cmp ax, 0
+jne ROTULO311
+jmp near ROTULO312
+ROTULO311:
+;     ---=== System.Forms.hcb:517:43 ===---
+mov ax, _form
+mov [bp+-8], ax
+mov ax, 517
+mov [bp+-10], ax
+mov ax, 4
+cs jmp word [_os_trycode]
+ROTULO312:
+;     ---=== System.Forms.hcb:518:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:518:74 ===---
+xor ax, ax
+push ax
+;     ---=== System.Forms.hcb:518:68 ===---
+;     ---=== System.Forms.hcb:518:70 ===---
+mov ax, 50
+push ax
+;     ---=== System.Forms.hcb:518:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 90
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+90]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:518:47 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+push es
+push di
+;     ---=== System.Forms.hcb:518:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+;     ---=== System.Forms.hcb:518:31 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+cs call far [_graphics_calcfontsize]
+add sp, 16
+;     ---=== System.Forms.hcb:519:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:519:32 ===---
+;     ---=== System.Forms.hcb:519:65 ===---
+;     ---=== System.Forms.hcb:519:51 ===---
+;     ---=== System.Forms.hcb:519:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:519:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 90
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+90]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:519:69 ===---
+mov ax, 1
+mov cx, ax
+pop ax
+shr ax, cl
+push ax
+;     ---=== System.Forms.hcb:519:20 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+mov [bp+-10], ax
+;     ---=== System.Forms.hcb:520:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:520:33 ===---
+;     ---=== System.Forms.hcb:520:66 ===---
+;     ---=== System.Forms.hcb:520:52 ===---
+;     ---=== System.Forms.hcb:520:54 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+es mov ax, [di+0]
+push ax
+;     ---=== System.Forms.hcb:520:37 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 90
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+90]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:520:70 ===---
+mov ax, 1
+mov cx, ax
+pop ax
+shr ax, cl
+push ax
+;     ---=== System.Forms.hcb:520:21 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+mov [bp+-12], ax
+;     ---=== System.Forms.hcb:521:9 ===---
+;     ---=== System.Forms.hcb:521:28 ===---
+;     ---=== System.Forms.hcb:521:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== System.Forms.hcb:521:31 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO318
+jmp near ROTULO319
+ROTULO318:
+mov ax, 65535
+jmp near ROTULO320
+ROTULO319:
+xor ax, ax
+ROTULO320:
+cmp ax, 0
+jne ROTULO316
+jmp near ROTULO317
+ROTULO316:
+;     ---=== System.Forms.hcb:522:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:522:122 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:522:88 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:522:75 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 88
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+88]
+push ax
+;     ---=== System.Forms.hcb:522:62 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:522:49 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+push ax
+;     ---=== System.Forms.hcb:522:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== System.Forms.hcb:523:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:523:109 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:523:96 ===---
+;     ---=== System.Forms.hcb:523:97 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:523:94 ===---
+;     ---=== System.Forms.hcb:523:95 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:523:83 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:523:70 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+es mov ax, [di+86]
+push ax
+;     ---=== System.Forms.hcb:523:57 ===---
+;     ---=== System.Forms.hcb:523:58 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:523:55 ===---
+;     ---=== System.Forms.hcb:523:56 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:523:44 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:523:31 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:524:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:524:142 ===---
+xor ax, ax
+push ax
+;     ---=== System.Forms.hcb:524:109 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowtitlecolor
+push ax
+;     ---=== System.Forms.hcb:524:96 ===---
+;     ---=== System.Forms.hcb:524:97 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:524:94 ===---
+;     ---=== System.Forms.hcb:524:95 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:524:83 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:524:72 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== System.Forms.hcb:524:68 ===---
+;     ---=== System.Forms.hcb:524:69 ===---
+mov ax, 1
+push ax
+;     ---=== System.Forms.hcb:524:57 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:524:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== System.Forms.hcb:524:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+push di
+;     ---=== System.Forms.hcb:524:31 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+push es
+push di
+cs call far [_graphics_drawtext]
+add sp, 20
+;     ---=== System.Forms.hcb:525:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:525:150 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:525:117 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:525:113 ===---
+;     ---=== System.Forms.hcb:525:114 ===---
+mov ax, 3
+push ax
+;     ---=== System.Forms.hcb:525:100 ===---
+;     ---=== System.Forms.hcb:525:102 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:525:88 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:525:82 ===---
+;     ---=== System.Forms.hcb:525:84 ===---
+mov ax, 11
+push ax
+;     ---=== System.Forms.hcb:525:70 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:525:65 ===---
+;     ---=== System.Forms.hcb:525:67 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:525:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+es mov ax, [di+84]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:525:48 ===---
+;     ---=== System.Forms.hcb:525:50 ===---
+mov ax, 5
+push ax
+;     ---=== System.Forms.hcb:525:36 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== System.Forms.hcb:526:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== System.Forms.hcb:526:33 ===---
+;     ---=== System.Forms.hcb:526:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:526:31 ===---
+mov ax, 2
+pop bx
+add ax, bx
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+74], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== System.Forms.hcb:527:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== System.Forms.hcb:527:34 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+push cs
+call _control_drawchildren
+add sp, 4
+ROTULO317:
+;     ---=== System.Forms.hcb:529:9 ===---
+;     ---=== System.Forms.hcb:529:53 ===---
+;     ---=== System.Forms.hcb:529:19 ===---
+;     ---=== System.Forms.hcb:529:14 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le segmento em variavel
+mov ax, [bp+6+2]
+push ax
+;     ---=== System.Forms.hcb:529:23 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le segmento em variavel
+cs mov ax, [_application_currentfocusform+2]
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO326
+jmp near ROTULO327
+ROTULO326:
+mov ax, 65535
+jmp near ROTULO328
+ROTULO327:
+xor ax, ax
+ROTULO328:
+push ax
+;     ---=== System.Forms.hcb:529:64 ===---
+;     ---=== System.Forms.hcb:529:59 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+push ax
+;     ---=== System.Forms.hcb:529:68 ===---
+; ACAO STRUCTURE - Define Segmento/desvio de estrutura
+; ACAO LEITURA - Le variavel
+cs mov ax, [_application_currentfocusform]
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO329
+jmp near ROTULO330
+ROTULO329:
+mov ax, 65535
+jmp near ROTULO331
+ROTULO330:
+xor ax, ax
+ROTULO331:
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO321
+jmp near ROTULO322
+ROTULO321:
+;     ---=== System.Forms.hcb:530:67 ===---
+;     ---=== System.Forms.hcb:530:67 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:530:33 ===---
+;     ---=== System.Forms.hcb:530:35 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:530:21 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+mov [bp+-14], ax
+ROTULO332:
+;     ---=== System.Forms.hcb:530:67 ===---
+;     ---=== System.Forms.hcb:530:67 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:530:65 ===---
+;     ---=== System.Forms.hcb:530:67 ===---
+mov ax, 3
+push ax
+;     ---=== System.Forms.hcb:530:52 ===---
+;     ---=== System.Forms.hcb:530:54 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:530:40 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO335
+jmp near ROTULO336
+ROTULO335:
+mov ax, 65535
+jmp near ROTULO337
+ROTULO336:
+xor ax, ax
+ROTULO337:
+cmp ax, 0
+jne ROTULO333
+jmp near ROTULO334
+ROTULO333:
+;     ---=== System.Forms.hcb:531:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:531:75 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:531:72 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:531:67 ===---
+;     ---=== System.Forms.hcb:531:69 ===---
+mov ax, 3
+push ax
+;     ---=== System.Forms.hcb:531:55 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:531:52 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:531:47 ===---
+;     ---=== System.Forms.hcb:531:49 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:531:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:532:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:532:73 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:532:70 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:532:65 ===---
+;     ---=== System.Forms.hcb:532:67 ===---
+mov ax, 5
+push ax
+;     ---=== System.Forms.hcb:532:56 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:532:53 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:532:47 ===---
+;     ---=== System.Forms.hcb:532:49 ===---
+mov ax, 13
+push ax
+;     ---=== System.Forms.hcb:532:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:533:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:533:73 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowbordercolor
+push ax
+;     ---=== System.Forms.hcb:533:70 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:533:65 ===---
+;     ---=== System.Forms.hcb:533:67 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:533:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:533:50 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:533:45 ===---
+;     ---=== System.Forms.hcb:533:47 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:533:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:534:17 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== System.Forms.hcb:530:67 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+jmp near ROTULO332
+ROTULO334:
+jmp near ROTULO338
+ROTULO322:
+;     ---=== System.Forms.hcb:537:67 ===---
+;     ---=== System.Forms.hcb:537:67 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== System.Forms.hcb:537:33 ===---
+;     ---=== System.Forms.hcb:537:35 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:537:21 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+mov [bp+-14], ax
+ROTULO339:
+;     ---=== System.Forms.hcb:537:67 ===---
+;     ---=== System.Forms.hcb:537:67 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:537:65 ===---
+;     ---=== System.Forms.hcb:537:67 ===---
+mov ax, 3
+push ax
+;     ---=== System.Forms.hcb:537:52 ===---
+;     ---=== System.Forms.hcb:537:54 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 12
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+12]
+push ax
+;     ---=== System.Forms.hcb:537:40 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 84
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+84]
+pop bx
+add ax, bx
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO342
+jmp near ROTULO343
+ROTULO342:
+mov ax, 65535
+jmp near ROTULO344
+ROTULO343:
+xor ax, ax
+ROTULO344:
+cmp ax, 0
+jne ROTULO340
+jmp near ROTULO341
+ROTULO340:
+;     ---=== System.Forms.hcb:538:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:538:75 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:538:72 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:538:67 ===---
+;     ---=== System.Forms.hcb:538:69 ===---
+mov ax, 3
+push ax
+;     ---=== System.Forms.hcb:538:55 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+;     ---=== System.Forms.hcb:538:52 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:538:47 ===---
+;     ---=== System.Forms.hcb:538:49 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:538:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:539:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:539:73 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:539:70 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:539:65 ===---
+;     ---=== System.Forms.hcb:539:67 ===---
+mov ax, 5
+push ax
+;     ---=== System.Forms.hcb:539:56 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:539:53 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:539:47 ===---
+;     ---=== System.Forms.hcb:539:49 ===---
+mov ax, 13
+push ax
+;     ---=== System.Forms.hcb:539:35 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 82
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+82]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:540:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== System.Forms.hcb:540:73 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _systemcolors_windowcolor
+push ax
+;     ---=== System.Forms.hcb:540:70 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:540:65 ===---
+;     ---=== System.Forms.hcb:540:67 ===---
+mov ax, 2
+push ax
+;     ---=== System.Forms.hcb:540:53 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 86
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+86]
+pop bx
+sub ax, bx
+push ax
+;     ---=== System.Forms.hcb:540:50 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== System.Forms.hcb:540:45 ===---
+;     ---=== System.Forms.hcb:540:47 ===---
+mov ax, 4
+push ax
+;     ---=== System.Forms.hcb:540:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== System.Forms.hcb:541:17 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== System.Forms.hcb:537:67 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+jmp near ROTULO339
+ROTULO341:
+ROTULO338:
+ROTULO305:
+mov sp, bp
+pop bp
+FIM_form_controlpaint:
+retf
+; MODULO FIM: form
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:116:8 ===---
+; MODULO: string
+NAME_string:
+db 6
+db 115,116,114,105,110,103
+db 0
+_string:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:117:21 ===---
+_string_length:
+times 4 db 0
+db 6
+db 108,101,110,103,116,104
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:118:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:119:21 ===---
+_string_concat:
+times 4 db 0
+db 6
+db 99,111,110,99,97,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/Library.hcb:120:21 ===---
+; MODULO FIM: string
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:1:8 ===---
+; MODULO: console
+NAME_console:
+db 7
+db 99,111,110,115,111,108,101
+db 0
+_console:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:2:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:3:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:4:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:5:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:6:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:7:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:8:21 ===---
+_console_avail:
+times 4 db 0
+db 5
+db 97,118,97,105,108
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:9:21 ===---
+_console_readchar:
+times 4 db 0
+db 8
+db 114,101,97,100,99,104,97,114
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:10:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:11:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:12:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:13:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:14:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:15:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:16:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:17:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.Console.hcb:18:16 ===---
+; MODULO FIM: console
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:5:8 ===---
+; MODULO: thread
+NAME_thread:
+db 6
+db 116,104,114,101,97,100
+db 0
+_thread:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:6:16 ===---
+_thread_yield:
+times 4 db 0
+db 5
+db 121,105,101,108,100
+times 1 db 0
+; MODULO FIM: thread
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:71:8 ===---
+; MODULO: colors
+NAME_colors:
+db 6
+db 99,111,108,111,114,115
+db 0
+_colors:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:72:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:73:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:74:21 ===---
+_colors_black:
+times 4 db 0
+db 5
+db 98,108,97,99,107
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:75:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:76:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:77:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:78:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:79:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:80:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:81:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:82:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:83:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:84:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:85:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:86:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:87:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:88:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:89:21 ===---
+_colors_white:
+times 4 db 0
+db 5
+db 119,104,105,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:90:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:91:21 ===---
+; MODULO FIM: colors
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:95:8 ===---
+; MODULO: graphics
+NAME_graphics:
+db 8
+db 103,114,97,112,104,105,99,115
+db 0
+_graphics:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:96:16 ===---
+_graphics_drawpixel:
+times 4 db 0
+db 9
+db 100,114,97,119,112,105,120,101,108
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:97:16 ===---
+_graphics_drawline:
+times 4 db 0
+db 8
+db 100,114,97,119,108,105,110,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:98:16 ===---
+_graphics_drawrectangle:
+times 4 db 0
+db 13
+db 100,114,97,119,114,101,99,116,97,110,103,108,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:99:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:100:16 ===---
+_graphics_drawtext:
+times 4 db 0
+db 8
+db 100,114,97,119,116,101,120,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:101:16 ===---
+_graphics_calcfontsize:
+times 4 db 0
+db 12
+db 99,97,108,99,102,111,110,116,115,105,122,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:102:16 ===---
+_graphics_clearscreen:
+times 4 db 0
+db 11
+db 99,108,101,97,114,115,99,114,101,101,110
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:103:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:104:21 ===---
+_graphics_getwidth:
+times 4 db 0
+db 8
+db 103,101,116,119,105,100,116,104
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:105:21 ===---
+_graphics_getheight:
+times 4 db 0
+db 9
+db 103,101,116,104,101,105,103,104,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:106:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:107:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:108:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:109:16 ===---
+; MODULO FIM: graphics
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:120:8 ===---
+; MODULO: font
+NAME_font:
+db 4
+db 102,111,110,116
+db 0
+_font:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:121:21 ===---
+_font_getdefault:
+times 4 db 0
+db 10
+db 103,101,116,100,101,102,97,117,108,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:122:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:123:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:124:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:125:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:126:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:127:16 ===---
+; MODULO FIM: font
+EXPORT_TABLE:
+db 2
+dw NAME_control
+db 3
+dw NAME_control_initialize
+db 3
+dw NAME_control_setparent
+db 3
+dw NAME_control_getparent
+db 3
+dw NAME_control_add
+db 3
+dw NAME_control_count
+db 3
+dw NAME_control_item
+db 3
+dw NAME_control_redraw
+db 3
+dw NAME_control_redrawonlyfocus
+db 3
+dw NAME_control_settext
+db 3
+dw NAME_control_gettext
+db 3
+dw NAME_control_drawchildren
+db 3
+dw NAME_control_focus
+db 3
+dw NAME_control_processkeyboard
+db 3
+dw NAME_control_show
+db 3
+dw NAME_control_hide
+db 2
+dw NAME_screen
+db 3
+dw NAME_screen_initialize
+db 3
+dw NAME_screen_getcurrentscreen
+db 2
+dw NAME_textbox
+db 3
+dw NAME_textbox_initialize
+db 2
+dw NAME_button
+db 3
+dw NAME_button_initialize
+db 2
+dw NAME_label
+db 3
+dw NAME_label_initialize
+db 2
+dw NAME_form
+db 3
+dw NAME_form_initialize
+db 2
+dw NAME_systemcolors
+db 3
+dw NAME_systemcolors_backgroundcolor
+db 3
+dw NAME_systemcolors_textcolor
+db 3
+dw NAME_systemcolors_windowbordercolor
+db 3
+dw NAME_systemcolors_windowcolor
+db 3
+dw NAME_systemcolors_windowtitlecolor
+db 3
+dw NAME_systemcolors_initialize
+db 2
+dw NAME_application
+db 3
+dw NAME_application_applydarktheme
+db 3
+dw NAME_application_applydefaulttheme
+db 3
+dw NAME_application_initialize
+db 3
+dw NAME_application_exit
+db 3
+dw NAME_application_run
+times 2 db 0
+IMPORT_TABLE:
+db 1
+dw _string
+db 2
+dw NAME_string
+; QTD REFS: 2
+db 3
+dw _string_length
+; QTD REFS: 1
+db 3
+dw _string_concat
+db 1
+dw _console
+db 2
+dw NAME_console
+; QTD REFS: 1
+db 3
+dw _console_avail
+; QTD REFS: 1
+db 3
+dw _console_readchar
+db 1
+dw _thread
+db 2
+dw NAME_thread
+; QTD REFS: 1
+db 3
+dw _thread_yield
+db 1
+dw _colors
+db 2
+dw NAME_colors
+; QTD REFS: 5
+db 3
+dw _colors_black
+; QTD REFS: 5
+db 3
+dw _colors_white
+db 1
+dw _graphics
+db 2
+dw NAME_graphics
+; QTD REFS: 4
+db 3
+dw _graphics_drawpixel
+; QTD REFS: 15
+db 3
+dw _graphics_drawline
+; QTD REFS: 5
+db 3
+dw _graphics_drawrectangle
+; QTD REFS: 4
+db 3
+dw _graphics_drawtext
+; QTD REFS: 1
+db 3
+dw _graphics_calcfontsize
+; QTD REFS: 1
+db 3
+dw _graphics_clearscreen
+; QTD REFS: 1
+db 3
+dw _graphics_getwidth
+; QTD REFS: 1
+db 3
+dw _graphics_getheight
+db 1
+dw _font
+db 2
+dw NAME_font
+; QTD REFS: 1
+db 3
+dw _font_getdefault
+times 2 db 0
+REALOC_TABLE:
+dw 3
+dw _application_currenttheme
+dw 4
+dw 0
+dw 3
+dw _application_currentfocus
+dw 4
+dw 0
+dw 3
+dw _application_currentfocusform
+dw 4
+dw 0
+dw 3
+dw _screen_screencontrol
+dw 4
+dw 0
+dw 0
+dw 0
+dw 0
+dw 0
+END:

@@ -32,24 +32,65 @@ Module OS
         asm "dw 0 ; MINIMUM API VERSION"
         asm "dw .start ; Start Routine"
         asm "dw END ; Code Size"
-        asm "dw 6144 ; Stack Size"
+        asm "dw 20480 ; Stack Size"
         asm "dw REALOC_TABLE ; Realocation Table"
         asm "dw IMPORT_TABLE ; Import Table"
         asm "dw EXPORT_TABLE ; Export Table"
         asm ".start:"
         asm "mov word [_os_minstackptr], 0"
+        asm "mov ax, ss"
+        asm "mov ds, ax"
+        asm "mov es, ax"
         Start2
         asm "retf"
     End
 
     Sub StackCheck
-        asm "cmp sp, 10"
+        asm "cmp sp, 128"
         asm "ja .ok"
         Throw StackOverflowError
         asm ".ok:"
     End
 
     Sub Start2
+        ' Realoca executavel
+        Dim realoc as PtrWordArray
+        Dim ptr as PtrWordArray
+        Dim tipoRealoc as UInt16
+        Dim desvio as UInt16
+        Dim soma as UInt16
+        #realoc = CodeSegment()
+        #ptr = CodeSegment()
+        @realoc = RealocTable()
+        while realoc <> 0
+            tipoRealoc = realoc
+            @realoc ++
+            @realoc ++
+            @ptr = realoc
+            @realoc ++
+            @realoc ++
+            desvio = realoc
+            @realoc ++
+            @realoc ++
+            soma = realoc
+            @realoc ++
+            @realoc ++
+            if tipoRealoc == 3 then
+                desvio = desvio + @ptr
+                ptr = desvio
+                @ptr ++
+                @ptr ++
+                ptr = CodeSegment() + soma
+            end
+            if tipoRealoc == 2 then
+                @ptr = @ptr + desvio
+                ptr = StackSegment() + soma
+            end
+            if tipoRealoc == 1 then
+                @ptr = @ptr + desvio
+                ptr = CodeSegment() + soma
+            end
+        end
         ' Declara ponteiro para os argumentos
         dim args as PtrByteArray
         ' Define ponteiro
@@ -69,13 +110,17 @@ Module OS
     Public Function StackSegment() as UInt16
         asm "mov ax, ss"
     End
+
+    Public Function RealocTable() as UInt16
+        asm "mov ax, REALOC_TABLE"
+    End
 End
 
 Structure String
     Dim Capacity as UInt8
 End
 
-Module String From "husis"
+Module String From "husix"
     Public Function Length(text as PtrByteArray) as UInt16
     Public Function Equals(txt1 as PtrByteArray, txt2 as PtrByteArray) as UInt16
     Public Function Concat(dest as PtrByteArray, orig as PtrByteArray) as UInt16

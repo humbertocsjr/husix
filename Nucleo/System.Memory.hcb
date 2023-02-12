@@ -2,12 +2,12 @@ Imports System
 Imports System.OS
 Imports System.Threading
 
-Module GlobalMemory
+Public Module GlobalMemory
     Dim MemorySizeKiB as UInt16
     Dim MapPtr as PtrByteArray
     Dim InUse as Semaphore
 
-    Public Sub Initialize
+    Friend Sub Initialize
         Dim freeKiB as UInt16
         Dim i as UInt16
         If String.Equals(Config.OperatingMode, "DOS") Then
@@ -123,11 +123,11 @@ Module GlobalMemory
 End
 
 
-Module Memory
+Public Module Memory
     Dim FirstBlockPtr as PtrWordArray
     Dim InUse as Semaphore
 
-    Public Sub Initialize
+    Friend Sub Initialize
         FirstBlockPtr = GlobalMemory.AllocKiB(MultiThreading.KernelThread, 1)
         Semaphore.Initialize InUse, 1
     End

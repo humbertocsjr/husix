@@ -15,6 +15,7 @@ Module Translation
     Public Dim KernelSize as PtrByteArray
     Public Dim InitFile as PtrByteArray
     Public Dim VideoCardDetected as PtrByteArray
+    Public Dim LibrarysPath as PtrByteArray
 
     Public Sub Initialize
         Kernel = "Kernel"
@@ -33,6 +34,7 @@ Module Translation
         KernelSize =         "Kernel Size.........: "
         InitFile = "/System/Luzia.hsx"
         VideoCardDetected =  "Video Card..........: "
+        LibrarysPath = "/Librarys/"
     End
 
     

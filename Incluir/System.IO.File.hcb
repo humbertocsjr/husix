@@ -1,0 +1,42 @@
+Structure FileInfo
+    Spacing 33
+    Dim Id as UInt16
+    Dim Name as PtrByteArray
+    Dim MountedFileSystem as PtrByteArray
+    Dim Open as Action(Of FileInfo, Stream)
+End
+
+Structure DirectoryInfo
+    Spacing 33
+    Dim Id as UInt16
+    Dim Name as PtrByteArray
+    Dim MountedFileSystem as PtrByteArray
+    Dim GetFileInfo as Func(Of DirectoryInfo, UInt16, FileInfo, UInt16)
+    Dim GetDirectoryInfo as Func(Of DirectoryInfo, UInt16, DirectoryInfo, UInt16)
+End
+
+
+Module FileInfo From "husix"
+    Public Sub Initialize(dir as FileInfo)
+    Public Sub Duplicate(output as FileInfo, input as FileInfo)
+End
+
+Module DirectoryInfo From "husix"
+    Public Sub Initialize(dir as DirectoryInfo)
+    Public Sub Duplicate(output as DirectoryInfo, input as DirectoryInfo)
+End
+
+Module File From "husix"
+    Public Function Open(filename as String, s as Stream) as UInt16
+End
+
+Module Path From "husix"
+    Public Function IsAbsolutePath(path as PtrByteArray) as UInt16
+    Public Function IsRelativePath(path as PtrByteArray) as UInt16
+    Public Sub Combine(output as String, path as String)
+    Public Function GetToken(output as String, path as String, pos as UInt16) as UInt16
+    Public Function GetTokenCount(path as String) as UInt16
+    Public Sub GetParentDirInfo(dir as DirectoryInfo, path as String)
+    Public Sub GetDirectoryInfo(dir as DirectoryInfo, path as String)
+    Public Sub GetFileInfo(file as FileInfo, path as String)
+End

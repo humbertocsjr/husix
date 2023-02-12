@@ -29,13 +29,13 @@ Structure MountedFileSystem
     Dim GetRoot as Action(Of MountedFileSystem, DirectoryInfo)
 End
 
-Module FileSystem
+Public Module FileSystem
     Dim FSList as List
     Dim MountList as List
     Dim Root as MountedFileSystem
     Dim RootIsMounted as UInt16
 
-    Public Sub Initialize
+    Friend Sub Initialize
         RootIsMounted = 0
         List.Initialize FSList, SizeOf(FileSystem)
         List.Initialize MountList, SizeOf(MountedFileSystem)

@@ -1,4 +1,151 @@
-Imports System
+Imports Library
+Imports System.Threading
+Imports System.IO.Console
+
+Structure ColorPalette
+    Dim Black as UInt16
+    Dim Blue as UInt16
+    Dim Green as UInt16
+    Dim Cyan as UInt16
+    Dim Red as UInt16
+    Dim Magenta as UInt16
+    Dim Brown as UInt16
+    Dim LightGray as UInt16
+    Dim Gray as UInt16
+    Dim LightBlue as UInt16
+    Dim LightGreen as UInt16
+    Dim LightCyan as UInt16
+    Dim LightRed as UInt16
+    Dim LightMagenta as UInt16
+    Dim Yellow as UInt16
+    Dim White as UInt16
+    Dim Transparent as UInt16
+    Dim ConversionTextMode as UInt16
+    Dim ConversionRedShl as UInt8
+    Dim ConversionRedShr as UInt8
+    Dim ConversionGreenShl as UInt8
+    Dim ConversionGreenShr as UInt8
+    Dim ConversionBlueShl as UInt8
+    Dim ConversionBlueShr as UInt8
+End
+
+Public Module Colors
+    Dim Palette as ColorPalette
+
+    Public Sub Initialize
+        Palette.Black = 0
+        Palette.Blue = 1
+        Palette.Green = 2
+        Palette.Cyan = 3
+        Palette.Red = 4
+        Palette.Magenta = 5
+        Palette.Brown = 6
+        Palette.LightGray = 7
+        Palette.Gray = 8
+        Palette.LightBlue = 9
+        Palette.LightGreen = 10
+        Palette.LightCyan = 11
+        Palette.LightRed = 12
+        Palette.LightMagenta = 13
+        Palette.Yellow = 14
+        Palette.White = 15
+        Palette.Transparent = 0xffff
+        Palette.ConversionTextMode = 1
+    End
+
+    Public Sub Register(newpal as ColorPalette)
+        #Palette = #newpal
+        @Palette = @newpal
+    End
+
+    Public Function Black() as UInt16
+        Return Palette.Black
+    End
+
+    Public Function Blue() as UInt16
+        Return Palette.Blue
+    End
+
+    Public Function Green() as UInt16
+        Return Palette.Green
+    End
+
+    Public Function Cyan() as UInt16
+        Return Palette.Cyan
+    End
+
+    Public Function Red() as UInt16
+        Return Palette.Red
+    End
+
+    Public Function Magenta() as UInt16
+        Return Palette.Magenta
+    End
+
+    Public Function Brown() as UInt16
+        Return Palette.Brown
+    End
+
+    Public Function LightGray() as UInt16
+        Return Palette.LightGray
+    End
+
+    Public Function Gray() as UInt16
+        Return Palette.Gray
+    End
+
+    Public Function LightBlue() as UInt16
+        Return Palette.LightBlue
+    End
+
+    Public Function LightGreen() as UInt16
+        Return Palette.LightGreen
+    End
+
+    Public Function LightCyan() as UInt16
+        Return Palette.LightCyan
+    End
+
+    Public Function LightRed() as UInt16
+        Return Palette.LightRed
+    End
+
+    Public Function LightMagenta() as UInt16
+        Return Palette.LightMagenta
+    End
+
+    Public Function Yellow() as UInt16
+        Return Palette.Yellow
+    End
+
+    Public Function White() as UInt16
+        Return Palette.White
+    End
+
+    Public Function Transparent() as UInt16
+        Return Palette.Transparent
+    End
+
+    Public Function FromRGB(r as UInt8, g as UInt8, b as UInt8) as UInt16
+        Dim tmpR as UInt16
+        Dim tmpG as UInt16
+        Dim tmpB as UInt16
+        Dim tmpI as UInt16
+        If Palette.ConversionTextMode Then
+            tmpR = (r shr 6) and 1
+            tmpG = (g shr 6) and 1
+            tmpB = (b shr 6) and 1
+            tmpI = (r shr 7) + (g shr 7) + (b shr 7)
+            Return (tmpI shl 3) + (tmpR shl 2) + (tmpG shl 1) + tmpB
+        Else
+            tmpR = (r shl Palette.ConversionRedShl) shr Palette.ConversionRedShr
+            tmpG = (r shl Palette.ConversionGreenShl) shr Palette.ConversionGreenShr
+            tmpB = (r shl Palette.ConversionBlueShl) shr Palette.ConversionBlueShr
+            Return tmpR + tmpG + tmpB
+        End
+    End
+End
+
 
 Structure VideoMode
     Dim Width as UInt16
@@ -6,9 +153,10 @@ Structure VideoMode
     Dim Colors as UInt16
     Dim DrawPixel as Action(Of VideoMode, UInt16, UInt16, UInt16)
     Dim DrawRectangle as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)
-    Dim DrawEllipse as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)
+    Dim DrawCircle as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16)
     Dim DrawLine as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16)
     Dim ClearScreen as Action(Of VideoMode, UInt16)
+    Dim Refresh as Action(Of VideoMode)
 End
 
 Structure Size
@@ -29,7 +177,18 @@ Structure Font
     Dim CalcSize as Action(Of Font, PtrByteArray, Size, UInt16, UInt16)
 End
 
-Module Graphics
+Structure FontChar
+    Dim Char as PtrByteArray
+    Dim CharX as PtrByteArray
+    Dim Above as PtrByteArray
+    Dim AboveX as PtrByteArray
+    Dim Below as PtrByteArray
+    Dim BelowX as PtrByteArray
+    Dim HasAbove as UInt8
+    Dim HasBellow as UInt8
+End
+
+Public Module Graphics
     Dim Active as UInt16
     Dim Video as VideoMode
 
@@ -58,13 +217,11 @@ Module Graphics
         Video.DrawRectangle.Invoke x1, y1, x2, y2, borderColor, backgroundColor
     End
 
-    Public Sub DrawEllipse(x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, borderColor as UInt16, backgroundColor as UInt16)
+    Public Sub DrawCircle(xm as UInt16, ym as UInt16, r as UInt16, borderColor as UInt16, backgroundColor as UInt16)
         If Active == 0 Then Throw AccessDeniedError
-        If x1 >= Video.Width Then Return
-        If y1 >= Video.Height Then Return
-        If x2 >= Video.Width Then x2 = Video.Width - 1
-        If y2 >= Video.Height Then y2 = Video.Height - 1
-        Video.DrawEllipse.Invoke x1, y1, x2, y2, borderColor, backgroundColor
+        If (xm + r) >= Video.Width Then Return
+        If (ym + r) >= Video.Height Then Return
+        Video.DrawCircle.Invoke xm, ym, r, borderColor, backgroundColor
     End
 
     Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
@@ -118,9 +275,14 @@ Module Graphics
         Font.Initialize
     End
 
+    Public Sub Refresh()
+        If Active == 0 Then Throw AccessDeniedError
+        Video.Refresh.Invoke
+    End
+
 End
 
-Module GenericVideo
+Public Module GenericVideo
     Dim Palette as ColorPalette
 
     Public Sub Register2ColorsPalette
@@ -171,8 +333,8 @@ Module GenericVideo
         mode.DrawLine = AddressOf(DrawLine)
     End
 
-    Public Sub RegisterDrawEllipse(mode as VideoMode)
-        mode.DrawEllipse = AddressOf(DrawEllipse)
+    Public Sub RegisterDrawCircle(mode as VideoMode)
+        mode.DrawCircle = AddressOf(DrawCircle)
     End
 
     Sub DrawLine(mode as VideoMode, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16)
@@ -263,13 +425,44 @@ Module GenericVideo
         End
     End
 
-    Sub DrawEllipse(mode as VideoMode, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, borderColor as UInt16, backgroundColor as UInt16)
-        Throw NotImplementedError
+    Sub DrawCircle(mode as VideoMode, xm as UInt16, ym as UInt16, r as UInt16, borderColor as UInt16, backgroundColor as UInt16)
+        Dim x as UInt16
+        Dim y as UInt16
+        Dim err as UInt16
+        x = -r
+        y = 0
+        err = 2-(r shl 1)
+        Goto drawCircleStart
+        While (x < 0)
+            drawCircleStart:
+            If backgroundColor <> 0xffff Then
+                Graphics.DrawLine xm-x, xm+y, xm+x, xm+y, backgroundColor
+                Graphics.DrawLine xm-x, xm-y, xm+x, xm-y, backgroundColor
+            End
+            Graphics.DrawPixel xm-x, ym+y, borderColor
+            Graphics.DrawPixel xm-x, ym-y, borderColor
+            Graphics.DrawPixel xm+x, ym+y, borderColor
+            Graphics.DrawPixel xm+x, ym-y, borderColor
+            r = err
+            If r <= y Then 
+                y++
+                err = err + (y shl 1) + 1
+            End
+            If (r > x) OrElse (err > y) Then
+                x++
+                err = err + (x shl 1) + 1
+            End
+        End
+
     End
 End
 
-Module Font
+Public Module Font
     Public Dim Default as Font
+
+    Public Function GetDefault() as Font
+        Return Default
+    End
 
     Public Sub Initialize
         LoadBinary Default, Embed("Font.hfn")
@@ -305,7 +498,7 @@ Module Font
         dest.Height = dest.BodyHeight + dest.AboveHeight + dest.BelowHeight
     End
 
-    Function FindChar(font as Font, index as UInt16) as PtrByteArray
+    Public Function FindChar(font as Font, index as UInt16) as PtrByteArray
         Dim ptrIndex as PtrWordArray
         Dim ptrChar as PtrByteArray
         Dim tmp as UInt16
@@ -317,10 +510,72 @@ Module Font
         Return ptrChar
     End
 
-    Sub DrawText(font as Font, text as PtrByteArray, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
+    Public Function ConvertCharToFont(font as Font, char as FontChar, text as PtrByteArray, pos as UInt16) as UInt16
+        Dim index as UInt16
+        Dim aboveIndex as UInt16
+        Dim belowIndex as UInt16
+
+        index = 0
+        aboveIndex = 0
+        belowIndex = 0
+        @text = @text + pos
+
+        If (text >= 0x30) AndAlso (text <= 0x39) Then 
+            index = text - 0x30 + 2
+            Goto charfontend
+        End
+        If (text >= 0x41) AndAlso (text <= 0x5a) Then 
+            index = text - 0x41 + 12
+            Goto charfontend
+        End
+        If (text >= 0x61) AndAlso (text <= 0x7a) Then 
+            index = text - 0x61 + 38
+            Goto charfontend
+        End
+        If text == 0x20 Then 
+            index = 1
+            Goto charfontend
+        End
+        If text == 0xc3 Then
+            @text++
+            pos++
+            If text == 0xb3 Then 
+                index = 26
+                aboveIndex = 74
+                Goto charfontend
+            End
+            If text == 0xa7 Then 
+                index = 40
+                belowIndex = 76
+                Goto charfontend
+            End
+            If text == 0xa3 Then 
+                index = 38
+                aboveIndex = 68
+                Goto charfontend
+            End
+        End
+        charfontend:
+        If aboveIndex <> 0 Then
+            char.HasAbove = 1
+            char.Above = FindChar(font, aboveIndex)
+        Else
+            char.HasAbove = 0
+        End
+        If belowIndex <> 0 Then
+            char.HasBellow = 1
+            char.Below = FindChar(font, belowIndex)
+        Else
+            char.HasBellow = 0
+        End
+        char.Char = FindChar(font, index)
+        pos++
+        Return pos
+    End
+
+    Public Sub DrawText(font as Font, text as PtrByteArray, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
         Dim ptrChar as PtrByteArray
         Dim len as UInt16
-        Dim index as UInt16
         Dim width as UInt16
         Dim maxBytes as UInt16
         Dim subWidth as UInt16
@@ -333,21 +588,16 @@ Module Font
         Dim yCalc as UInt16
         Dim xCalc as UInt16
         Dim tmp as UInt16
-        Dim useAbove as UInt16
-        Dim useBelow as UInt16
         Dim totalWidth as UInt16
+        Dim fontChar as FontChar
+        fontChar = New
         totalWidth = x2 - x1
         len = String.Length(text)
-        @text++
         x = 0
-        For pos = 1 to len
-            useAbove = 0
-            useBelow = 0
-            index = 0
-            If (text >= 0x30) andalso (text <= 0x39) Then index = text - 0x30 + 2
-            If (text >= 0x41) andalso (text <= 0x5a) Then index = text - 0x41 + 12
-            If text == 0x20 Then index = 1
-            ptrChar = FindChar(font, index)
+        pos = 1
+        While pos <= len
+            pos = ConvertCharToFont(font, fontChar, text, pos)
+            ptrChar = fontChar.Char
             width = ptrChar
             @ptrChar++
             extraOffset = ptrChar
@@ -372,9 +622,9 @@ Module Font
                     End
                     tmp  = ptrChar
                     For k = 1 to subWidth
+                        yCalc = y1 + font.AboveHeight + i - 1
                         if tmp and 128 then
                             xCalc = x1 + x + k - 1
-                            yCalc = y1 + font.AboveHeight + i - 1
                             If (xCalc <= x2) andalso (yCalc <= y2) Then
                                 Graphics.DrawPixel xCalc, yCalc, color 
                             End
@@ -385,14 +635,12 @@ Module Font
                 End
             End
             x = x + width + font.Spacing
-            @text++
         End
     End
 
-    Sub CalcSize(font as Font, text as PtrByteArray, output as Size, totalWidth as UInt16, multiline as UInt16)
+    Public Sub CalcSize(font as Font, text as PtrByteArray, output as Size, totalWidth as UInt16, multiline as UInt16)
         Dim ptrChar as PtrByteArray
         Dim len as UInt16
-        Dim index as UInt16
         Dim width as UInt16
         Dim maxBytes as UInt16
         Dim subWidth as UInt16
@@ -408,17 +656,16 @@ Module Font
         Dim useAbove as UInt16
         Dim useBelow as UInt16
         Dim newLine as UInt16
+        Dim fontChar as FontChar
+        fontChar = New
         newLine = 0
         len = String.Length(text)
-        @text++
         x = 0
         output.Height = font.Height
-        For pos = 1 to len
-            index = 0
-            If (text >= 0x30) andalso (text <= 0x39) Then index = text - 0x30 + 2
-            If (text >= 0x41) andalso (text <= 0x5a) Then index = text - 0x41 + 12
-            If text == 0x20 Then index = 1
-            ptrChar = FindChar(font, index)
+        pos = 1
+        While pos <= len
+            pos = ConvertCharToFont(font, fontChar, text, pos)
+            ptrChar = fontChar.Char
             width = ptrChar
             If (x + width) > totalWidth Then
                 If multiline Then
@@ -432,7 +679,6 @@ Module Font
             End
             x = x + width + font.Spacing
             If newLine == 0 Then output.Width = x
-            @text++
         End
     End
 End

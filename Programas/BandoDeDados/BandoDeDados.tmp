@@ -1,0 +1,872 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:27:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:28:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:29:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:30:13 ===---
+db 'HSX',0 ; Application
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:31:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:32:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:33:13 ===---
+dw .start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:34:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:35:13 ===---
+dw 20480 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:36:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:37:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:38:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:39:13 ===---
+.start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:40:13 ===---
+mov word [_os_minstackptr], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:41:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:42:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:43:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:44:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:45:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:18:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 10
+db 83,121,115,116,101,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:19:9 ===---
+_os_trystack:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:20:9 ===---
+_os_trycode:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:21:9 ===---
+_os_trybase:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+_os_tryfatal:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:23:9 ===---
+_os_minstackptr:
+times 2 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:48:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:49:13 ===---
+cmp sp, 128
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:50:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:51:15 ===---
+mov ax, _os
+mov [bp+-8], ax
+mov ax, 51
+mov [bp+-10], ax
+mov ax, 2
+cs jmp word [_os_trycode]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:52:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:55:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 28
+push cs
+call _os_stackcheck
+; ARG: realoc TAM: 4 POS: BP--14 
+; ARG: ptr TAM: 4 POS: BP--18 
+; ARG: tiporealoc TAM: 2 POS: BP--20 
+; ARG: desvio TAM: 2 POS: BP--22 
+; ARG: soma TAM: 2 POS: BP--24 
+; ARG: args TAM: 4 POS: BP--28 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:57:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:59:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:60:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:61:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:95:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:19 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-14+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:63:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:63:16 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-18+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:64:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:64:19 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_realoctable
+mov [bp+-14], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:65:9 ===---
+ROTULO3:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:65:22 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:65:15 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+es mov ax, [di+0]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:65:25 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO6
+jmp near ROTULO7
+ROTULO6:
+mov ax, 65535
+jmp near ROTULO8
+ROTULO7:
+xor ax, ax
+ROTULO8:
+cmp ax, 0
+jne ROTULO4
+jmp near ROTULO5
+ROTULO4:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:66:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:66:26 ===---
+; ACAO LEITURA - Le ponteiro
+es mov ax, [di+0]
+mov [bp+-20], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:67:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:69:14 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:69:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+es mov ax, [di+0]
+mov [bp+-18], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:70:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:71:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:22 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+es mov ax, [di+0]
+mov [bp+-22], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:73:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:74:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:20 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+es mov ax, [di+0]
+mov [bp+-24], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:76:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:77:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:78:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:78:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:78:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-20]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:78:30 ===---
+mov ax, 3
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO11
+jmp near ROTULO12
+ROTULO11:
+mov ax, 65535
+jmp near ROTULO13
+ROTULO12:
+xor ax, ax
+ROTULO13:
+cmp ax, 0
+jne ROTULO9
+jmp near ROTULO10
+ROTULO9:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:33 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-18]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-22]
+pop bx
+add ax, bx
+mov [bp+-22], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:23 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-22]
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+0], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:81:18 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-18]
+inc di
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:82:18 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-18]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:83:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:83:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:83:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-24]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:83:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+pop bx
+add ax, bx
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+0], ax
+ROTULO10:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:85:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:85:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:85:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-20]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:85:30 ===---
+mov ax, 2
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO16
+jmp near ROTULO17
+ROTULO16:
+mov ax, 65535
+jmp near ROTULO18
+ROTULO17:
+xor ax, ax
+ROTULO18:
+cmp ax, 0
+jne ROTULO14
+jmp near ROTULO15
+ROTULO14:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:86:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:86:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:86:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-22]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:86:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-18]
+pop bx
+add ax, bx
+mov [bp+-18], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:87:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:87:38 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:87:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-24]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:87:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_stacksegment
+pop bx
+add ax, bx
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+0], ax
+ROTULO15:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-20]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:30 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO21
+jmp near ROTULO22
+ROTULO21:
+mov ax, 65535
+jmp near ROTULO23
+ROTULO22:
+xor ax, ax
+ROTULO23:
+cmp ax, 0
+jne ROTULO19
+jmp near ROTULO20
+ROTULO19:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:18 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:29 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-22]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-18]
+pop bx
+add ax, bx
+mov [bp+-18], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:37 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-24]
+push ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:23 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+pop bx
+add ax, bx
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+0], ax
+ROTULO20:
+jmp near ROTULO3
+ROTULO5:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:97:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:97:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-28+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:98:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-28], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:100:11 ===---
+cs mov ax, [_os_trycode]
+mov [bp+-2], ax
+cs mov ax, [_os_trystack]
+mov [bp+-4], ax
+cs mov ax, [_os_trybase]
+mov [bp+-6], ax
+mov ax, bp
+cs mov [_os_trybase], ax
+mov ax, sp
+cs mov [_os_trystack], ax
+mov ax, ROTULO24
+cs mov [_os_trycode], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:101:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:101:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-28+2]
+pop es
+mov di, [bp+-28]
+push es
+push di
+push cs
+call _program_main
+add sp, 4
+jmp near ROTULO25
+ROTULO24:
+mov bx, ax
+mov ax, [bp+-10]
+push word [bp+-8+2]
+pop es
+mov di, [bp+-8]
+cs mov bp, [_os_trybase]
+cs mov sp, [_os_trystack]
+push es
+pop word [bp+-8+2]
+mov [bp+-8], di
+mov [bp+-10], ax
+mov ax, bx
+jmp near ROTULO25
+ROTULO27:
+cs jmp word [_os_tryfatal]
+ROTULO25:
+mov ax, [bp+-6]
+cs mov [_os_trybase], ax
+mov ax, [bp+-4]
+cs mov [_os_trystack], ax
+mov ax, [bp+-2]
+cs mov [_os_trycode], ax
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:106:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:107:13 ===---
+mov ax, cs
+ROTULO28:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:110:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:111:13 ===---
+mov ax, ss
+ROTULO29:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:114:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:115:13 ===---
+mov ax, REALOC_TABLE
+ROTULO30:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== BandoDeDados.hcb:4:8 ===---
+; MODULO: program
+NAME_program:
+db 7
+db 112,114,111,103,114,97,109
+db 0
+_program:
+db 16
+db 66,97,110,100,111,68,101,68,97,100,111,115,46,104,99,98
+db 0
+;     ---=== BandoDeDados.hcb:5:16 ===---
+_program_main:
+push bp
+mov bp, sp
+; ARG: args TAM: 4 POS: BP+6 
+;     ---=== BandoDeDados.hcb:5:21 ===---
+ROTULO31:
+mov sp, bp
+pop bp
+FIM_program_main:
+retf
+; MODULO FIM: program
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:38:15 ===---
+; MODULO: table
+NAME_table:
+db 5
+db 116,97,98,108,101
+db 0
+_table:
+db 9
+db 84,97,98,108,101,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:39:16 ===---
+_table_initialize:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:39:27 ===---
+ROTULO32:
+mov sp, bp
+pop bp
+FIM_table_initialize:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:43:16 ===---
+NAME_table_createinmemory:
+jmp near _table_createinmemory
+db 14
+db 99,114,101,97,116,101,105,110,109,101,109,111,114,121
+times 1 db 0
+_table_createinmemory:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:43:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:44:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:44:25 ===---
+mov ax, 128
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+0], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:45:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:45:26 ===---
+mov ax, 1
+es mov [di+30], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:46:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:46:34 ===---
+xor ax, ax
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:47:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:47:33 ===---
+xor ax, ax
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:48:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:48:28 ===---
+xor ax, ax
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:49:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:49:28 ===---
+xor ax, ax
+es mov [di+10], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO33:
+mov sp, bp
+pop bp
+FIM_table_createinmemory:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:52:16 ===---
+NAME_table_create:
+jmp near _table_create
+db 6
+db 99,114,101,97,116,101
+times 1 db 0
+_table_create:
+push bp
+mov bp, sp
+; ARG: filename TAM: 4 POS: BP+6 
+; ARG: table TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:52:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:52:43 ===---
+ROTULO34:
+mov sp, bp
+pop bp
+FIM_table_create:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:55:16 ===---
+NAME_table_open:
+jmp near _table_open
+db 4
+db 111,112,101,110
+times 1 db 0
+_table_open:
+push bp
+mov bp, sp
+; ARG: filename TAM: 4 POS: BP+6 
+; ARG: table TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:55:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:55:41 ===---
+ROTULO35:
+mov sp, bp
+pop bp
+FIM_table_open:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:58:16 ===---
+NAME_table_close:
+jmp near _table_close
+db 5
+db 99,108,111,115,101
+times 1 db 0
+_table_close:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:58:22 ===---
+ROTULO36:
+mov sp, bp
+pop bp
+FIM_table_close:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:61:16 ===---
+NAME_table_addfield:
+jmp near _table_addfield
+db 8
+db 97,100,100,102,105,101,108,100
+times 1 db 0
+_table_addfield:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: name TAM: 4 POS: BP+10 
+; ARG: type TAM: 4 POS: BP+14 
+; ARG: len TAM: 2 POS: BP+18 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:61:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:61:41 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:61:57 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:61:73 ===---
+ROTULO37:
+mov sp, bp
+pop bp
+FIM_table_addfield:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:64:16 ===---
+NAME_table_delfield:
+jmp near _table_delfield
+db 8
+db 100,101,108,102,105,101,108,100
+times 1 db 0
+_table_delfield:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: name TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:64:25 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:64:41 ===---
+ROTULO38:
+mov sp, bp
+pop bp
+FIM_table_delfield:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:67:16 ===---
+NAME_table_gotoid:
+jmp near _table_gotoid
+db 6
+db 103,111,116,111,105,100
+times 1 db 0
+_table_gotoid:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: id TAM: 2 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:67:23 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:67:39 ===---
+ROTULO39:
+mov sp, bp
+pop bp
+FIM_table_gotoid:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:70:21 ===---
+NAME_table_getcurrentid:
+jmp near _table_getcurrentid
+db 12
+db 103,101,116,99,117,114,114,101,110,116,105,100
+times 1 db 0
+_table_getcurrentid:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:70:34 ===---
+ROTULO40:
+mov sp, bp
+pop bp
+FIM_table_getcurrentid:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:73:21 ===---
+NAME_table_next:
+jmp near _table_next
+db 4
+db 110,101,120,116
+times 1 db 0
+_table_next:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:73:26 ===---
+ROTULO41:
+mov sp, bp
+pop bp
+FIM_table_next:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:76:21 ===---
+NAME_table_previous:
+jmp near _table_previous
+db 8
+db 112,114,101,118,105,111,117,115
+times 1 db 0
+_table_previous:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:76:30 ===---
+ROTULO42:
+mov sp, bp
+pop bp
+FIM_table_previous:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:79:16 ===---
+NAME_table_getitem:
+jmp near _table_getitem
+db 7
+db 103,101,116,105,116,101,109
+times 1 db 0
+_table_getitem:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: struct TAM: 4 POS: BP+10 
+; ARG: structsize TAM: 2 POS: BP+14 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:79:24 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:79:40 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:79:64 ===---
+ROTULO43:
+mov sp, bp
+pop bp
+FIM_table_getitem:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:82:16 ===---
+NAME_table_updateitem:
+jmp near _table_updateitem
+db 10
+db 117,112,100,97,116,101,105,116,101,109
+times 1 db 0
+_table_updateitem:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: struct TAM: 4 POS: BP+10 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:82:27 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:82:43 ===---
+ROTULO44:
+mov sp, bp
+pop bp
+FIM_table_updateitem:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:85:16 ===---
+NAME_table_filterreset:
+jmp near _table_filterreset
+db 11
+db 102,105,108,116,101,114,114,101,115,101,116
+times 1 db 0
+_table_filterreset:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:85:28 ===---
+ROTULO45:
+mov sp, bp
+pop bp
+FIM_table_filterreset:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:88:16 ===---
+NAME_table_filteraddequal:
+jmp near _table_filteraddequal
+db 14
+db 102,105,108,116,101,114,97,100,100,101,113,117,97,108
+times 1 db 0
+_table_filteraddequal:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: field TAM: 4 POS: BP+10 
+; ARG: value TAM: 4 POS: BP+14 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:88:31 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:88:47 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:88:64 ===---
+ROTULO46:
+mov sp, bp
+pop bp
+FIM_table_filteraddequal:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:91:16 ===---
+NAME_table_filteraddnotequal:
+jmp near _table_filteraddnotequal
+db 17
+db 102,105,108,116,101,114,97,100,100,110,111,116,101,113,117,97,108
+times 1 db 0
+_table_filteraddnotequal:
+push bp
+mov bp, sp
+; ARG: table TAM: 4 POS: BP+6 
+; ARG: field TAM: 4 POS: BP+10 
+; ARG: value TAM: 4 POS: BP+14 
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:91:34 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:91:50 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Programas/BandoDeDados/Table.hcb:91:67 ===---
+ROTULO47:
+mov sp, bp
+pop bp
+FIM_table_filteraddnotequal:
+retf
+; MODULO FIM: table
+EXPORT_TABLE:
+db 2
+dw NAME_table
+db 3
+dw NAME_table_createinmemory
+db 3
+dw NAME_table_create
+db 3
+dw NAME_table_open
+db 3
+dw NAME_table_close
+db 3
+dw NAME_table_addfield
+db 3
+dw NAME_table_delfield
+db 3
+dw NAME_table_gotoid
+db 3
+dw NAME_table_getcurrentid
+db 3
+dw NAME_table_next
+db 3
+dw NAME_table_previous
+db 3
+dw NAME_table_getitem
+db 3
+dw NAME_table_updateitem
+db 3
+dw NAME_table_filterreset
+db 3
+dw NAME_table_filteraddequal
+db 3
+dw NAME_table_filteraddnotequal
+times 2 db 0
+IMPORT_TABLE:
+times 2 db 0
+REALOC_TABLE:
+dw 0
+dw 0
+dw 0
+dw 0
+END:

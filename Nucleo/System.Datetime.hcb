@@ -12,7 +12,7 @@ Structure DateTime
     Spacing 10 ' Espaco reservado para uso futuro
 End
 
-Module DateTime
+Public Module DateTime
 
     Public Sub Now(dt as DateTime)
         dt.MiliSecond = Clock.MiliSecond

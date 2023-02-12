@@ -5,6 +5,8 @@ Imports System.IO.File
 
 ' Representa uma tarefa, função próxima do .Net
 Structure Thread
+    Spacing 33
+    Dim Name as PtrByteArray
     Dim Id as UInt16
     Dim Active as UInt16
     Dim Suspended as UInt16
@@ -26,7 +28,7 @@ Structure Semaphore
     Dim Limit as UInt16
 End
 
-Module Semaphore
+Public Module Semaphore
     ' Deve ser chamado para criar um Semaforo, informando o limite de acessos simultaneos
     Public Sub Initialize(s as Semaphore, limit as UInt16)
         s.Count = 0
@@ -83,6 +85,9 @@ Module MultiThreading
         For i = 1 to 128
             ptr = Item(i)
             t = ptr
+            ptr = 32
+            t.Name = t
+            String.Copy t.Name, ""
             t.Id = i
             t.Active = 0
             t.Suspended = 1
@@ -97,6 +102,7 @@ Module MultiThreading
                 @Current = @ptr
                 Current.Next = ptr
                 Current.Previous = ptr
+                String.Copy Current.Name, "husix"
             End
         End
         Semaphore.Initialize InUse, 1
@@ -151,6 +157,7 @@ Module MultiThreading
         For i = 1 To 128
             t = Item(i)
             If t.Active == 0 Then
+                String.Copy t.Name, ""
                 t.Active = 1
                 t.Suspended = 1
                 t.Allocated = 0
@@ -171,6 +178,10 @@ Module MultiThreading
         ptr = List
         @ptr = @ptr + (i * SizeOf(Thread))
         Return ptr
+    End
+
+    Public Function Capacity() as UInt16
+        Return 128
     End
 
     ' Retorna a quantidade de Threads executando
@@ -223,7 +234,7 @@ Module MultiThreading
     End
 End
 
-Module Thread
+Public Module Thread
     ' Solitita uma tarefa nova
     Public Function RequestNew() as PtrByteArray
         Return MultiThreading.RequestNew()
@@ -295,5 +306,14 @@ Module Thread
             If diff >= seconds Then Return
             Yield
         End
+    End
+End
+
+Public Module Process
+    Public Sub Start(filename as String, args as String)
+        Dim assm as Assembly
+        assm = New
+        Assembly.LoadAssembly assm, filename
+        Assembly.Start assm, args
     End
 End

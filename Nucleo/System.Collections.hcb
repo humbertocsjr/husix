@@ -13,7 +13,7 @@ Structure ListBlock
     Dim BlockCapacity as UInt16
 End
 
-Module List
+Public Module List
     Public Sub Initialize(l as List, itemSize as UInt16)
         Dim ptr as PtrByteArray
         #ptr = 0

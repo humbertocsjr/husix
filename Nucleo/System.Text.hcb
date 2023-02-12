@@ -1,4 +1,4 @@
-Module UTF8
+Public Module UTF8
 
     Public Function CharSize(c as PtrByteArray) as UInt16
         If c < 128 Then Return 1

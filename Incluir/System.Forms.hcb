@@ -1,0 +1,126 @@
+
+Structure Theme
+    Dim BackgroundColor as UInt16
+    Dim TextColor as UInt16
+    Dim WindowBorderColor as UInt16
+    Dim WindowColor as UInt16
+    Dim WindowTitleColor as UInt16
+End
+
+Structure EventArgs
+    Dim Cancel as UInt16
+End
+
+Structure MouseEventArgs
+    Dim X as UInt16
+    Dim Y as UInt16
+    Dim PrimaryButton as UInt16
+    Dim SecondaryButton as UInt16
+    Dim ScrollValue as Int16
+    Dim Cancel as UInt16
+End
+
+Structure KeyboardEventArgs
+    Dim AsciiChar as UInt8
+    Dim UTF8LowWord as UInt16
+    Dim UTF8HighWord as UInt16
+    Dim Pressed as UInt16
+    Dim Cancel as UInt16
+End
+
+Structure Control
+    Dim Top as UInt16
+    Dim Left as UInt16
+    Dim Height as UInt16
+    Dim Width as UInt16
+    Dim Value as UInt16
+    Dim Text as PtrByteArray
+    Dim Visible as UInt8
+    Dim Resizable as UInt8
+    Dim Focusable as UInt8
+    Dim RedrawOnFocusChanged as UInt8
+    Dim HasFocus as UInt8
+    Dim Font as PtrByteArray
+    Dim ControlPaint as Action(Of Control, UInt16)
+    Dim ControlMouseInteraction as Action(Of Control, MouseEventArgs)
+    Dim ControlKeyboardInteracion as Action(Of Control, KeyboardEventArgs)
+    Dim ControlFocusChanged as Action(Of Control, UInt16)
+    Dim OnClick as Action(Of Control, MouseEventArgs)
+    Dim OnKeyPress as Action(Of Control, KeyboardEventArgs)
+    Dim OnKeyRelease as Action(Of Control, KeyboardEventArgs)
+    Dim OnFocus as Action(Of Control)
+    Dim OnLostFocus as Action(Of Control)
+    Dim HasParent as UInt8
+    Dim Parent as PtrByteArray
+    Dim HasChild as UInt8
+    Dim Child as PtrByteArray
+    Dim HasNextControl as UInt8
+    Dim NextControl as PtrByteArray
+    Dim PaddingTop as UInt16
+    Dim PaddingBottom as UInt16
+    Dim PaddingLeft as UInt16
+    Dim PaddingRight as UInt16
+    Dim CalcX1 as UInt16
+    Dim CalcY1 as UInt16
+    Dim CalcX2 as UInt16
+    Dim CalcY2 as UInt16
+    Dim CalcWidth as UInt16
+    Dim CalcHeight as UInt16
+    Dim CalcVisible as UInt16
+End
+
+Module Control From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+    Public Sub SetParent(ctrl as Control, parent as Control)
+    Public Function GetParent(ctrl as Control) as PtrByteArray
+    Public Sub Add(ctrl as Control, child as Control)
+    Public Function Count(ctrl as Control) as UInt16
+    Public Function Item(ctrl as Control, position as UInt16) as PtrByteArray
+    Public Sub Redraw(ctrl as Control)
+    Public Sub RedrawOnlyFocus(ctrl as Control)
+    Public Sub SetText(ctrl as Control, txt as PtrByteArray)
+    Public Function GetText(ctrl as Control) as ptrbytearray
+    Public Sub DrawChildren(parent as Control)
+    Public Sub Focus(ctrl as Control)
+    Public Sub ProcessKeyboard(ctrl as Control, e as KeyboardEventArgs)
+    Public Sub Show(ctrl as Control)
+    Public Sub Hide(ctrl as Control)
+End
+
+Module Screen From "System.Forms.dll"
+    Public Sub Initialize
+    Public Function GetCurrentScreen() as Control
+End
+
+Module TextBox From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module Button From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module Label From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module Form From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module SystemColors From "System.Forms.dll"
+    Public Function BackgroundColor() as UInt16
+    Public Function TextColor() as UInt16
+    Public Function WindowBorderColor() as UInt16
+    Public Function WindowColor() as UInt16
+    Public Function WindowTitleColor() as UInt16
+    Public Sub Initialize(newTheme as Theme)
+End
+
+Module Application From "System.Forms.dll"
+    Public Sub ApplyDarkTheme()
+    Public Sub ApplyDefaultTheme()
+    Public Sub Initialize
+    Public Sub Exit(status as UInt16)
+    Public Sub Run(ctrl as Control)
+End

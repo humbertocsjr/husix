@@ -1,0 +1,7 @@
+Module Process From "husix"
+    Public Sub Start(filename as String, args as String)
+End
+
+Module Thread From "husix"
+    Public Sub Yield()
+End

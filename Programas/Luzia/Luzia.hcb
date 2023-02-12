@@ -2,14 +2,39 @@
 ' Então nada melhor que Luzia para iniciar tudo
 Imports System
 Imports System.IO.Console
+Imports System.IO.File
+Imports System.Threading
 Imports Translation
+Imports System.Drawing
+Imports System.Forms
 
 Module Program
 
     Public Sub Main(args as String)
+        Dim driverVideo as String
         Translation.Initialize
         Console.WriteLine Translation.InitSystem
-        While 1 asm "hlt"
+        
+        driverVideo = New
+        String.Copy driverVideo, Translation.SystemPath
+        String.Concat driverVideo, args
+        String.Concat driverVideo, ".hsx"
+        Console.Write driverVideo
+
+        Process.Start driverVideo, ""
+
+        While Graphics.GetActive() == 0 Thread.Yield
+
+        Graphics.ClearScreen Colors.White()
+        Graphics.DrawRectangle 10, 10, 250, 24, Colors.Black(), Colors.White()
+        Graphics.DrawText Font.GetDefault(), Translation.InitSystem, 12, 11, 250, 23, Colors.Black(), 0
+
+
+        While 1 
+            ' Loop infinito economizando CPU, este será o espaço entre as tarefas, para não superaquecer
+            asm "sti"
+            asm "hlt"
+        End
     End
 
 End

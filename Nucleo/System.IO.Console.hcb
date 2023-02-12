@@ -96,6 +96,10 @@ Public Module Console
         End
     End
 
+    Public Function Avail() as UInt16
+        return IO.ConsoleAvail()
+    End
+
     Public Function ReadChar() as UInt8
         return IO.ConsoleReadChar()
     End
@@ -165,15 +169,15 @@ Public Module Console
     Public Sub WriteUInt16(nro as UInt16)
         Dim tmp as UInt16
         Dim prox as UInt16
-        let tmp = nro mod 10
-        let prox = nro / 10
+        tmp = nro mod 10
+        prox = nro / 10
         If prox > 0 Then WriteUInt16 prox
         WriteChar 48 + tmp
     End
 
     Public Sub WriteInt16(nro as Int16)
         If nro < 0 Then
-            let nro = -nro
+            nro = -nro
         End
         WriteUInt16 nro
     End

@@ -1,6 +1,6 @@
 Imports System
 
-Module IO
+Public Module IO
     Public Sub OutputByte(port as UInt16, value as UInt8)
         asm "mov dx, [bp+6]"
         asm "mov ax, [bp+8]"
@@ -50,11 +50,18 @@ Module IO
     End
 
     Public Function ConsoleAvail() as UInt16
-        
+        asm "mov ah, 1"
+        asm "int 0x16"
+        asm "jnz .sim"
+        Return 0
+        asm ".sim:"
+        Return 1
     End
 
     Public Function ConsoleReadChar() as UInt16
-
+        asm "mov ah, 0"
+        asm "int 0x16"
+        asm "xor ah, ah"
     End
 
     Public Sub ConsoleWriteChar(c as UInt8)

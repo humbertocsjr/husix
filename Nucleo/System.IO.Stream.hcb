@@ -20,7 +20,7 @@ Structure Stream
     Dim CurrentBlock as UInt16
 End
 
-Module Stream
+Public Module Stream
     Public Sub Initialize(s as Stream)
         Dim ptr as PtrByteArray
         #ptr = 0

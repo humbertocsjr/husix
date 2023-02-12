@@ -1,0 +1,128 @@
+
+Structure VideoMode
+    Dim Width as UInt16
+    Dim Height as UInt16
+    Dim Colors as UInt16
+    Dim DrawPixel as Action(Of VideoMode, UInt16, UInt16, UInt16)
+    Dim DrawRectangle as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)
+    Dim DrawCircle as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16)
+    Dim DrawLine as Action(Of VideoMode, UInt16, UInt16, UInt16, UInt16, UInt16)
+    Dim ClearScreen as Action(Of VideoMode, UInt16)
+    Dim Refresh as Action(Of VideoMode)
+End
+
+Structure Size
+    Dim Width as UInt16
+    Dim Height as UInt16
+End
+
+Structure Font
+    Dim Data as PtrByteArray
+    Dim Name as PtrByteArray
+    Dim Author as PtrByteArray
+    Dim Height as UInt16
+    Dim BodyHeight as UInt16
+    Dim AboveHeight as UInt16
+    Dim BelowHeight as UInt16
+    Dim Spacing as UInt16
+    Dim DrawText as Action(Of Font, PtrByteArray, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)
+    Dim CalcSize as Action(Of Font, PtrByteArray, Size, UInt16, UInt16)
+End
+
+Structure FontChar
+    Dim Char as PtrByteArray
+    Dim CharX as PtrByteArray
+    Dim Above as PtrByteArray
+    Dim AboveX as PtrByteArray
+    Dim Below as PtrByteArray
+    Dim BelowX as PtrByteArray
+    Dim HasAbove as UInt8
+    Dim HasBellow as UInt8
+End
+
+
+Structure ColorPalette
+    Dim Black as UInt16
+    Dim Blue as UInt16
+    Dim Green as UInt16
+    Dim Cyan as UInt16
+    Dim Red as UInt16
+    Dim Magenta as UInt16
+    Dim Brown as UInt16
+    Dim LightGray as UInt16
+    Dim Gray as UInt16
+    Dim LightBlue as UInt16
+    Dim LightGreen as UInt16
+    Dim LightCyan as UInt16
+    Dim LightRed as UInt16
+    Dim LightMagenta as UInt16
+    Dim Yellow as UInt16
+    Dim White as UInt16
+    Dim Transparent as UInt16
+    Dim ConversionTextMode as UInt16
+    Dim ConversionRedShl as UInt8
+    Dim ConversionRedShr as UInt8
+    Dim ConversionGreenShl as UInt8
+    Dim ConversionGreenShr as UInt8
+    Dim ConversionBlueShl as UInt8
+    Dim ConversionBlueShr as UInt8
+End
+
+Module Colors From "System.Drawing.dll"
+    Public Sub Initialize
+    Public Sub Register(newpal as ColorPalette)
+    Public Function Black() as UInt16
+    Public Function Blue() as UInt16
+    Public Function Green() as UInt16
+    Public Function Cyan() as UInt16
+    Public Function Red() as UInt16
+    Public Function Magenta() as UInt16
+    Public Function Brown() as UInt16
+    Public Function LightGray() as UInt16
+    Public Function Gray() as UInt16
+    Public Function LightBlue() as UInt16
+    Public Function LightGreen() as UInt16
+    Public Function LightCyan() as UInt16
+    Public Function LightRed() as UInt16
+    Public Function LightMagenta() as UInt16
+    Public Function Yellow() as UInt16
+    Public Function White() as UInt16
+    Public Function Transparent() as UInt16
+    Public Function FromRGB(r as UInt8, g as UInt8, b as UInt8) as UInt16
+End
+
+
+Module Graphics From "System.Drawing.dll"
+    Public Sub DrawPixel(x as UInt16, y as UInt16, color as UInt16)
+    Public Sub DrawLine(x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16)
+    Public Sub DrawRectangle(x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, borderColor as UInt16, backgroundColor as UInt16)
+    Public Sub DrawCircle(xm as UInt16, ym as UInt16, r as UInt16, borderColor as UInt16, backgroundColor as UInt16)
+    Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
+    Public Sub CalcFontSize(font as Font, text as String, size as Size, totalWidth as UInt16, multiline as UInt16)
+    Public Sub ClearScreen(color as UInt16)
+    Public Function GetActive() as UInt16
+    Public Function GetWidth() as UInt16
+    Public Function GetHeight() as UInt16
+    Public Function GetColors() as UInt16
+    Public Sub Mode80x25x16
+    Public Sub ModeManual(newMode as VideoMode)
+    Public Sub Refresh()
+End
+
+Module GenericVideo From "System.Drawing.dll"
+    Public Sub Register2ColorsPalette
+    Public Sub Register16ColorsPalette
+    Public Sub RegisterDrawLine(mode as VideoMode)
+    Public Sub RegisterDrawCircle(mode as VideoMode)
+End
+
+
+Module Font From "System.Drawing.dll"
+    Public Function GetDefault() as Font
+    Public Sub Initialize
+    Public Sub LoadBinary(dest as Font, data as PtrByteArray)
+    Public Function FindChar(font as Font, index as UInt16) as PtrByteArray
+    Public Function ConvertCharToFont(font as Font, char as FontChar, text as PtrByteArray, pos as UInt16) as UInt16
+    Public Sub DrawText(font as Font, text as PtrByteArray, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
+    Public Sub CalcSize(font as Font, text as PtrByteArray, output as Size, totalWidth as UInt16, multiline as UInt16)
+End

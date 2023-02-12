@@ -67,12 +67,15 @@ compilar:
 	@$(MAKE) -C Inicial
 	@$(MAKE) -C Nucleo
 	@$(MAKE) -C Programas
+	@$(MAKE) -C Bibliotecas
+	@$(MAKE) -C Controladores
 
 clean:
 	@$(MAKE) -C Ferramentas clean
 	@$(MAKE) -C Inicial clean
 	@$(MAKE) -C Nucleo clean
 	@$(MAKE) -C Programas clean
+	@$(MAKE) -C Bibliotecas clean
 	@(rm Distro/*TEST.img 2>> /dev/null) || true
 
 alfa_ptbr:
@@ -152,6 +155,9 @@ discos_copia_ptbr:
 	@minixfs add img.img Programas/Luzia/Luzia.hsx /Sistema/Luzia.hsx
 	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /Sistema/BandoDeDados.hsx
 	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programas/Sefudias.hsx
+	@minixfs add img.img Bibliotecas/System.Drawing.dll /Bibliotecas/System.Drawing.dll
+	@minixfs add img.img Bibliotecas/System.Forms.dll /Bibliotecas/System.Forms.dll
+	@minixfs add img.img Controladores/VGA/VGA.hsx /Sistema/VGA.hsx
 	@minixfs add img.img LICENSE /Licença
 
 discos_copia_enus:
@@ -164,6 +170,9 @@ discos_copia_enus:
 	@minixfs add img.img Programas/Luzia/Luzia.hsx /System/Luzia.hsx
 	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /System/BandoDeDados.hsx
 	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programs/Sefudias.hsx
+	@minixfs add img.img Bibliotecas/System.Drawing.dll /Librarys/System.Drawing.dll
+	@minixfs add img.img Bibliotecas/System.Forms.dll /Librarys/System.Forms.dll
+	@minixfs add img.img Controladores/VGA/VGA.hsx /System/VGA.hsx
 	@minixfs add img.img LICENSE /License
 
 teste-qemu:
@@ -172,6 +181,8 @@ teste-qemu:
 	@$(MAKE) config_pc
 	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
 	@echo -= Iniciando emulacao [QEMU] =-
 	@qemu-system-i386 -fda Distro/1440TEST.img -serial stdio
 
@@ -181,6 +192,8 @@ teste-qemu-enus:
 	@$(MAKE) config_pc
 	@$(MAKE) alfa_enus
 	@TRADUCAO=enus $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
 	@echo -= Iniciando emulacao [QEMU] =-
 	@qemu-system-i386 -fda Distro/1440TEST.img -serial stdio
 
@@ -190,6 +203,8 @@ teste-bochs:
 	@$(MAKE) config_pc
 	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
 	@echo -= Iniciando emulacao [Bochs] =-
 	@bochs -q
 
@@ -199,6 +214,8 @@ teste-dosbox:
 	@$(MAKE) config_pc
 	@$(MAKE) alfa_ptbr
 	@TRADUCAO=ptbr $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
 	@echo -= Iniciando emulacao [DOSBox] =-
 	@dosbox -C "IMGMOUNT 0 Distro/1440TEST.img -size 512,18,2,80 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "c:\husix Mode=DOS Disk=BIOSDisk000" > /dev/null
 

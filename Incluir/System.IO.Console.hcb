@@ -1,5 +1,3 @@
-Imports System
-
 Module Console From "husix"
     Public Function CanVGA() as UInt16
     Public Function CanEGA() as UInt16
@@ -7,6 +5,7 @@ Module Console From "husix"
     Public Function CanMGA() as UInt16
     Public Function CanHercules() as UInt16
     Public Sub Mode80x25x4
+    Public Function Avail() as UInt16
     Public Function ReadChar() as UInt8
     Public Sub ReadLine(txt as PtrByteArray)
     Public Sub WriteChar(c as UInt8)

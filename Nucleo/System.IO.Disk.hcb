@@ -38,7 +38,7 @@ Structure DiskInfo
     Dim Param8 as UInt16
 End
 
-Module Disk
+Public Module Disk
     Dim Disks as List
 
     Friend Sub Initialize
