@@ -11719,8 +11719,8 @@ _translation_initialize:
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1004
 ROTULO1005:
-db 7
-db 78,195,186,99,108,101,111
+db 6
+db 75,101,114,110,101,108
 times 1 db 0
 ROTULO1004:
 mov ax, cs
@@ -11731,8 +11731,8 @@ cs mov [_translation_kernel], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1006
 ROTULO1007:
-db 9
-db 73,110,105,99,105,97,110,100,111
+db 8
+db 83,116,97,114,116,105,110,103
 times 1 db 0
 ROTULO1006:
 mov ax, cs
@@ -11744,7 +11744,7 @@ cs mov [_translation_starting], ax
 jmp near ROTULO1008
 ROTULO1009:
 db 8
-db 77,111,110,116,97,110,100,111
+db 77,111,117,110,116,105,110,103
 times 1 db 0
 ROTULO1008:
 mov ax, cs
@@ -11755,8 +11755,8 @@ cs mov [_translation_mounting], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1010
 ROTULO1011:
-db 21
-db 68,105,115,99,111,32,110,195,163,111,32,101,110,99,111,110,116,114,97,100,111
+db 14
+db 68,105,115,107,32,110,111,116,32,102,111,117,110,100
 times 1 db 0
 ROTULO1010:
 mov ax, cs
@@ -11767,8 +11767,8 @@ cs mov [_translation_disknotfound], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1012
 ROTULO1013:
-db 30
-db 83,105,115,116,101,109,97,32,100,101,32,65,114,113,117,105,118,111,115,32,67,111,114,114,111,109,112,105,100,111
+db 21
+db 67,111,114,114,117,112,116,101,100,32,70,105,108,101,32,83,121,115,116,101,109
 times 1 db 0
 ROTULO1012:
 mov ax, cs
@@ -11791,8 +11791,8 @@ cs mov [_translation_ok], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1016
 ROTULO1017:
-db 11
-db 69,114,114,111,32,70,97,116,97,108,58
+db 12
+db 70,97,116,97,108,32,69,114,114,111,114,58
 times 1 db 0
 ROTULO1016:
 mov ax, cs
@@ -11803,8 +11803,8 @@ cs mov [_translation_fatalerror], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1018
 ROTULO1019:
-db 20
-db 60,83,73,83,84,69,77,65,32,80,65,82,65,76,73,90,65,68,79,62
+db 15
+db 60,83,89,83,84,69,77,32,72,65,76,84,69,68,62
 times 1 db 0
 ROTULO1018:
 mov ax, cs
@@ -11815,8 +11815,8 @@ cs mov [_translation_systemhalted], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1020
 ROTULO1021:
-db 11
-db 67,97,114,114,101,103,97,110,100,111,32
+db 8
+db 76,111,97,100,105,110,103,32
 times 1 db 0
 ROTULO1020:
 mov ax, cs
@@ -11827,8 +11827,8 @@ cs mov [_translation_loading], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1022
 ROTULO1023:
-db 33
-db 83,105,115,116,101,109,97,32,79,112,101,114,97,99,105,111,110,97,108,32,66,114,97,115,105,108,101,105,114,111,32,61,41
+db 29
+db 66,114,97,122,105,108,105,97,110,32,79,112,101,114,97,116,105,110,103,32,83,121,115,116,101,109,32,61,41
 times 1 db 0
 ROTULO1022:
 mov ax, cs
@@ -11839,8 +11839,8 @@ cs mov [_translation_brazilianoperatingsystem], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1024
 ROTULO1025:
-db 51
-db 77,111,100,111,32,100,101,32,86,105,100,101,111,32,110,97,111,32,100,101,116,101,99,116,97,100,111,44,32,82,101,113,117,101,114,32,67,71,65,32,111,117,32,115,117,112,101,114,105,111,114
+db 47
+db 86,105,100,101,111,32,77,111,100,101,32,110,111,116,32,100,101,116,101,99,116,101,100,46,32,82,101,113,117,105,114,101,115,32,67,71,65,32,111,114,32,72,105,103,104,101,114
 times 1 db 0
 ROTULO1024:
 mov ax, cs
@@ -11852,7 +11852,7 @@ cs mov [_translation_requirescga], ax
 jmp near ROTULO1026
 ROTULO1027:
 db 35
-db 77,111,100,111,32,65,109,98,105,101,110,116,101,32,79,112,101,114,97,99,105,111,110,97,108,32,115,111,98,114,101,32,68,79,83
+db 79,112,101,114,97,116,105,110,103,32,69,110,118,105,114,111,110,109,101,110,116,32,77,111,100,101,32,111,118,101,114,32,68,79,83
 times 1 db 0
 ROTULO1026:
 mov ax, cs
@@ -11863,8 +11863,8 @@ cs mov [_translation_modedos], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1028
 ROTULO1029:
-db 24
-db 77,101,109,195,179,114,105,97,32,68,105,115,112,111,110,195,173,118,101,108,46,46,58,32
+db 22
+db 65,118,97,105,108,97,98,108,101,32,77,101,109,111,114,121,46,46,46,46,58,32
 times 1 db 0
 ROTULO1028:
 mov ax, cs
@@ -11875,8 +11875,8 @@ cs mov [_translation_availmemory], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1030
 ROTULO1031:
-db 23
-db 84,97,109,97,110,104,111,32,100,111,32,78,195,186,99,108,101,111,46,46,46,58,32
+db 22
+db 75,101,114,110,101,108,32,83,105,122,101,46,46,46,46,46,46,46,46,46,58,32
 times 1 db 0
 ROTULO1030:
 mov ax, cs
@@ -11887,8 +11887,8 @@ cs mov [_translation_kernelsize], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1032
 ROTULO1033:
-db 18
-db 47,83,105,115,116,101,109,97,47,76,117,122,105,97,46,104,115,120
+db 17
+db 47,83,121,115,116,101,109,47,76,117,122,105,97,46,104,115,120
 times 1 db 0
 ROTULO1032:
 mov ax, cs
@@ -11899,8 +11899,8 @@ cs mov [_translation_initfile], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1034
 ROTULO1035:
-db 23
-db 80,108,97,99,97,32,100,101,32,86,195,173,100,101,111,46,46,46,46,46,46,58,32
+db 22
+db 86,105,100,101,111,32,67,97,114,100,46,46,46,46,46,46,46,46,46,46,58,32
 times 1 db 0
 ROTULO1034:
 mov ax, cs
@@ -11911,8 +11911,8 @@ cs mov [_translation_videocarddetected], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO1036
 ROTULO1037:
-db 13
-db 47,66,105,98,108,105,111,116,101,99,97,115,47
+db 10
+db 47,76,105,98,114,97,114,121,115,47
 times 1 db 0
 ROTULO1036:
 mov ax, cs
@@ -11968,8 +11968,8 @@ pop es
 mov di, ROTULO1040
 jmp near ROTULO1039
 ROTULO1040:
-db 4
-db 65,108,102,97
+db 5
+db 65,108,112,104,97
 times 1 db 0
 ROTULO1039:
 push es

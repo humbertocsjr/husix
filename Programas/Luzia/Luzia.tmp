@@ -767,8 +767,8 @@ _translation_initialize:
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO46
 ROTULO47:
-db 32
-db 83,105,115,116,101,109,97,32,100,101,32,73,110,105,99,105,97,108,105,122,97,195,167,195,163,111,32,76,117,122,105,97
+db 17
+db 76,117,122,105,97,32,73,110,105,116,32,83,121,115,116,101,109
 times 1 db 0
 ROTULO46:
 mov ax, cs
@@ -779,8 +779,8 @@ cs mov [_translation_initsystem], ax
 ; ACAO GRAVACAO - Gravacao de texto em ponteiro
 jmp near ROTULO48
 ROTULO49:
-db 9
-db 47,83,105,115,116,101,109,97,47
+db 8
+db 47,83,121,115,116,101,109,47
 times 1 db 0
 ROTULO48:
 mov ax, cs
