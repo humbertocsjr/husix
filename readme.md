@@ -21,15 +21,15 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
 - Implementado Carregamendo de executáveis
 - Implementado Carregamento de bibliotecas(Dependências)
 
-**Situação Atual:** Implementando System.Forms e validando forma de ter um Try Catch funcional entre segmentos
+**Situação Atual:** Implementando Controladores de Hardware
 
 **Tradução EN-US**
 
-![Tradução EN-US](Imagens/v2023.2r4209-enus.png)
+![Tradução EN-US](Imagens/v2023.2r4622.png)
 
 **Tradução PT-BR**
 
-![Tradução PT-BR](Imagens/v2023.2r4209-ptbr.png)
+![Tradução PT-BR](Imagens/v2023.2r4622.png)
 
 # Funcionamento / Pontos de Interesse
 
