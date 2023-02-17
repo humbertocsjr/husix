@@ -1,9 +1,17 @@
 Module Translation
     Public Dim InitSystem as PtrByteArray
     Public Dim SystemPath as PtrByteArray
+    Public Dim VideoDriverNotFound as PtrByteArray
+    Public Dim SystemHalted as PtrByteArray
+    Public Dim LoadingMarcoPolo as PtrByteArray
+    Public Dim LoadingDriver as PtrByteArray
 
     Public Sub Initialize
         InitSystem = "Sistema de Inicialização Luzia"
         SystemPath = "/Sistema/"
+        VideoDriverNotFound = "Controlador de Vídeo não encontrado."
+        SystemHalted = "-= SISTEMA PARALIZADO =-"
+        LoadingMarcoPolo = "Carregando Marco Polo"
+        LoadingDriver = "Carregando Controlador: "
     End
 End

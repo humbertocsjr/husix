@@ -83,6 +83,12 @@ dw trema ; 74
 dw anel ; 75
 dw cedilha ; 76
 dw gancho_polaco ; 77
+dw ponto ; 78
+dw virgula ; 79
+dw doispontos ; 80
+dw menos ; 81
+dw mais ; 82
+dw barra ; 83
 
 nome:
     db .fim - $ 
@@ -558,3 +564,55 @@ db 3, 0
 db 0b01000000
 db 0b10010000
 db 0b01100000
+
+ponto:
+db 1, 0
+db 0b10000000
+db 0b00000000
+db 0b00000000
+
+virgula:
+db 2, 0
+db 0b01000000
+db 0b10000000
+db 0b00000000
+
+doispontos:
+db 1, 0
+db 0b00000000
+db 0b00000000
+db 0b10000000
+db 0b00000000
+db 0b10000000
+db 0b00000000
+db 0b00000000
+
+menos:
+db 5, 0
+db 0b00000000
+db 0b00000000
+db 0b00000000
+db 0b11111000
+db 0b00000000
+db 0b00000000
+db 0b00000000
+
+mais:
+db 5, 0
+db 0b00000000
+db 0b00100000
+db 0b00100000
+db 0b11111000
+db 0b00100000
+db 0b00100000
+db 0b00000000
+
+barra:
+db 4, 0
+db 0b00010000
+db 0b00100000
+db 0b00100000
+db 0b01000000
+db 0b01000000
+db 0b10000000
+db 0b10000000

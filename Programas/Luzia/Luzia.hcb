@@ -7,27 +7,127 @@ Imports System.Threading
 Imports Translation
 Imports System.Drawing
 Imports System.Forms
+Imports System.Memory
 
 Module Program
+    Dim MainForm as Control
+    Dim DescriptionLabel as Control
+    Dim DescriptionText as String
 
     Public Sub Main(args as String)
-        Dim driverVideo as String
+        Try
+            Start args
+        Catch Error
+            Console.Mode80x25x4
+            Console.WriteLine Translation.SystemHalted
+            While 1
+                Thread.Yield
+            End
+        End
+    End
+
+    Public Sub Start(args as String)
+        Dim hsx as String
+        hsx = New
         Translation.Initialize
         Console.WriteLine Translation.InitSystem
         
-        driverVideo = New
-        String.Copy driverVideo, Translation.SystemPath
-        String.Concat driverVideo, args
-        String.Concat driverVideo, ".hsx"
-        Console.Write driverVideo
+        ' Carrega e inicia o Driver de Video
+        String.Copy hsx, Translation.SystemPath
+        String.Concat hsx, args
+        String.Concat hsx, ".hsx"
+        
+        Console.Write hsx
+        Try
+            Dim finfo as FileInfo
+            finfo = New
+            Path.GetFileInfo finfo,  hsx
+            Process.Start hsx, ""
+        Catch Error
+            Console.WriteLine Translation.VideoDriverNotFound
+            Console.WriteLine Translation.SystemHalted
+            While 1
+                Thread.Yield
+            End
+        End
 
-        Process.Start driverVideo, ""
-
+        ' Aguarda o Driver de Video iniciar
         While Graphics.GetActive() == 0 Thread.Yield
 
-        Graphics.ClearScreen Colors.White()
-        Graphics.DrawRectangle 10, 10, 250, 24, Colors.Black(), Colors.White()
-        Graphics.DrawText Font.GetDefault(), Translation.InitSystem, 12, 11, 250, 23, Colors.Black(), 0
+        ' Prepara o ambiente do System.Forms
+        Application.Initialize
+        ' Monta formulario que exibe informações de Inicialização
+        Form.Initialize MainForm
+        MainForm.Width = 300
+        MainForm.Height = 50
+        MainForm.Top = (Graphics.GetHeight() - MainForm.Height) / 2
+        MainForm.Left = (Graphics.GetWidth() - MainForm.Width) / 2
+        MainForm.Text = "HUSIX - Luzia"
+        ' Monta rótulo com informações de inicialização
+        Label.Initialize DescriptionLabel
+        DescriptionLabel.Text = DescriptionText
+        String.Copy DescriptionText, Translation.InitSystem
+        DescriptionLabel.Top = 10
+        DescriptionLabel.Left = 10
+        DescriptionLabel.Width = 280
+        DescriptionLabel.Height = 40
+        DescriptionLabel.Visible = 1
+        Control.Add MainForm, DescriptionLabel
+        ' Configura o MainForm
+        Control.Add Screen.GetCurrentScreen(), MainForm
+        Control.Show MainForm
+        ' Desenha tudo na tela
+        Screen.Redraw
+        ' Define o MainForm como formulario em foco
+        Control.Focus MainForm
+        ' Desenha tudo na tela
+        Screen.Redraw
+
+        ' Carrega e inicia o Driver de Video
+        String.Copy hsx, Translation.SystemPath
+        String.Concat hsx, "MarcoPolo.hsx"
+        
+        Try
+            ' Altera conteudo da descrição
+            String.Copy DescriptionText, Translation.LoadingMarcoPolo
+            ' Desenha tudo na tela
+            Screen.Redraw
+            Process.Start hsx, ""
+        Catch Error
+        End
+
+
+        ' Carrega e inicia o Driver de Relógio
+        String.Copy hsx, Translation.SystemPath
+        String.Concat hsx, "Clock.hsx"
+        
+        Try
+            ' Altera conteudo da descrição
+            String.Copy DescriptionText, Translation.LoadingDriver
+            String.Concat DescriptionText, "Clock"
+            ' Desenha tudo na tela
+            Screen.Redraw
+            Process.Start hsx, ""
+        Catch Error
+        End
+
+
+        ' Carrega e inicia o Driver de PS/2
+        String.Copy hsx, Translation.SystemPath
+        String.Concat hsx, "PS2.hsx"
+        
+        Try
+            ' Altera conteudo da descrição
+            String.Copy DescriptionText, Translation.LoadingDriver
+            String.Concat DescriptionText, "PS2"
+            ' Desenha tudo na tela
+            Screen.Redraw
+            Process.Start hsx, "debug"
+        Catch Error
+        End
+
+        Control.Hide MainForm
+        Screen.Redraw
 
 
         While 1 

@@ -1,0 +1,2773 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+_os_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:24:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:26:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:27:13 ===---
+db 'HSX',0 ; Application
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:28:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:29:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:30:13 ===---
+dw _os_start_start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:31:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:32:13 ===---
+dw 20480 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:33:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:34:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:35:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:36:13 ===---
+_os_minstackptr: dw 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:37:13 ===---
+_os_start_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:38:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:39:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:40:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:41:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:42:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:20:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 10
+db 83,121,115,116,101,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:45:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:46:13 ===---
+cs mov ax, [_os_minstackptr]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:47:13 ===---
+add ax, 64
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:48:13 ===---
+cmp sp, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:49:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:50:15 ===---
+cs mov si, [_os_minstackptr]
+ss mov word [si+6], _os
+push cs
+ss pop word [si+6+2]
+mov ax, 50
+ss mov [si+4], ax
+mov ax, 2
+ss mov [si+18], ax
+ss call far [si+0]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:51:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:54:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: args TAM: 4 POS: BP--14 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:56:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-14+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:59:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-14], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:61:11 ===---
+; Armazena Dados do Try Catch
+cs mov si, [_os_minstackptr]
+ss mov ax, [si+0]
+mov [bp+-2], ax
+ss mov ax, [si+2]
+mov [bp+-4], ax
+ss mov ax, [si+14]
+mov [bp+-6], ax
+ss mov ax, [si+16]
+mov [bp+-8], ax
+mov ax, bp
+ss mov [si+16], ax
+mov ax, sp
+ss mov [si+14], ax
+ss mov word [si+0], ROTULO3
+push cs
+ss pop word [si+0+2]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+push es
+push di
+push cs
+call _program_main
+add sp, 4
+jmp near ROTULO4
+ROTULO3:
+mov bx, ax
+cs mov si, [_os_minstackptr]
+ss mov bp, [si+16]
+ss mov sp, [si+14]
+mov ax, bx
+jmp near ROTULO4
+ROTULO6:
+push cs
+call _os_fatalerror
+ROTULO4:
+mov ax, [bp+-2]
+cs mov si, [_os_minstackptr]
+ss mov [si+0], ax
+mov ax, [bp+-4]
+ss mov [si+2], ax
+mov ax, [bp+-6]
+ss mov [si+14], ax
+mov ax, [bp+-8]
+ss mov [si+16], ax
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:67:16 ===---
+_os_fatalerror:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:22 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_current]
+push es
+push di
+cs call far [_thread_abort]
+add sp, 4
+ROTULO7:
+FIM_os_fatalerror:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:71:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:13 ===---
+mov ax, cs
+ROTULO8:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:76:13 ===---
+mov ax, ss
+ROTULO9:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:13 ===---
+mov ax, REALOC_TABLE
+ROTULO10:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== CGA.hcb:6:8 ===---
+; MODULO: program
+NAME_program:
+db 7
+db 112,114,111,103,114,97,109
+db 0
+_program:
+db 7
+db 67,71,65,46,104,99,98
+db 0
+;     ---=== CGA.hcb:7:16 ===---
+_program_main:
+push bp
+mov bp, sp
+; ARG: args TAM: 4 POS: BP+6 
+;     ---=== CGA.hcb:7:21 ===---
+;     ---=== CGA.hcb:8:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _cga_mode640x200x2
+;     ---=== CGA.hcb:9:9 ===---
+ROTULO12:
+;     ---=== CGA.hcb:9:15 ===---
+mov ax, 1
+cmp ax, 0
+jne ROTULO13
+jmp near ROTULO14
+ROTULO13:
+;     ---=== CGA.hcb:9:17 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_yield]
+jmp near ROTULO12
+ROTULO14:
+ROTULO11:
+mov sp, bp
+pop bp
+FIM_program_main:
+retf
+; MODULO FIM: program
+;     ---=== CGA.hcb:13:8 ===---
+; MODULO: cga
+NAME_cga:
+db 3
+db 99,103,97
+db 0
+_cga:
+db 7
+db 67,71,65,46,104,99,98
+db 0
+;     ---=== CGA.hcb:14:9 ===---
+_cga_video:
+times 34 db 0
+;     ---=== CGA.hcb:16:16 ===---
+_cga_mode640x200x2:
+;     ---=== CGA.hcb:17:13 ===---
+mov ax, 0x6
+;     ---=== CGA.hcb:18:13 ===---
+int 0x10
+;     ---=== CGA.hcb:19:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:19:23 ===---
+mov ax, 640
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:20:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:20:24 ===---
+mov ax, 200
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:21:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:21:24 ===---
+mov ax, 2
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:22:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:22:27 ===---
+push cs
+pop es
+mov di, _cga_drawpixel
+push es
+push di
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+es pop word [di+6]
+es pop word [di+6+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:23:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'genericvideo'
+;     ---=== CGA.hcb:23:39 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+cs call far [_genericvideo_registerdrawline]
+add sp, 4
+;     ---=== CGA.hcb:24:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'genericvideo'
+;     ---=== CGA.hcb:24:41 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+push es
+push di
+cs call far [_genericvideo_registerdrawcircle]
+add sp, 4
+;     ---=== CGA.hcb:25:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:25:31 ===---
+push cs
+pop es
+mov di, _cga_drawrectangle
+push es
+push di
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:26:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:26:29 ===---
+push cs
+pop es
+mov di, _cga_clearscreen
+push es
+push di
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+es pop word [di+22]
+es pop word [di+22+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:27:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== CGA.hcb:27:25 ===---
+push cs
+pop es
+mov di, _cga_refresh
+push es
+push di
+cs push word [_cga_video+2]
+pop es
+cs mov di, [_cga_video]
+es pop word [di+26]
+es pop word [di+26+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== CGA.hcb:28:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:28:29 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+cs call far [_graphics_modemanual]
+add sp, 4
+;     ---=== CGA.hcb:29:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'genericvideo'
+cs call far [_genericvideo_register2colorspalette]
+ROTULO15:
+FIM_cga_mode640x200x2:
+retf
+;     ---=== CGA.hcb:32:9 ===---
+_cga_refresh:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+;     ---=== CGA.hcb:32:17 ===---
+ROTULO16:
+mov sp, bp
+pop bp
+FIM_cga_refresh:
+retf
+;     ---=== CGA.hcb:35:9 ===---
+_cga_drawpixel:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x TAM: 2 POS: BP+10 
+; ARG: y TAM: 2 POS: BP+12 
+; ARG: color TAM: 2 POS: BP+14 
+;     ---=== CGA.hcb:35:19 ===---
+;     ---=== CGA.hcb:35:38 ===---
+;     ---=== CGA.hcb:35:51 ===---
+;     ---=== CGA.hcb:35:64 ===---
+;     ---=== CGA.hcb:36:9 ===---
+;     ---=== CGA.hcb:36:14 ===---
+;     ---=== CGA.hcb:36:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:36:17 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 0
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+0]
+mov bx, ax
+pop ax
+cmp ax, bx
+jae ROTULO20
+jmp near ROTULO21
+ROTULO20:
+mov ax, 65535
+jmp near ROTULO22
+ROTULO21:
+xor ax, ax
+ROTULO22:
+cmp ax, 0
+jne ROTULO18
+jmp near ROTULO19
+ROTULO18:
+;     ---=== CGA.hcb:36:33 ===---
+;     ---=== CGA.hcb:36:38 ===---
+xor ax, ax
+jmp near ROTULO17
+ROTULO19:
+;     ---=== CGA.hcb:37:9 ===---
+;     ---=== CGA.hcb:37:14 ===---
+;     ---=== CGA.hcb:37:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:37:17 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 2
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+2]
+mov bx, ax
+pop ax
+cmp ax, bx
+jae ROTULO25
+jmp near ROTULO26
+ROTULO25:
+mov ax, 65535
+jmp near ROTULO27
+ROTULO26:
+xor ax, ax
+ROTULO27:
+cmp ax, 0
+jne ROTULO23
+jmp near ROTULO24
+ROTULO23:
+;     ---=== CGA.hcb:37:34 ===---
+;     ---=== CGA.hcb:37:39 ===---
+xor ax, ax
+jmp near ROTULO17
+ROTULO24:
+;     ---=== CGA.hcb:38:13 ===---
+mov ax, 0xba00
+;     ---=== CGA.hcb:39:13 ===---
+test word [bp+12], 1
+;     ---=== CGA.hcb:40:13 ===---
+jne .par
+;     ---=== CGA.hcb:41:13 ===---
+mov ax, 0xb800
+;     ---=== CGA.hcb:42:13 ===---
+.par:
+;     ---=== CGA.hcb:43:13 ===---
+mov es, ax
+;     ---=== CGA.hcb:44:13 ===---
+mov ax, [bp+12]
+;     ---=== CGA.hcb:45:13 ===---
+shr ax, 1
+;     ---=== CGA.hcb:46:13 ===---
+mov bx, 80
+;     ---=== CGA.hcb:47:13 ===---
+mul bx
+;     ---=== CGA.hcb:48:13 ===---
+mov bx, [bp+10]
+;     ---=== CGA.hcb:49:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:50:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:51:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:52:13 ===---
+add ax, bx
+;     ---=== CGA.hcb:53:13 ===---
+mov di, ax
+;     ---=== CGA.hcb:54:13 ===---
+mov cx, [bp+10]
+;     ---=== CGA.hcb:55:13 ===---
+and cx, 7
+;     ---=== CGA.hcb:56:13 ===---
+inc cx
+;     ---=== CGA.hcb:57:13 ===---
+mov ax, [bp+14]
+;     ---=== CGA.hcb:58:13 ===---
+and ax, 1
+;     ---=== CGA.hcb:59:13 ===---
+je .inverte
+;     ---=== CGA.hcb:60:13 ===---
+ror al, cl
+;     ---=== CGA.hcb:61:13 ===---
+es or [di], al
+;     ---=== CGA.hcb:62:13 ===---
+jmp .fim
+;     ---=== CGA.hcb:63:13 ===---
+.inverte:
+;     ---=== CGA.hcb:64:13 ===---
+mov al, 1
+;     ---=== CGA.hcb:65:13 ===---
+ror al, cl
+;     ---=== CGA.hcb:66:13 ===---
+not ax
+;     ---=== CGA.hcb:67:13 ===---
+es and [di], al
+;     ---=== CGA.hcb:68:13 ===---
+.fim:
+ROTULO17:
+mov sp, bp
+pop bp
+FIM_cga_drawpixel:
+retf
+;     ---=== CGA.hcb:71:9 ===---
+_cga_byteor:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x TAM: 2 POS: BP+10 
+; ARG: y TAM: 2 POS: BP+12 
+; ARG: value TAM: 2 POS: BP+14 
+;     ---=== CGA.hcb:71:16 ===---
+;     ---=== CGA.hcb:71:35 ===---
+;     ---=== CGA.hcb:71:48 ===---
+;     ---=== CGA.hcb:71:61 ===---
+;     ---=== CGA.hcb:72:13 ===---
+mov ax, 0xba00
+;     ---=== CGA.hcb:73:13 ===---
+test word [bp+12], 1
+;     ---=== CGA.hcb:74:13 ===---
+jne .par
+;     ---=== CGA.hcb:75:13 ===---
+mov ax, 0xb800
+;     ---=== CGA.hcb:76:13 ===---
+.par:
+;     ---=== CGA.hcb:77:13 ===---
+mov es, ax
+;     ---=== CGA.hcb:78:13 ===---
+mov ax, [bp+12]
+;     ---=== CGA.hcb:79:13 ===---
+shr ax, 1
+;     ---=== CGA.hcb:80:13 ===---
+mov bx, 80
+;     ---=== CGA.hcb:81:13 ===---
+mul bx
+;     ---=== CGA.hcb:82:13 ===---
+mov bx, [bp+10]
+;     ---=== CGA.hcb:83:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:84:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:85:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:86:13 ===---
+add ax, bx
+;     ---=== CGA.hcb:87:13 ===---
+mov di, ax
+;     ---=== CGA.hcb:88:13 ===---
+mov ax, [bp+14]
+;     ---=== CGA.hcb:89:13 ===---
+es or [di], al
+ROTULO28:
+mov sp, bp
+pop bp
+FIM_cga_byteor:
+retf
+;     ---=== CGA.hcb:92:9 ===---
+_cga_byteand:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x TAM: 2 POS: BP+10 
+; ARG: y TAM: 2 POS: BP+12 
+; ARG: value TAM: 2 POS: BP+14 
+;     ---=== CGA.hcb:92:17 ===---
+;     ---=== CGA.hcb:92:36 ===---
+;     ---=== CGA.hcb:92:49 ===---
+;     ---=== CGA.hcb:92:62 ===---
+;     ---=== CGA.hcb:93:13 ===---
+mov ax, 0xba00
+;     ---=== CGA.hcb:94:13 ===---
+test word [bp+12], 1
+;     ---=== CGA.hcb:95:13 ===---
+jne .par
+;     ---=== CGA.hcb:96:13 ===---
+mov ax, 0xb800
+;     ---=== CGA.hcb:97:13 ===---
+.par:
+;     ---=== CGA.hcb:98:13 ===---
+mov es, ax
+;     ---=== CGA.hcb:99:13 ===---
+mov ax, [bp+12]
+;     ---=== CGA.hcb:100:13 ===---
+shr ax, 1
+;     ---=== CGA.hcb:101:13 ===---
+mov bx, 80
+;     ---=== CGA.hcb:102:13 ===---
+mul bx
+;     ---=== CGA.hcb:103:13 ===---
+mov bx, [bp+10]
+;     ---=== CGA.hcb:104:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:105:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:106:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:107:13 ===---
+add ax, bx
+;     ---=== CGA.hcb:108:13 ===---
+mov di, ax
+;     ---=== CGA.hcb:109:13 ===---
+mov ax, [bp+14]
+;     ---=== CGA.hcb:110:13 ===---
+es and [di], al
+ROTULO29:
+mov sp, bp
+pop bp
+FIM_cga_byteand:
+retf
+;     ---=== CGA.hcb:113:9 ===---
+_cga_byteandor:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x TAM: 2 POS: BP+10 
+; ARG: y TAM: 2 POS: BP+12 
+; ARG: valueand TAM: 2 POS: BP+14 
+; ARG: valueor TAM: 2 POS: BP+16 
+;     ---=== CGA.hcb:113:19 ===---
+;     ---=== CGA.hcb:113:38 ===---
+;     ---=== CGA.hcb:113:51 ===---
+;     ---=== CGA.hcb:113:64 ===---
+;     ---=== CGA.hcb:113:83 ===---
+;     ---=== CGA.hcb:114:13 ===---
+mov ax, 0xba00
+;     ---=== CGA.hcb:115:13 ===---
+test word [bp+12], 1
+;     ---=== CGA.hcb:116:13 ===---
+jne .par
+;     ---=== CGA.hcb:117:13 ===---
+mov ax, 0xb800
+;     ---=== CGA.hcb:118:13 ===---
+.par:
+;     ---=== CGA.hcb:119:13 ===---
+mov es, ax
+;     ---=== CGA.hcb:120:13 ===---
+mov ax, [bp+12]
+;     ---=== CGA.hcb:121:13 ===---
+shr ax, 1
+;     ---=== CGA.hcb:122:13 ===---
+mov bx, 80
+;     ---=== CGA.hcb:123:13 ===---
+mul bx
+;     ---=== CGA.hcb:124:13 ===---
+mov bx, [bp+10]
+;     ---=== CGA.hcb:125:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:126:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:127:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:128:13 ===---
+add ax, bx
+;     ---=== CGA.hcb:129:13 ===---
+mov di, ax
+;     ---=== CGA.hcb:130:13 ===---
+mov ax, [bp+14]
+;     ---=== CGA.hcb:131:13 ===---
+es and [di], al
+;     ---=== CGA.hcb:132:13 ===---
+mov ax, [bp+16]
+;     ---=== CGA.hcb:133:13 ===---
+es or [di], al
+ROTULO30:
+mov sp, bp
+pop bp
+FIM_cga_byteandor:
+retf
+;     ---=== CGA.hcb:136:9 ===---
+_cga_byteset:
+push bp
+mov bp, sp
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x TAM: 2 POS: BP+10 
+; ARG: y TAM: 2 POS: BP+12 
+; ARG: value TAM: 2 POS: BP+14 
+; ARG: len TAM: 2 POS: BP+16 
+;     ---=== CGA.hcb:136:17 ===---
+;     ---=== CGA.hcb:136:36 ===---
+;     ---=== CGA.hcb:136:49 ===---
+;     ---=== CGA.hcb:136:62 ===---
+;     ---=== CGA.hcb:136:78 ===---
+;     ---=== CGA.hcb:137:13 ===---
+mov ax, 0xba00
+;     ---=== CGA.hcb:138:13 ===---
+test word [bp+12], 1
+;     ---=== CGA.hcb:139:13 ===---
+jne .par
+;     ---=== CGA.hcb:140:13 ===---
+mov ax, 0xb800
+;     ---=== CGA.hcb:141:13 ===---
+.par:
+;     ---=== CGA.hcb:142:13 ===---
+mov es, ax
+;     ---=== CGA.hcb:143:13 ===---
+mov ax, [bp+12]
+;     ---=== CGA.hcb:144:13 ===---
+shr ax, 1
+;     ---=== CGA.hcb:145:13 ===---
+mov bx, 80
+;     ---=== CGA.hcb:146:13 ===---
+mul bx
+;     ---=== CGA.hcb:147:13 ===---
+mov bx, [bp+10]
+;     ---=== CGA.hcb:148:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:149:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:150:13 ===---
+shr bx, 1
+;     ---=== CGA.hcb:151:13 ===---
+add ax, bx
+;     ---=== CGA.hcb:152:13 ===---
+mov di, ax
+;     ---=== CGA.hcb:153:13 ===---
+mov ax, [bp+14]
+;     ---=== CGA.hcb:154:13 ===---
+mov cx, [bp+16]
+;     ---=== CGA.hcb:155:13 ===---
+cld
+;     ---=== CGA.hcb:156:13 ===---
+rep stosb
+ROTULO31:
+mov sp, bp
+pop bp
+FIM_cga_byteset:
+retf
+;     ---=== CGA.hcb:159:14 ===---
+_cga_convertmask:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: first TAM: 2 POS: BP+6 
+; ARG: last TAM: 2 POS: BP+8 
+; ARG: ret TAM: 2 POS: BP--2 
+; ARG: i TAM: 2 POS: BP--4 
+;     ---=== CGA.hcb:159:26 ===---
+;     ---=== CGA.hcb:159:43 ===---
+;     ---=== CGA.hcb:160:13 ===---
+;     ---=== CGA.hcb:161:13 ===---
+;     ---=== CGA.hcb:162:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 0
+;     ---=== CGA.hcb:163:41 ===---
+;     ---=== CGA.hcb:163:41 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:163:23 ===---
+;     ---=== CGA.hcb:163:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+push ax
+;     ---=== CGA.hcb:163:27 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov [bp+-4], ax
+ROTULO33:
+;     ---=== CGA.hcb:163:41 ===---
+;     ---=== CGA.hcb:163:41 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== CGA.hcb:163:37 ===---
+;     ---=== CGA.hcb:163:32 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+8]
+push ax
+;     ---=== CGA.hcb:163:41 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO39
+jmp near ROTULO40
+ROTULO39:
+mov ax, 65535
+jmp near ROTULO41
+ROTULO40:
+xor ax, ax
+ROTULO41:
+cmp ax, 0
+jne ROTULO34
+jmp near ROTULO35
+ROTULO34:
+;     ---=== CGA.hcb:164:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:164:23 ===---
+;     ---=== CGA.hcb:164:19 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:164:31 ===---
+;     ---=== CGA.hcb:164:27 ===---
+mov ax, 128
+push ax
+;     ---=== CGA.hcb:164:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov cx, ax
+pop ax
+shr al, cl
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-2], ax
+;     ---=== CGA.hcb:163:41 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+jmp near ROTULO33
+ROTULO35:
+;     ---=== CGA.hcb:166:9 ===---
+;     ---=== CGA.hcb:166:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+jmp near ROTULO32
+ROTULO32:
+mov sp, bp
+pop bp
+FIM_cga_convertmask:
+retf
+;     ---=== CGA.hcb:169:14 ===---
+_cga_convertinversemask:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: first TAM: 2 POS: BP+6 
+; ARG: last TAM: 2 POS: BP+8 
+; ARG: ret TAM: 2 POS: BP--2 
+; ARG: i TAM: 2 POS: BP--4 
+;     ---=== CGA.hcb:169:33 ===---
+;     ---=== CGA.hcb:169:50 ===---
+;     ---=== CGA.hcb:170:13 ===---
+;     ---=== CGA.hcb:171:13 ===---
+;     ---=== CGA.hcb:172:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 0
+;     ---=== CGA.hcb:173:41 ===---
+;     ---=== CGA.hcb:173:41 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:173:23 ===---
+;     ---=== CGA.hcb:173:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+push ax
+;     ---=== CGA.hcb:173:27 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov [bp+-4], ax
+ROTULO49:
+;     ---=== CGA.hcb:173:41 ===---
+;     ---=== CGA.hcb:173:41 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== CGA.hcb:173:37 ===---
+;     ---=== CGA.hcb:173:32 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+8]
+push ax
+;     ---=== CGA.hcb:173:41 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO55
+jmp near ROTULO56
+ROTULO55:
+mov ax, 65535
+jmp near ROTULO57
+ROTULO56:
+xor ax, ax
+ROTULO57:
+cmp ax, 0
+jne ROTULO50
+jmp near ROTULO51
+ROTULO50:
+;     ---=== CGA.hcb:174:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:174:23 ===---
+;     ---=== CGA.hcb:174:19 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:174:31 ===---
+;     ---=== CGA.hcb:174:27 ===---
+mov ax, 128
+push ax
+;     ---=== CGA.hcb:174:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov cx, ax
+pop ax
+shl al, cl
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-2], ax
+;     ---=== CGA.hcb:173:41 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+jmp near ROTULO49
+ROTULO51:
+;     ---=== CGA.hcb:176:9 ===---
+;     ---=== CGA.hcb:176:16 ===---
+;     ---=== CGA.hcb:176:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+not ax
+ROTULO64:
+mov ax, 65535
+jmp near ROTULO66
+ROTULO65:
+xor ax, ax
+ROTULO66:
+jmp near ROTULO48
+ROTULO48:
+mov sp, bp
+pop bp
+FIM_cga_convertinversemask:
+retf
+;     ---=== CGA.hcb:180:9 ===---
+_cga_drawrectangle:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: x1 TAM: 2 POS: BP+10 
+; ARG: y1 TAM: 2 POS: BP+12 
+; ARG: x2 TAM: 2 POS: BP+14 
+; ARG: y2 TAM: 2 POS: BP+16 
+; ARG: bordercolor TAM: 2 POS: BP+18 
+; ARG: backgroundcolor TAM: 2 POS: BP+20 
+; ARG: y TAM: 2 POS: BP--2 
+; ARG: x TAM: 2 POS: BP--4 
+; ARG: comp TAM: 2 POS: BP--6 
+; ARG: tmp TAM: 2 POS: BP--8 
+; ARG: tmpor TAM: 2 POS: BP--10 
+; ARG: tmpand TAM: 2 POS: BP--12 
+; ARG: diff TAM: 2 POS: BP--14 
+;     ---=== CGA.hcb:180:23 ===---
+;     ---=== CGA.hcb:180:42 ===---
+;     ---=== CGA.hcb:180:56 ===---
+;     ---=== CGA.hcb:180:70 ===---
+;     ---=== CGA.hcb:180:84 ===---
+;     ---=== CGA.hcb:180:98 ===---
+;     ---=== CGA.hcb:180:121 ===---
+;     ---=== CGA.hcb:181:13 ===---
+;     ---=== CGA.hcb:182:13 ===---
+;     ---=== CGA.hcb:183:13 ===---
+;     ---=== CGA.hcb:184:13 ===---
+;     ---=== CGA.hcb:185:13 ===---
+;     ---=== CGA.hcb:186:13 ===---
+;     ---=== CGA.hcb:187:13 ===---
+;     ---=== CGA.hcb:188:9 ===---
+;     ---=== CGA.hcb:188:22 ===---
+;     ---=== CGA.hcb:188:16 ===---
+;     ---=== CGA.hcb:188:18 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:188:13 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:188:24 ===---
+mov ax, 24
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO70
+jmp near ROTULO71
+ROTULO70:
+mov ax, 65535
+jmp near ROTULO72
+ROTULO71:
+xor ax, ax
+ROTULO72:
+cmp ax, 0
+jne ROTULO68
+jmp near ROTULO69
+ROTULO68:
+;     ---=== CGA.hcb:189:13 ===---
+;     ---=== CGA.hcb:189:32 ===---
+;     ---=== CGA.hcb:189:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:189:35 ===---
+mov ax, 65535
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO75
+jmp near ROTULO76
+ROTULO75:
+mov ax, 65535
+jmp near ROTULO77
+ROTULO76:
+xor ax, ax
+ROTULO77:
+cmp ax, 0
+jne ROTULO73
+jmp near ROTULO74
+ROTULO73:
+;     ---=== CGA.hcb:190:36 ===---
+;     ---=== CGA.hcb:190:36 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:190:27 ===---
+;     ---=== CGA.hcb:190:28 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:190:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+pop bx
+add ax, bx
+mov [bp+-2], ax
+ROTULO78:
+;     ---=== CGA.hcb:190:36 ===---
+;     ---=== CGA.hcb:190:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:190:35 ===---
+;     ---=== CGA.hcb:190:36 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:190:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO81
+jmp near ROTULO82
+ROTULO81:
+mov ax, 65535
+jmp near ROTULO83
+ROTULO82:
+xor ax, ax
+ROTULO83:
+cmp ax, 0
+jne ROTULO79
+jmp near ROTULO80
+ROTULO79:
+;     ---=== CGA.hcb:191:21 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:191:61 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:191:58 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:191:53 ===---
+;     ---=== CGA.hcb:191:55 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:191:50 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:191:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:191:42 ===---
+;     ---=== CGA.hcb:191:44 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:191:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+pop bx
+add ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== CGA.hcb:190:36 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+jmp near ROTULO78
+ROTULO80:
+ROTULO74:
+;     ---=== CGA.hcb:194:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:194:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:194:43 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:194:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:194:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:194:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== CGA.hcb:195:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:195:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:195:43 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:195:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:195:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:195:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== CGA.hcb:196:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:196:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:196:43 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:196:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:196:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:196:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== CGA.hcb:197:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== CGA.hcb:197:47 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:197:43 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:197:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:197:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:197:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== CGA.hcb:198:13 ===---
+;     ---=== CGA.hcb:198:18 ===---
+xor ax, ax
+jmp near ROTULO67
+ROTULO69:
+;     ---=== CGA.hcb:200:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:200:27 ===---
+;     ---=== CGA.hcb:200:33 ===---
+;     ---=== CGA.hcb:200:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:200:37 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== CGA.hcb:200:20 ===---
+;     ---=== CGA.hcb:200:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:200:24 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+pop bx
+sub ax, bx
+mov [bp+-6], ax
+;     ---=== CGA.hcb:201:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-14], 0
+;     ---=== CGA.hcb:202:9 ===---
+;     ---=== CGA.hcb:202:17 ===---
+;     ---=== CGA.hcb:202:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== CGA.hcb:202:20 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO92
+jmp near ROTULO93
+ROTULO92:
+mov ax, 65535
+jmp near ROTULO94
+ROTULO93:
+xor ax, ax
+ROTULO94:
+cmp ax, 0
+jne ROTULO90
+jmp near ROTULO91
+ROTULO90:
+;     ---=== CGA.hcb:202:27 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:202:34 ===---
+;     ---=== CGA.hcb:202:35 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:202:34 ===---
+xor ax, ax
+pop bx
+sub ax, bx
+mov [bp+-14], ax
+ROTULO91:
+;     ---=== CGA.hcb:203:9 ===---
+;     ---=== CGA.hcb:203:17 ===---
+;     ---=== CGA.hcb:203:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== CGA.hcb:203:19 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+jl ROTULO97
+jmp near ROTULO98
+ROTULO97:
+mov ax, 65535
+jmp near ROTULO99
+ROTULO98:
+xor ax, ax
+ROTULO99:
+cmp ax, 0
+jne ROTULO95
+jmp near ROTULO96
+ROTULO95:
+;     ---=== CGA.hcb:203:26 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:203:33 ===---
+;     ---=== CGA.hcb:203:34 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:203:33 ===---
+xor ax, ax
+pop bx
+sub ax, bx
+mov [bp+-14], ax
+ROTULO96:
+;     ---=== CGA.hcb:204:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:204:19 ===---
+;     ---=== CGA.hcb:204:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:204:23 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov [bp+-8], ax
+;     ---=== CGA.hcb:205:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-10], 0
+;     ---=== CGA.hcb:206:9 ===---
+;     ---=== CGA.hcb:206:16 ===---
+;     ---=== CGA.hcb:206:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:206:18 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO105
+jmp near ROTULO106
+ROTULO105:
+mov ax, 65535
+jmp near ROTULO107
+ROTULO106:
+xor ax, ax
+ROTULO107:
+cmp ax, 0
+jne ROTULO103
+jmp near ROTULO104
+ROTULO103:
+;     ---=== CGA.hcb:206:25 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:206:34 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:206:52 ===---
+;     ---=== CGA.hcb:206:53 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:206:49 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:206:46 ===---
+xor ax, ax
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov [bp+-12], ax
+jmp near ROTULO108
+ROTULO104:
+;     ---=== CGA.hcb:206:61 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-12], 0
+ROTULO108:
+;     ---=== CGA.hcb:207:9 ===---
+;     ---=== CGA.hcb:207:24 ===---
+;     ---=== CGA.hcb:207:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:207:28 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO109
+jmp near ROTULO110
+ROTULO109:
+;     ---=== CGA.hcb:208:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:208:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:208:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:208:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov [bp+-10], ax
+;     ---=== CGA.hcb:209:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:209:45 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:209:62 ===---
+mov ax, 7
+push ax
+;     ---=== CGA.hcb:209:57 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:209:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:209:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:209:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:209:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:210:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:210:45 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:210:62 ===---
+mov ax, 7
+push ax
+;     ---=== CGA.hcb:210:57 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:210:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:210:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:210:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:210:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+jmp near ROTULO114
+ROTULO110:
+;     ---=== CGA.hcb:212:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:212:45 ===---
+xor ax, ax
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:212:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:212:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:212:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:212:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:213:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:213:45 ===---
+xor ax, ax
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:213:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:213:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:213:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:213:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+ROTULO114:
+;     ---=== CGA.hcb:215:9 ===---
+;     ---=== CGA.hcb:215:28 ===---
+;     ---=== CGA.hcb:215:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:215:31 ===---
+mov ax, 65535
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO117
+jmp near ROTULO118
+ROTULO117:
+mov ax, 65535
+jmp near ROTULO119
+ROTULO118:
+xor ax, ax
+ROTULO119:
+cmp ax, 0
+jne ROTULO115
+jmp near ROTULO116
+ROTULO115:
+;     ---=== CGA.hcb:216:13 ===---
+;     ---=== CGA.hcb:216:32 ===---
+;     ---=== CGA.hcb:216:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:216:36 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO120
+jmp near ROTULO121
+ROTULO120:
+;     ---=== CGA.hcb:217:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:217:31 ===---
+;     ---=== CGA.hcb:217:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== CGA.hcb:217:34 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:217:53 ===---
+mov ax, 7
+push ax
+;     ---=== CGA.hcb:217:49 ===---
+;     ---=== CGA.hcb:217:50 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:217:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+add ax, bx
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-10], ax
+ROTULO121:
+jmp near ROTULO128
+ROTULO116:
+;     ---=== CGA.hcb:220:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:220:29 ===---
+;     ---=== CGA.hcb:220:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== CGA.hcb:220:32 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:220:51 ===---
+mov ax, 7
+push ax
+;     ---=== CGA.hcb:220:47 ===---
+;     ---=== CGA.hcb:220:48 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:220:44 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+add ax, bx
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-12], ax
+ROTULO128:
+;     ---=== CGA.hcb:222:32 ===---
+;     ---=== CGA.hcb:222:32 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:222:20 ===---
+;     ---=== CGA.hcb:222:22 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:222:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+pop bx
+add ax, bx
+mov [bp+-2], ax
+ROTULO132:
+;     ---=== CGA.hcb:222:32 ===---
+;     ---=== CGA.hcb:222:32 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:222:30 ===---
+;     ---=== CGA.hcb:222:32 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:222:27 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO135
+jmp near ROTULO136
+ROTULO135:
+mov ax, 65535
+jmp near ROTULO137
+ROTULO136:
+xor ax, ax
+ROTULO137:
+cmp ax, 0
+jne ROTULO133
+jmp near ROTULO134
+ROTULO133:
+;     ---=== CGA.hcb:223:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:223:44 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:223:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:223:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:223:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:223:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:222:32 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+jmp near ROTULO132
+ROTULO134:
+;     ---=== CGA.hcb:225:9 ===---
+;     ---=== CGA.hcb:225:28 ===---
+;     ---=== CGA.hcb:225:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:225:31 ===---
+mov ax, 65535
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO140
+jmp near ROTULO141
+ROTULO140:
+mov ax, 65535
+jmp near ROTULO142
+ROTULO141:
+xor ax, ax
+ROTULO142:
+cmp ax, 0
+jne ROTULO138
+jmp near ROTULO139
+ROTULO138:
+;     ---=== CGA.hcb:226:13 ===---
+;     ---=== CGA.hcb:226:32 ===---
+;     ---=== CGA.hcb:226:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:226:36 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO143
+jmp near ROTULO144
+ROTULO143:
+;     ---=== CGA.hcb:227:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-12], 255
+jmp near ROTULO148
+ROTULO144:
+;     ---=== CGA.hcb:229:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-12], 0
+ROTULO148:
+;     ---=== CGA.hcb:231:27 ===---
+;     ---=== CGA.hcb:231:27 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:231:21 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+mov [bp+-2], ax
+ROTULO149:
+;     ---=== CGA.hcb:231:27 ===---
+;     ---=== CGA.hcb:231:27 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:231:27 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO152
+jmp near ROTULO153
+ROTULO152:
+mov ax, 65535
+jmp near ROTULO154
+ROTULO153:
+xor ax, ax
+ROTULO154:
+cmp ax, 0
+jne ROTULO150
+jmp near ROTULO151
+ROTULO150:
+;     ---=== CGA.hcb:232:17 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:232:68 ===---
+;     ---=== CGA.hcb:232:70 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== CGA.hcb:232:61 ===---
+;     ---=== CGA.hcb:232:55 ===---
+;     ---=== CGA.hcb:232:57 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:232:52 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:232:65 ===---
+mov ax, 3
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:232:42 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:232:39 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:232:34 ===---
+;     ---=== CGA.hcb:232:36 ===---
+mov ax, 8
+push ax
+;     ---=== CGA.hcb:232:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:232:25 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteset
+add sp, 12
+;     ---=== CGA.hcb:231:27 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+jmp near ROTULO149
+ROTULO151:
+ROTULO139:
+;     ---=== CGA.hcb:236:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:236:19 ===---
+;     ---=== CGA.hcb:236:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:236:23 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+and ax, bx
+mov [bp+-8], ax
+;     ---=== CGA.hcb:237:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-10], 0
+;     ---=== CGA.hcb:238:9 ===---
+;     ---=== CGA.hcb:238:16 ===---
+;     ---=== CGA.hcb:238:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:238:18 ===---
+mov ax, 7
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO160
+jmp near ROTULO161
+ROTULO160:
+mov ax, 65535
+jmp near ROTULO162
+ROTULO161:
+xor ax, ax
+ROTULO162:
+cmp ax, 0
+jne ROTULO158
+jmp near ROTULO159
+ROTULO158:
+;     ---=== CGA.hcb:238:25 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:238:34 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:238:53 ===---
+mov ax, 7
+push ax
+;     ---=== CGA.hcb:238:49 ===---
+;     ---=== CGA.hcb:238:50 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:238:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+add ax, bx
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov [bp+-12], ax
+jmp near ROTULO163
+ROTULO159:
+;     ---=== CGA.hcb:238:61 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:238:70 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:238:87 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:238:82 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov [bp+-12], ax
+ROTULO163:
+;     ---=== CGA.hcb:239:9 ===---
+;     ---=== CGA.hcb:239:24 ===---
+;     ---=== CGA.hcb:239:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:239:28 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO164
+jmp near ROTULO165
+ROTULO164:
+;     ---=== CGA.hcb:240:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:240:21 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:240:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:240:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov [bp+-10], ax
+;     ---=== CGA.hcb:241:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:241:45 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:241:60 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:241:57 ===---
+xor ax, ax
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:241:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:241:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:241:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:241:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:242:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:242:45 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:242:60 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:242:57 ===---
+xor ax, ax
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:242:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:242:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:242:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:242:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+jmp near ROTULO169
+ROTULO165:
+;     ---=== CGA.hcb:244:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:244:45 ===---
+xor ax, ax
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:244:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:244:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:244:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:244:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:245:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:245:45 ===---
+xor ax, ax
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:245:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:245:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:245:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:245:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+ROTULO169:
+;     ---=== CGA.hcb:247:9 ===---
+;     ---=== CGA.hcb:247:16 ===---
+;     ---=== CGA.hcb:247:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== CGA.hcb:247:18 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO172
+jmp near ROTULO173
+ROTULO172:
+mov ax, 65535
+jmp near ROTULO174
+ROTULO173:
+xor ax, ax
+ROTULO174:
+cmp ax, 0
+jne ROTULO170
+jmp near ROTULO171
+ROTULO170:
+;     ---=== CGA.hcb:248:13 ===---
+;     ---=== CGA.hcb:248:32 ===---
+;     ---=== CGA.hcb:248:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:248:35 ===---
+mov ax, 65535
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO177
+jmp near ROTULO178
+ROTULO177:
+mov ax, 65535
+jmp near ROTULO179
+ROTULO178:
+xor ax, ax
+ROTULO179:
+cmp ax, 0
+jne ROTULO175
+jmp near ROTULO176
+ROTULO175:
+;     ---=== CGA.hcb:249:17 ===---
+;     ---=== CGA.hcb:249:36 ===---
+;     ---=== CGA.hcb:249:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+20]
+push ax
+;     ---=== CGA.hcb:249:40 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO180
+jmp near ROTULO181
+ROTULO180:
+;     ---=== CGA.hcb:250:21 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:250:35 ===---
+;     ---=== CGA.hcb:250:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== CGA.hcb:250:38 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:250:56 ===---
+;     ---=== CGA.hcb:250:57 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:250:53 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:250:50 ===---
+xor ax, ax
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-10], ax
+ROTULO181:
+jmp near ROTULO188
+ROTULO176:
+;     ---=== CGA.hcb:253:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:253:33 ===---
+;     ---=== CGA.hcb:253:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== CGA.hcb:253:36 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:253:54 ===---
+;     ---=== CGA.hcb:253:55 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:253:51 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:253:48 ===---
+xor ax, ax
+push ax
+push cs
+call _cga_convertmask
+add sp, 4
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-12], ax
+ROTULO188:
+ROTULO171:
+;     ---=== CGA.hcb:256:32 ===---
+;     ---=== CGA.hcb:256:32 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== CGA.hcb:256:20 ===---
+;     ---=== CGA.hcb:256:22 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:256:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+pop bx
+add ax, bx
+mov [bp+-2], ax
+ROTULO192:
+;     ---=== CGA.hcb:256:32 ===---
+;     ---=== CGA.hcb:256:32 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:256:30 ===---
+;     ---=== CGA.hcb:256:32 ===---
+mov ax, 1
+push ax
+;     ---=== CGA.hcb:256:27 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+pop bx
+sub ax, bx
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO195
+jmp near ROTULO196
+ROTULO195:
+mov ax, 65535
+jmp near ROTULO197
+ROTULO196:
+xor ax, ax
+ROTULO197:
+cmp ax, 0
+jne ROTULO193
+jmp near ROTULO194
+ROTULO193:
+;     ---=== CGA.hcb:257:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:257:44 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:257:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:257:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== CGA.hcb:257:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+push ax
+;     ---=== CGA.hcb:257:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteandor
+add sp, 12
+;     ---=== CGA.hcb:256:32 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-2]
+jmp near ROTULO192
+ROTULO194:
+;     ---=== CGA.hcb:259:9 ===---
+;     ---=== CGA.hcb:259:24 ===---
+;     ---=== CGA.hcb:259:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+18]
+push ax
+;     ---=== CGA.hcb:259:28 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO198
+jmp near ROTULO199
+ROTULO198:
+;     ---=== CGA.hcb:260:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-12], 255
+jmp near ROTULO203
+ROTULO199:
+;     ---=== CGA.hcb:262:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-12], 0
+ROTULO203:
+;     ---=== CGA.hcb:264:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:264:61 ===---
+;     ---=== CGA.hcb:264:63 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== CGA.hcb:264:54 ===---
+;     ---=== CGA.hcb:264:48 ===---
+;     ---=== CGA.hcb:264:50 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:264:45 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:264:58 ===---
+mov ax, 3
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:264:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:264:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+12]
+push ax
+;     ---=== CGA.hcb:264:26 ===---
+;     ---=== CGA.hcb:264:28 ===---
+mov ax, 8
+push ax
+;     ---=== CGA.hcb:264:23 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:264:17 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteset
+add sp, 12
+;     ---=== CGA.hcb:265:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:265:61 ===---
+;     ---=== CGA.hcb:265:63 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-14]
+push ax
+;     ---=== CGA.hcb:265:54 ===---
+;     ---=== CGA.hcb:265:48 ===---
+;     ---=== CGA.hcb:265:50 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:265:45 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+14]
+pop bx
+sub ax, bx
+push ax
+;     ---=== CGA.hcb:265:58 ===---
+mov ax, 3
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:265:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:265:31 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+16]
+push ax
+;     ---=== CGA.hcb:265:26 ===---
+;     ---=== CGA.hcb:265:28 ===---
+mov ax, 8
+push ax
+;     ---=== CGA.hcb:265:23 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+pop bx
+add ax, bx
+push ax
+;     ---=== CGA.hcb:265:17 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteset
+add sp, 12
+ROTULO67:
+mov sp, bp
+pop bp
+FIM_cga_drawrectangle:
+retf
+;     ---=== CGA.hcb:268:9 ===---
+_cga_clearscreen:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: mode TAM: 4 POS: BP+6 
+; ARG: color TAM: 2 POS: BP+10 
+; ARG: tmp TAM: 2 POS: BP--2 
+; ARG: y TAM: 2 POS: BP--4 
+;     ---=== CGA.hcb:268:21 ===---
+;     ---=== CGA.hcb:268:40 ===---
+;     ---=== CGA.hcb:269:13 ===---
+;     ---=== CGA.hcb:270:13 ===---
+;     ---=== CGA.hcb:271:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 0
+;     ---=== CGA.hcb:272:22 ===---
+;     ---=== CGA.hcb:272:22 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-4], 0
+ROTULO205:
+;     ---=== CGA.hcb:272:22 ===---
+;     ---=== CGA.hcb:272:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== CGA.hcb:272:22 ===---
+mov ax, 200
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO208
+jmp near ROTULO209
+ROTULO208:
+mov ax, 65535
+jmp near ROTULO210
+ROTULO209:
+xor ax, ax
+ROTULO210:
+cmp ax, 0
+jne ROTULO206
+jmp near ROTULO207
+ROTULO206:
+;     ---=== CGA.hcb:273:13 ===---
+;     ---=== CGA.hcb:273:22 ===---
+;     ---=== CGA.hcb:273:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:273:26 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO211
+jmp near ROTULO212
+ROTULO211:
+;     ---=== CGA.hcb:273:33 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 170
+ROTULO212:
+;     ---=== CGA.hcb:274:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:274:38 ===---
+mov ax, 80
+push ax
+;     ---=== CGA.hcb:274:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:274:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== CGA.hcb:274:27 ===---
+xor ax, ax
+push ax
+;     ---=== CGA.hcb:274:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteset
+add sp, 12
+;     ---=== CGA.hcb:275:13 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+;     ---=== CGA.hcb:276:13 ===---
+;     ---=== CGA.hcb:276:22 ===---
+;     ---=== CGA.hcb:276:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+10]
+push ax
+;     ---=== CGA.hcb:276:26 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO216
+jmp near ROTULO217
+ROTULO216:
+;     ---=== CGA.hcb:276:33 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-2], 85
+ROTULO217:
+;     ---=== CGA.hcb:277:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== CGA.hcb:277:38 ===---
+mov ax, 80
+push ax
+;     ---=== CGA.hcb:277:33 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+xor ah, ah
+push ax
+;     ---=== CGA.hcb:277:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== CGA.hcb:277:27 ===---
+xor ax, ax
+push ax
+;     ---=== CGA.hcb:277:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+push cs
+call _cga_byteset
+add sp, 12
+;     ---=== CGA.hcb:272:22 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-4]
+jmp near ROTULO205
+ROTULO207:
+ROTULO204:
+mov sp, bp
+pop bp
+FIM_cga_clearscreen:
+retf
+; MODULO FIM: cga
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:16:8 ===---
+; MODULO: thread
+NAME_thread:
+db 6
+db 116,104,114,101,97,100
+db 0
+_thread:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:17:16 ===---
+_thread_yield:
+times 4 db 0
+db 5
+db 121,105,101,108,100
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:18:16 ===---
+_thread_abort:
+times 4 db 0
+db 5
+db 97,98,111,114,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:19:21 ===---
+_thread_current:
+times 4 db 0
+db 7
+db 99,117,114,114,101,110,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:20:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:21:16 ===---
+; MODULO FIM: thread
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:95:8 ===---
+; MODULO: graphics
+NAME_graphics:
+db 8
+db 103,114,97,112,104,105,99,115
+db 0
+_graphics:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:96:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:97:16 ===---
+_graphics_drawline:
+times 4 db 0
+db 8
+db 100,114,97,119,108,105,110,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:98:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:99:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:100:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:101:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:102:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:103:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:104:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:105:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:106:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:107:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:108:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:109:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:110:16 ===---
+_graphics_modemanual:
+times 4 db 0
+db 10
+db 109,111,100,101,109,97,110,117,97,108
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:111:16 ===---
+; MODULO FIM: graphics
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:114:8 ===---
+; MODULO: genericvideo
+NAME_genericvideo:
+db 12
+db 103,101,110,101,114,105,99,118,105,100,101,111
+db 0
+_genericvideo:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:115:16 ===---
+_genericvideo_register2colorspalette:
+times 4 db 0
+db 22
+db 114,101,103,105,115,116,101,114,50,99,111,108,111,114,115,112,97,108,101,116,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:116:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:117:16 ===---
+_genericvideo_registerdrawline:
+times 4 db 0
+db 16
+db 114,101,103,105,115,116,101,114,100,114,97,119,108,105,110,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:118:16 ===---
+_genericvideo_registerdrawcircle:
+times 4 db 0
+db 18
+db 114,101,103,105,115,116,101,114,100,114,97,119,99,105,114,99,108,101
+times 1 db 0
+; MODULO FIM: genericvideo
+EXPORT_TABLE:
+times 2 db 0
+IMPORT_TABLE:
+db 1
+dw _thread
+db 2
+dw NAME_thread
+; QTD REFS: 1
+db 3
+dw _thread_yield
+; QTD REFS: 1
+db 3
+dw _thread_abort
+; QTD REFS: 1
+db 3
+dw _thread_current
+db 1
+dw _graphics
+db 2
+dw NAME_graphics
+; QTD REFS: 5
+db 3
+dw _graphics_drawline
+; QTD REFS: 1
+db 3
+dw _graphics_modemanual
+db 1
+dw _genericvideo
+db 2
+dw NAME_genericvideo
+; QTD REFS: 1
+db 3
+dw _genericvideo_register2colorspalette
+; QTD REFS: 1
+db 3
+dw _genericvideo_registerdrawline
+; QTD REFS: 1
+db 3
+dw _genericvideo_registerdrawcircle
+times 2 db 0
+REALOC_TABLE:
+dw 3
+dw _cga_video
+dw 4
+dw 0
+dw 0
+dw 0
+dw 0
+dw 0
+END:

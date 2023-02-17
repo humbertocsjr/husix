@@ -34,7 +34,7 @@ Public Module GlobalMemory
             asm "cs mov [_globalmemory_memorysizekib], ax"
         End
 
-        #MapPtr = OS.CodeSegment() + 4096
+        #MapPtr = OS.StackSegment() + (OS.StackSize / 16) + 1 
         @MapPtr = 0
         freeKiB = (#MapPtr SHR 6) + 2
         For i = 1 To MemorySizeKiB

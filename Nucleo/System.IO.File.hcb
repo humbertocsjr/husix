@@ -69,7 +69,7 @@ Public Module File
     End
 End
 
-Module Path
+Public Module Path
 
     Public Function IsAbsolutePath(path as PtrByteArray) as UInt16
         @path++

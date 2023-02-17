@@ -52,6 +52,7 @@ Structure Control
     Dim OnLostFocus as Action(Of Control)
     Dim HasParent as UInt8
     Dim Parent as PtrByteArray
+    Dim Window as PtrByteArray
     Dim HasChild as UInt8
     Dim Child as PtrByteArray
     Dim HasNextControl as UInt8
@@ -67,6 +68,8 @@ Structure Control
     Dim CalcWidth as UInt16
     Dim CalcHeight as UInt16
     Dim CalcVisible as UInt16
+    Dim ForceRedraw as UInt16
+    Dim SuppressAutoRefresh as UInt16
 End
 
 Module Control From "System.Forms.dll"
@@ -80,6 +83,8 @@ Module Control From "System.Forms.dll"
     Public Sub RedrawOnlyFocus(ctrl as Control)
     Public Sub SetText(ctrl as Control, txt as PtrByteArray)
     Public Function GetText(ctrl as Control) as ptrbytearray
+    Public Sub Suppress(ctrl as Control)
+    Public Sub Resume(ctrl as Control)
     Public Sub DrawChildren(parent as Control)
     Public Sub Focus(ctrl as Control)
     Public Sub ProcessKeyboard(ctrl as Control, e as KeyboardEventArgs)
@@ -89,6 +94,7 @@ End
 
 Module Screen From "System.Forms.dll"
     Public Sub Initialize
+    Public Sub Redraw
     Public Function GetCurrentScreen() as Control
 End
 
@@ -101,6 +107,14 @@ Module Button From "System.Forms.dll"
 End
 
 Module Label From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module UIntLabel From "System.Forms.dll"
+    Public Sub Initialize(ctrl as Control)
+End
+
+Module HexLabel From "System.Forms.dll"
     Public Sub Initialize(ctrl as Control)
 End
 
@@ -118,9 +132,16 @@ Module SystemColors From "System.Forms.dll"
 End
 
 Module Application From "System.Forms.dll"
+    Public Function GetCurrentFocus() as Control
+    Public Function GetCurrentFocusForm() as Control
     Public Sub ApplyDarkTheme()
     Public Sub ApplyDefaultTheme()
     Public Sub Initialize
+    Public Sub SetKeyboardUpdate(action as PtrByteArray)
+    Public Sub SetMouseUpdate(action as PtrByteArray)
+    Public Sub SendKeyboardEvent(e as KeyboardEventArgs)
+    Public Sub SendMouseEvent(e as MouseEventArgs)
     Public Sub Exit(status as UInt16)
     Public Sub Run(ctrl as Control)
+    Public Sub RunWithLoop(ctrl as Control, internalLoop as PtrByteArray)
 End

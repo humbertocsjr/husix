@@ -2,23 +2,30 @@ Imports System
 Imports System.Drawing
 Imports System.Threading
 Imports System.IO.Console
+Imports System.Memory
 
 Module Program
     Friend Sub Main(args as String)
         VGA.Mode640x480x2
-        Graphics.DrawPixel 40, 10, 1
-        Graphics.DrawPixel 40, 11, 0
-        Graphics.DrawPixel 40, 12, 1
         While 1 Thread.Yield
     End
 End
 
 Module VGA
     Dim Video as VideoMode
+    Dim Buffer as PtrByteArray
+    Dim VideoBuffer as PtrByteArray
+    Dim RefreshMap as UInt16
+    Dim InRefresh as Semaphore
 
     Public Sub Mode640x480x2
         asm "mov ax, 0x11"
         asm "int 0x10"
+        Semaphore.Initialize InRefresh, 1
+        Buffer = GlobalMemory.AllocKiB(Thread.Current(), 39)
+        #VideoBuffer = 0xa000
+        @VideoBuffer = 0
+        RefreshMap = 0
         Video.Width = 640
         Video.Height = 480
         Video.Colors = 2
@@ -32,13 +39,96 @@ Module VGA
         GenericVideo.Register2ColorsPalette
     End
 
+    Sub Copy(dest as PtrByteArray, orig as PtrByteArray, len as UInt16, offset as UInt16)
+        asm "cld"
+        asm "push ds"
+        asm "push si"
+        asm "mov ax, [bp+8]"
+        asm "mov es, ax"
+        asm "mov di, [bp+6]"
+        asm "mov ax, [bp+12]"
+        asm "mov ds, ax"
+        asm "mov si, [bp+10]"
+        asm "add si, [bp+16]"
+        asm "add di, [bp+16]"
+        asm "mov cx, [bp+14]"
+        asm "rep movsb"
+        asm "pop si"
+        asm "pop ds"
+    End
+
     Sub Refresh(mode as VideoMode)
+        'Memory.Copy VideoBuffer, Buffer, 38400
+        If RefreshMap == 0      Then Return
+        Semaphore.WaitOne InRefresh
+        If RefreshMap And 1     Then 
+            Copy VideoBuffer, Buffer, 2560, 0
+            RefreshMap = RefreshMap And 0xfffe
+        End
+        If RefreshMap And 2     Then 
+            Copy VideoBuffer, Buffer, 2560, 2560
+            RefreshMap = RefreshMap And 0xfffd
+        End
+        If RefreshMap And 4     Then 
+            Copy VideoBuffer, Buffer, 2560, 5120
+            RefreshMap = RefreshMap And 0xfffb
+        End
+        If RefreshMap And 8     Then 
+            Copy VideoBuffer, Buffer, 2560, 7680
+            RefreshMap = RefreshMap And 0xfff7
+        End
+        If RefreshMap And 16    Then 
+            Copy VideoBuffer, Buffer, 2560, 10240
+            RefreshMap = RefreshMap And 0xffef
+        End
+        If RefreshMap And 32    Then 
+            Copy VideoBuffer, Buffer, 2560, 12800
+            RefreshMap = RefreshMap And 0xffdf
+        End
+        If RefreshMap And 64    Then 
+            Copy VideoBuffer, Buffer, 2560, 15360
+            RefreshMap = RefreshMap And 0xffbf
+        End
+        If RefreshMap And 128   Then 
+            Copy VideoBuffer, Buffer, 2560, 17920
+            RefreshMap = RefreshMap And 0xff7f
+        End
+        If RefreshMap And 256   Then 
+            Copy VideoBuffer, Buffer, 2560, 20480
+            RefreshMap = RefreshMap And 0xfeff
+        End
+        If RefreshMap And 512   Then 
+            Copy VideoBuffer, Buffer, 2560, 23040
+            RefreshMap = RefreshMap And 0xfdff
+        End
+        If RefreshMap And 1024  Then 
+            Copy VideoBuffer, Buffer, 2560, 25600
+            RefreshMap = RefreshMap And 0xfbff
+        End
+        If RefreshMap And 2048  Then 
+            Copy VideoBuffer, Buffer, 2560, 28160
+            RefreshMap = RefreshMap And 0xf7ff
+        End
+        If RefreshMap And 4096  Then 
+            Copy VideoBuffer, Buffer, 2560, 30720
+            RefreshMap = RefreshMap And 0xefff
+        End
+        If RefreshMap And 8192  Then 
+            Copy VideoBuffer, Buffer, 2560, 33280
+            RefreshMap = RefreshMap And 0xdfff
+        End
+        If RefreshMap And 16384 Then 
+            Copy VideoBuffer, Buffer, 2560, 35840
+            RefreshMap = RefreshMap And 0xbfff
+        End
+        Semaphore.Release InRefresh
     End
 
     Sub DrawPixel(mode as VideoMode, x as UInt16, y as UInt16, color as UInt16)
         If x >= mode.Width Then Return
         If y >= mode.Height Then Return
-        asm "mov ax, 0xa000"
+        RefreshMap = RefreshMap Or (1 SHL (y SHR 5))
+        asm "cs mov ax, [_vga_buffer+2]"
         asm "mov es, ax"
         asm "mov ax, [bp+12]"
         asm "mov bx, 80"
@@ -49,6 +139,7 @@ Module VGA
         asm "shr bx, 1"
         asm "add ax, bx"
         asm "mov di, ax"
+        asm "cs add di, [_vga_buffer]"
         asm "mov cx, [bp+10]"
         asm "and cx, 7"
         asm "inc cx"
@@ -67,7 +158,8 @@ Module VGA
     End
 
     Sub ByteAndOr(mode as VideoMode, x as UInt16, y as UInt16, valueAnd as UInt8, valueOr as UInt8)
-        asm "mov ax, 0xa000"
+        RefreshMap = RefreshMap Or (1 SHL (y SHR 5))
+        asm "cs mov ax, [_vga_buffer+2]"
         asm "mov es, ax"
         asm "mov ax, [bp+12]"
         asm "mov bx, 80"
@@ -78,6 +170,7 @@ Module VGA
         asm "shr bx, 1"
         asm "add ax, bx"
         asm "mov di, ax"
+        asm "cs add di, [_vga_buffer]"
         asm "mov ax, [bp+14]"
         asm "es and [di], al"
         asm "mov ax, [bp+16]"
@@ -85,7 +178,8 @@ Module VGA
     End
 
     Sub ByteSet(mode as VideoMode, x as UInt16, y as UInt16, value as UInt8, len as UInt16)
-        asm "mov ax, 0xa000"
+        RefreshMap = RefreshMap Or (1 SHL (y SHR 5))
+        asm "cs mov ax, [_vga_buffer+2]"
         asm "mov es, ax"
         asm "mov ax, [bp+12]"
         asm "mov bx, 80"
@@ -96,6 +190,7 @@ Module VGA
         asm "shr bx, 1"
         asm "add ax, bx"
         asm "mov di, ax"
+        asm "cs add di, [_vga_buffer]"
         asm "mov ax, [bp+14]"
         asm "mov cx, [bp+16]"
         asm "cld"
@@ -221,6 +316,7 @@ Module VGA
             If color and 1 Then tmp = 0x55
             ByteSet mode, 0, y, tmp, 80
         End
+        RefreshMap = 0xffff
     End
 
 End

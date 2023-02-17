@@ -2,6 +2,7 @@
 ' Kernel
 
 Imports System
+Imports System.DateTime
 Imports System.Memory
 Imports System.Threading
 Imports System.IO
@@ -134,11 +135,17 @@ Module Program
         
         Dim assm as Assembly
         assm = New
-        WriteDot
-        Assembly.LoadAssembly assm, Translation.InitFile
-        Console.WriteLine Translation.Ok
-        ' Executa Luzia
-        Assembly.Run assm, Console.VideoCardName
+        Try
+            WriteDot
+            Assembly.LoadAssembly assm, Translation.InitFile
+            Console.WriteLine Translation.Ok
+            ' Executa Luzia
+            Assembly.Run assm, Console.VideoCardName
+        Catch OutOfMemoryError
+            FatalError "MEM", ErrorFile(), ErrorLine()
+        Catch Error
+            FatalError Translation.InitFileNotFound, ErrorFile(), ErrorLine()
+        End
         
         ' Desliga computador
         Shutdown

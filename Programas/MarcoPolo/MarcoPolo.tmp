@@ -1,0 +1,1198 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+_os_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:24:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:26:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:27:13 ===---
+db 'HSX',0 ; Application
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:28:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:29:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:30:13 ===---
+dw _os_start_start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:31:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:32:13 ===---
+dw 20480 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:33:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:34:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:35:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:36:13 ===---
+_os_minstackptr: dw 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:37:13 ===---
+_os_start_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:38:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:39:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:40:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:41:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:42:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:20:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 10
+db 83,121,115,116,101,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:45:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:46:13 ===---
+cs mov ax, [_os_minstackptr]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:47:13 ===---
+add ax, 64
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:48:13 ===---
+cmp sp, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:49:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:50:15 ===---
+cs mov si, [_os_minstackptr]
+ss mov word [si+6], _os
+push cs
+ss pop word [si+6+2]
+mov ax, 50
+ss mov [si+4], ax
+mov ax, 2
+ss mov [si+18], ax
+ss call far [si+0]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:51:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:54:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: args TAM: 4 POS: BP--14 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:56:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-14+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:59:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-14], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:61:11 ===---
+; Armazena Dados do Try Catch
+cs mov si, [_os_minstackptr]
+ss mov ax, [si+0]
+mov [bp+-2], ax
+ss mov ax, [si+2]
+mov [bp+-4], ax
+ss mov ax, [si+14]
+mov [bp+-6], ax
+ss mov ax, [si+16]
+mov [bp+-8], ax
+mov ax, bp
+ss mov [si+16], ax
+mov ax, sp
+ss mov [si+14], ax
+ss mov word [si+0], ROTULO3
+push cs
+ss pop word [si+0+2]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+push es
+push di
+push cs
+call _program_main
+add sp, 4
+jmp near ROTULO4
+ROTULO3:
+mov bx, ax
+cs mov si, [_os_minstackptr]
+ss mov bp, [si+16]
+ss mov sp, [si+14]
+mov ax, bx
+jmp near ROTULO4
+ROTULO6:
+push cs
+call _os_fatalerror
+ROTULO4:
+mov ax, [bp+-2]
+cs mov si, [_os_minstackptr]
+ss mov [si+0], ax
+mov ax, [bp+-4]
+ss mov [si+2], ax
+mov ax, [bp+-6]
+ss mov [si+14], ax
+mov ax, [bp+-8]
+ss mov [si+16], ax
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:67:16 ===---
+_os_fatalerror:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:22 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_current]
+push es
+push di
+cs call far [_thread_abort]
+add sp, 4
+ROTULO7:
+FIM_os_fatalerror:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:71:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:13 ===---
+mov ax, cs
+ROTULO8:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:76:13 ===---
+mov ax, ss
+ROTULO9:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:13 ===---
+mov ax, REALOC_TABLE
+ROTULO10:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== MarcoPolo.hcb:7:8 ===---
+; MODULO: program
+NAME_program:
+db 7
+db 112,114,111,103,114,97,109
+db 0
+_program:
+db 13
+db 77,97,114,99,111,80,111,108,111,46,104,99,98
+db 0
+;     ---=== MarcoPolo.hcb:8:9 ===---
+_program_menubar:
+times 108 db 0
+;     ---=== MarcoPolo.hcb:9:9 ===---
+_program_datetimenow:
+times 28 db 0
+;     ---=== MarcoPolo.hcb:10:9 ===---
+_program_lastminute:
+times 2 db 0
+;     ---=== MarcoPolo.hcb:11:9 ===---
+_program_datetimelabel:
+times 108 db 0
+;     ---=== MarcoPolo.hcb:12:9 ===---
+_program_datetimetext:
+times 4 db 0
+db 255
+times 255 db 0
+;     ---=== MarcoPolo.hcb:14:16 ===---
+_program_main:
+push bp
+mov bp, sp
+; ARG: args TAM: 4 POS: BP+6 
+;     ---=== MarcoPolo.hcb:14:21 ===---
+;     ---=== MarcoPolo.hcb:15:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_lastminute], 99
+;     ---=== MarcoPolo.hcb:16:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== MarcoPolo.hcb:16:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_menubar+2]
+pop es
+cs mov di, [_program_menubar]
+push es
+push di
+push cs
+call _menubar_initialize
+add sp, 4
+;     ---=== MarcoPolo.hcb:17:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'label'
+;     ---=== MarcoPolo.hcb:17:26 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+push es
+push di
+cs call far [_label_initialize]
+add sp, 4
+;     ---=== MarcoPolo.hcb:18:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:18:29 ===---
+mov ax, 1
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:19:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:19:44 ===---
+;     ---=== MarcoPolo.hcb:19:46 ===---
+mov ax, 40
+push ax
+;     ---=== MarcoPolo.hcb:19:30 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+cs push word [_program_menubar+2]
+pop es
+cs mov di, [_program_menubar]
+es mov ax, [di+6]
+pop bx
+sub ax, bx
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:20:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:20:32 ===---
+mov ax, 14
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:21:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:21:31 ===---
+mov ax, 35
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:22:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:22:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimetext+2]
+pop es
+cs mov di, [_program_datetimetext]
+push es
+push di
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:23:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:23:33 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:24:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'string'
+;     ---=== MarcoPolo.hcb:24:35 ===---
+push cs
+pop es
+mov di, ROTULO13
+jmp near ROTULO12
+ROTULO13:
+db 5
+db 48,48,58,48,48
+times 1 db 0
+ROTULO12:
+push es
+push di
+;     ---=== MarcoPolo.hcb:24:21 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimetext+2]
+pop es
+cs mov di, [_program_datetimetext]
+push es
+push di
+cs call far [_string_copy]
+add sp, 8
+;     ---=== MarcoPolo.hcb:25:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== MarcoPolo.hcb:25:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+push es
+push di
+;     ---=== MarcoPolo.hcb:25:21 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_menubar+2]
+pop es
+cs mov di, [_program_menubar]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== MarcoPolo.hcb:26:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'application'
+;     ---=== MarcoPolo.hcb:26:42 ===---
+push cs
+pop es
+mov di, _program_internalloop
+push es
+push di
+;     ---=== MarcoPolo.hcb:26:33 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_menubar+2]
+pop es
+cs mov di, [_program_menubar]
+push es
+push di
+cs call far [_application_runwithloop]
+add sp, 8
+ROTULO11:
+mov sp, bp
+pop bp
+FIM_program_main:
+retf
+;     ---=== MarcoPolo.hcb:29:9 ===---
+_program_internalloop:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== MarcoPolo.hcb:29:22 ===---
+;     ---=== MarcoPolo.hcb:30:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'datetime'
+;     ---=== MarcoPolo.hcb:30:22 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimenow+2]
+pop es
+cs mov di, [_program_datetimenow]
+push es
+push di
+cs call far [_datetime_now]
+add sp, 4
+;     ---=== MarcoPolo.hcb:31:9 ===---
+;     ---=== MarcoPolo.hcb:31:23 ===---
+;     ---=== MarcoPolo.hcb:31:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_lastminute]
+push ax
+;     ---=== MarcoPolo.hcb:31:26 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+cs push word [_program_datetimenow+2]
+pop es
+cs mov di, [_program_datetimenow]
+es mov ax, [di+4]
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO17
+jmp near ROTULO18
+ROTULO17:
+mov ax, 65535
+jmp near ROTULO19
+ROTULO18:
+xor ax, ax
+ROTULO19:
+cmp ax, 0
+jne ROTULO15
+jmp near ROTULO16
+ROTULO15:
+;     ---=== MarcoPolo.hcb:32:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== MarcoPolo.hcb:32:26 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+cs push word [_program_datetimenow+2]
+pop es
+cs mov di, [_program_datetimenow]
+es mov ax, [di+4]
+cs mov [_program_lastminute], ax
+;     ---=== MarcoPolo.hcb:33:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'datetime'
+;     ---=== MarcoPolo.hcb:33:53 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimetext+2]
+pop es
+cs mov di, [_program_datetimetext]
+push es
+push di
+;     ---=== MarcoPolo.hcb:33:40 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimenow+2]
+pop es
+cs mov di, [_program_datetimenow]
+push es
+push di
+cs call far [_datetime_tosmalltimestring]
+add sp, 8
+;     ---=== MarcoPolo.hcb:34:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== MarcoPolo.hcb:34:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_datetimelabel+2]
+pop es
+cs mov di, [_program_datetimelabel]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== MarcoPolo.hcb:35:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'screen'
+cs call far [_screen_redraw]
+ROTULO16:
+ROTULO14:
+mov sp, bp
+pop bp
+FIM_program_internalloop:
+retf
+; MODULO FIM: program
+;     ---=== MarcoPolo.hcb:41:8 ===---
+; MODULO: menubar
+NAME_menubar:
+db 7
+db 109,101,110,117,98,97,114
+db 0
+_menubar:
+db 13
+db 77,97,114,99,111,80,111,108,111,46,104,99,98
+db 0
+;     ---=== MarcoPolo.hcb:42:16 ===---
+_menubar_initialize:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: scr TAM: 4 POS: BP--4 
+;     ---=== MarcoPolo.hcb:42:27 ===---
+;     ---=== MarcoPolo.hcb:43:13 ===---
+;     ---=== MarcoPolo.hcb:44:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== MarcoPolo.hcb:44:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'screen'
+cs call far [_screen_getcurrentscreen]
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== MarcoPolo.hcb:45:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:45:26 ===---
+mov ax, 16
+es mov [di+78], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:46:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== MarcoPolo.hcb:46:28 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+cs call far [_control_initialize]
+add sp, 4
+;     ---=== MarcoPolo.hcb:47:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:47:32 ===---
+;     ---=== MarcoPolo.hcb:47:33 ===---
+mov ax, 1
+push ax
+;     ---=== MarcoPolo.hcb:47:22 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov ax, [di+6]
+pop bx
+sub ax, bx
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:48:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:48:23 ===---
+mov ax, 16
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:49:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:49:27 ===---
+;     ---=== MarcoPolo.hcb:49:28 ===---
+mov ax, 16
+push ax
+;     ---=== MarcoPolo.hcb:49:27 ===---
+xor ax, ax
+pop bx
+sub ax, bx
+es mov [di+78], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:50:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:50:29 ===---
+push cs
+pop es
+mov di, _menubar_controlpaint
+push es
+push di
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es pop word [di+23]
+es pop word [di+23+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:51:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:51:28 ===---
+mov ax, 1
+es mov [di+100], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== MarcoPolo.hcb:52:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== MarcoPolo.hcb:52:23 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+es pop word [di+64]
+es pop word [di+64+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+ROTULO20:
+mov sp, bp
+pop bp
+FIM_menubar_initialize:
+retf
+;     ---=== MarcoPolo.hcb:55:9 ===---
+_menubar_controlpaint:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+; ARG: focuschangeonly TAM: 2 POS: BP+10 
+;     ---=== MarcoPolo.hcb:55:22 ===---
+;     ---=== MarcoPolo.hcb:55:39 ===---
+;     ---=== MarcoPolo.hcb:56:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:56:91 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowcolor]
+push ax
+;     ---=== MarcoPolo.hcb:56:63 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowcolor]
+push ax
+;     ---=== MarcoPolo.hcb:56:50 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+4]
+push ax
+;     ---=== MarcoPolo.hcb:56:38 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== MarcoPolo.hcb:56:35 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:56:32 ===---
+xor ax, ax
+push ax
+cs call far [_graphics_drawrectangle]
+add sp, 12
+;     ---=== MarcoPolo.hcb:57:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:57:68 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:57:55 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+4]
+push ax
+;     ---=== MarcoPolo.hcb:57:43 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+;     ---=== MarcoPolo.hcb:57:30 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 4
+es mov ax, [di+4]
+push ax
+;     ---=== MarcoPolo.hcb:57:27 ===---
+xor ax, ax
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== MarcoPolo.hcb:58:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== MarcoPolo.hcb:58:30 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+cs call far [_control_drawchildren]
+add sp, 4
+;     ---=== MarcoPolo.hcb:59:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:59:39 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:59:36 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:59:33 ===---
+mov ax, 3
+push ax
+;     ---=== MarcoPolo.hcb:59:30 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:59:27 ===---
+xor ax, ax
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== MarcoPolo.hcb:60:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:60:39 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:60:36 ===---
+mov ax, 3
+push ax
+;     ---=== MarcoPolo.hcb:60:33 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:60:30 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:60:27 ===---
+xor ax, ax
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== MarcoPolo.hcb:61:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:61:34 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:61:31 ===---
+mov ax, 1
+push ax
+;     ---=== MarcoPolo.hcb:61:28 ===---
+mov ax, 1
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+;     ---=== MarcoPolo.hcb:62:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:62:61 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:62:58 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:62:46 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+6]
+push ax
+;     ---=== MarcoPolo.hcb:62:43 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:62:38 ===---
+;     ---=== MarcoPolo.hcb:62:40 ===---
+mov ax, 3
+push ax
+;     ---=== MarcoPolo.hcb:62:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+pop bx
+sub ax, bx
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== MarcoPolo.hcb:63:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:63:57 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:63:54 ===---
+mov ax, 3
+push ax
+;     ---=== MarcoPolo.hcb:63:42 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+6]
+push ax
+;     ---=== MarcoPolo.hcb:63:39 ===---
+xor ax, ax
+push ax
+;     ---=== MarcoPolo.hcb:63:27 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+es mov ax, [di+6]
+push ax
+cs call far [_graphics_drawline]
+add sp, 10
+;     ---=== MarcoPolo.hcb:64:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'graphics'
+;     ---=== MarcoPolo.hcb:64:47 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'systemcolors'
+cs call far [_systemcolors_windowbordercolor]
+push ax
+;     ---=== MarcoPolo.hcb:64:44 ===---
+mov ax, 1
+push ax
+;     ---=== MarcoPolo.hcb:64:39 ===---
+;     ---=== MarcoPolo.hcb:64:41 ===---
+mov ax, 1
+push ax
+;     ---=== MarcoPolo.hcb:64:28 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 6
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+es mov ax, [di+6]
+pop bx
+sub ax, bx
+push ax
+cs call far [_graphics_drawpixel]
+add sp, 6
+ROTULO21:
+mov sp, bp
+pop bp
+FIM_menubar_controlpaint:
+retf
+; MODULO FIM: menubar
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:16:8 ===---
+; MODULO: thread
+NAME_thread:
+db 6
+db 116,104,114,101,97,100
+db 0
+_thread:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:17:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:18:16 ===---
+_thread_abort:
+times 4 db 0
+db 5
+db 97,98,111,114,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:19:21 ===---
+_thread_current:
+times 4 db 0
+db 7
+db 99,117,114,114,101,110,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:20:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:21:16 ===---
+; MODULO FIM: thread
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:88:8 ===---
+; MODULO: string
+NAME_string:
+db 6
+db 115,116,114,105,110,103
+db 0
+_string:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:92:21 ===---
+_string_copy:
+times 4 db 0
+db 4
+db 99,111,112,121
+times 1 db 0
+; MODULO FIM: string
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:13:8 ===---
+; MODULO: datetime
+NAME_datetime:
+db 8
+db 100,97,116,101,116,105,109,101
+db 0
+_datetime:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:14:16 ===---
+_datetime_now:
+times 4 db 0
+db 3
+db 110,111,119
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:15:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:16:16 ===---
+_datetime_tosmalltimestring:
+times 4 db 0
+db 17
+db 116,111,115,109,97,108,108,116,105,109,101,115,116,114,105,110,103
+times 1 db 0
+; MODULO FIM: datetime
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:95:8 ===---
+; MODULO: graphics
+NAME_graphics:
+db 8
+db 103,114,97,112,104,105,99,115
+db 0
+_graphics:
+db 18
+db 83,121,115,116,101,109,46,68,114,97,119,105,110,103,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:96:16 ===---
+_graphics_drawpixel:
+times 4 db 0
+db 9
+db 100,114,97,119,112,105,120,101,108
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:97:16 ===---
+_graphics_drawline:
+times 4 db 0
+db 8
+db 100,114,97,119,108,105,110,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:98:16 ===---
+_graphics_drawrectangle:
+times 4 db 0
+db 13
+db 100,114,97,119,114,101,99,116,97,110,103,108,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:99:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:100:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:101:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:102:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:103:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:104:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:105:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:106:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:107:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:108:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:109:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:110:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Drawing.hcb:111:16 ===---
+; MODULO FIM: graphics
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:75:8 ===---
+; MODULO: control
+NAME_control:
+db 7
+db 99,111,110,116,114,111,108
+db 0
+_control:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:76:16 ===---
+_control_initialize:
+times 4 db 0
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:77:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:78:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:79:16 ===---
+_control_add:
+times 4 db 0
+db 3
+db 97,100,100
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:80:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:81:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:82:16 ===---
+_control_redraw:
+times 4 db 0
+db 6
+db 114,101,100,114,97,119
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:83:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:84:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:85:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:86:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:87:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:88:16 ===---
+_control_drawchildren:
+times 4 db 0
+db 12
+db 100,114,97,119,99,104,105,108,100,114,101,110
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:89:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:90:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:91:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:92:16 ===---
+; MODULO FIM: control
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:95:8 ===---
+; MODULO: screen
+NAME_screen:
+db 6
+db 115,99,114,101,101,110
+db 0
+_screen:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:96:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:97:16 ===---
+_screen_redraw:
+times 4 db 0
+db 6
+db 114,101,100,114,97,119
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:98:21 ===---
+_screen_getcurrentscreen:
+times 4 db 0
+db 16
+db 103,101,116,99,117,114,114,101,110,116,115,99,114,101,101,110
+times 1 db 0
+; MODULO FIM: screen
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:109:8 ===---
+; MODULO: label
+NAME_label:
+db 5
+db 108,97,98,101,108
+db 0
+_label:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:110:16 ===---
+_label_initialize:
+times 4 db 0
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+; MODULO FIM: label
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:125:8 ===---
+; MODULO: systemcolors
+NAME_systemcolors:
+db 12
+db 115,121,115,116,101,109,99,111,108,111,114,115
+db 0
+_systemcolors:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:126:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:127:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:128:21 ===---
+_systemcolors_windowbordercolor:
+times 4 db 0
+db 17
+db 119,105,110,100,111,119,98,111,114,100,101,114,99,111,108,111,114
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:129:21 ===---
+_systemcolors_windowcolor:
+times 4 db 0
+db 11
+db 119,105,110,100,111,119,99,111,108,111,114
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:130:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:131:16 ===---
+; MODULO FIM: systemcolors
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:134:8 ===---
+; MODULO: application
+NAME_application:
+db 11
+db 97,112,112,108,105,99,97,116,105,111,110
+db 0
+_application:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:135:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:136:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:137:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:138:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:139:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:140:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:141:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:142:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:143:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:144:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:145:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:146:16 ===---
+_application_runwithloop:
+times 4 db 0
+db 11
+db 114,117,110,119,105,116,104,108,111,111,112
+times 1 db 0
+; MODULO FIM: application
+EXPORT_TABLE:
+times 2 db 0
+IMPORT_TABLE:
+db 1
+dw _thread
+db 2
+dw NAME_thread
+; QTD REFS: 1
+db 3
+dw _thread_abort
+; QTD REFS: 1
+db 3
+dw _thread_current
+db 1
+dw _string
+db 2
+dw NAME_string
+; QTD REFS: 1
+db 3
+dw _string_copy
+db 1
+dw _datetime
+db 2
+dw NAME_datetime
+; QTD REFS: 1
+db 3
+dw _datetime_now
+; QTD REFS: 1
+db 3
+dw _datetime_tosmalltimestring
+db 1
+dw _graphics
+db 2
+dw NAME_graphics
+; QTD REFS: 2
+db 3
+dw _graphics_drawpixel
+; QTD REFS: 5
+db 3
+dw _graphics_drawline
+; QTD REFS: 1
+db 3
+dw _graphics_drawrectangle
+db 1
+dw _control
+db 2
+dw NAME_control
+; QTD REFS: 1
+db 3
+dw _control_initialize
+; QTD REFS: 1
+db 3
+dw _control_add
+; QTD REFS: 1
+db 3
+dw _control_redraw
+; QTD REFS: 1
+db 3
+dw _control_drawchildren
+db 1
+dw _screen
+db 2
+dw NAME_screen
+; QTD REFS: 1
+db 3
+dw _screen_redraw
+; QTD REFS: 1
+db 3
+dw _screen_getcurrentscreen
+db 1
+dw _label
+db 2
+dw NAME_label
+; QTD REFS: 1
+db 3
+dw _label_initialize
+db 1
+dw _systemcolors
+db 2
+dw NAME_systemcolors
+; QTD REFS: 7
+db 3
+dw _systemcolors_windowbordercolor
+; QTD REFS: 2
+db 3
+dw _systemcolors_windowcolor
+db 1
+dw _application
+db 2
+dw NAME_application
+; QTD REFS: 1
+db 3
+dw _application_runwithloop
+times 2 db 0
+REALOC_TABLE:
+dw 3
+dw _program_menubar
+dw 4
+dw 0
+dw 3
+dw _program_datetimenow
+dw 4
+dw 0
+dw 3
+dw _program_datetimelabel
+dw 4
+dw 0
+dw 3
+dw _program_datetimetext
+dw 4
+dw 0
+dw 0
+dw 0
+dw 0
+dw 0
+END:

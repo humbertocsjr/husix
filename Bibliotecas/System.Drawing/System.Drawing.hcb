@@ -224,13 +224,75 @@ Public Module Graphics
         Video.DrawCircle.Invoke xm, ym, r, borderColor, backgroundColor
     End
 
-    Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
+    Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
         If Active == 0 Then Throw AccessDeniedError
         If x1 >= Video.Width Then Return
         If y1 >= Video.Height Then Return
         If x2 >= Video.Width Then x2 = Video.Width - 1
         If y2 >= Video.Height Then y2 = Video.Height - 1
+        If backgroundColor <> Colors.Transparent() then DrawRectangle x1, y1, x2, y2, backgroundColor, backgroundColor
         font.DrawText.Invoke text, x1, y1, x2, y2, color, multiline
+    End
+
+    Public Sub DrawUInt(font as Font, number as UInt16, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
+        Dim tmp as String
+        Dim ptr as PtrByteArray
+        Dim digit as UInt16
+        tmp = New
+        ptr = tmp
+        If number == 0 Then
+            String.Copy tmp, "0"
+        Else
+            Dim len as UInt16
+            If number > 9999 Then
+                len = 5
+            ElseIf number > 999 Then
+                len = 4
+            ElseIf number > 99 Then
+                len = 3
+            ElseIf number > 9 Then
+                len = 2
+            Else
+                len = 1
+            End
+            @ptr = @tmp + len + 1
+            ptr = 0
+            While number > 0
+                @ptr = @tmp + len
+                digit = number mod 10
+                ptr = digit + 48
+                number = number / 10
+                len --
+            End
+        End
+        DrawText font, tmp, x1, y1, x2, y2, color, backgroundColor, multiline
+    End
+
+    Public Sub DrawHex(font as Font, number as UInt16, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
+        Dim tmp as String
+        Dim ptr as PtrByteArray
+        Dim digit as UInt16
+        tmp = New
+        ptr = tmp
+        String.Copy tmp, "0000"
+        If number > 0 Then
+            Dim len as UInt16
+            len = 4
+            @ptr = @tmp + len + 1
+            ptr = 0
+            While number > 0
+                @ptr = @tmp + len
+                digit = number And 0xf
+                If digit > 9 Then
+                    ptr = digit + 55
+                Else
+                    ptr = digit + 48
+                End
+                number = number shr 4
+                len --
+            End
+        End
+        DrawText font, tmp, x1, y1, x2, y2, color, backgroundColor, multiline
     End
 
     Public Sub CalcFontSize(font as Font, text as String, size as Size, totalWidth as UInt16, multiline as UInt16)
@@ -534,6 +596,22 @@ Public Module Font
         End
         If text == 0x20 Then 
             index = 1
+            Goto charfontend
+        End
+        If text == 58 Then 
+            index = 80
+            Goto charfontend
+        End
+        If text == 45 Then 
+            index = 81
+            Goto charfontend
+        End
+        If text == 43 Then 
+            index = 82
+            Goto charfontend
+        End
+        If text == 47 Then 
+            index = 83
             Goto charfontend
         End
         If text == 0xc3 Then

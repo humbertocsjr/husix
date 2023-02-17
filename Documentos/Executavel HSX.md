@@ -22,6 +22,9 @@ Tamanho do cabeçalho: 20 Bytes
 # Registro da Tabela de Realocações
 
 
+**NAO USAR TIPO DE REALOCACAL 2: NAO IMPLEMENTADO**
+
+
 # Tipos de Registros de Importação e Exportação
 
 - 0 - Fim da Lista

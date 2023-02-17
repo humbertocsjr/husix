@@ -1,0 +1,70 @@
+Imports System
+Imports System.Timer
+
+Structure DateTime
+    Dim MiliSecond as UInt16
+    Dim Second as UInt16
+    Dim Minute as UInt16
+    Dim Hour as UInt16
+    Dim Day as UInt16
+    Dim Month as UInt16
+    Dim Year as UInt16
+    Spacing 10 ' Espaco reservado para uso futuro
+End
+
+Public Module DateTime
+
+    Public Sub Now(dt as DateTime)
+        dt.MiliSecond = Clock.MiliSecond
+        dt.Second = Clock.Second
+        dt.Minute = Clock.Minute
+        dt.Hour = Clock.Hour
+        dt.Day = Clock.Day
+        dt.Month = Clock.Month
+        dt.Year = Clock.Year
+    End
+
+    Public Sub ToTimeString(dt as DateTime, out as String)
+        Dim tmp as PtrByteArray
+        Dim digit as UInt16
+        String.Copy out, ""
+        tmp = out
+        @tmp++
+        tmp = dt.Hour / 10 + 48
+        @tmp++
+        tmp = dt.Hour mod 10 + 48
+        @tmp++
+        tmp = 58
+        @tmp++
+        tmp = dt.Minute / 10 + 48
+        @tmp++
+        tmp = dt.Minute mod 10 + 48
+        @tmp++
+        tmp = 58
+        @tmp++
+        tmp = dt.Second / 10 + 48
+        @tmp++
+        tmp = dt.Second mod 10 + 48
+        @tmp++
+        tmp = 0
+    End
+
+    Public Sub ToSmallTimeString(dt as DateTime, out as String)
+        Dim tmp as PtrByteArray
+        Dim digit as UInt16
+        String.Copy out, ""
+        tmp = out
+        @tmp++
+        tmp = dt.Hour / 10 + 48
+        @tmp++
+        tmp = dt.Hour mod 10 + 48
+        @tmp++
+        tmp = 58
+        @tmp++
+        tmp = dt.Minute / 10 + 48
+        @tmp++
+        tmp = dt.Minute mod 10 + 48
+        @tmp++
+        tmp = 0
+    End
+End

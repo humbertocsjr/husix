@@ -28,6 +28,7 @@ Structure Assembly
     Dim StackSize as UInt16
     Dim WorkDirectory as PtrByteArray
     Dim StartingCode as PtrByteArray
+    Dim Executable as UInt16
 End
 
 Public Module Assembly
@@ -68,6 +69,11 @@ Public Module Assembly
             'TODO: Desalocar memoria
             Throw InvalidFormatError
         End
+        If header.Type == 1 Then
+            assm.Executable = 0
+        Else
+            assm.Executable = 1
+        End  
         ' Aloca a pilha
         assm.StackSize = header.StackSize / 1024
         ' Leia o diretorio atual
@@ -91,6 +97,7 @@ Public Module Assembly
         #regImp = #assm.Contents
         #ptr = #assm.Contents
         @regImp = header.ImportsLocalPtr
+        Realloc assm
         ' Processa todos os registros de importação
         '
         '  Um executável tem uma lista de Arquivos, Módulos e Rotinas que 
@@ -136,6 +143,10 @@ Public Module Assembly
                         @exportTable = @exportTable + 256
                         headerNew = exportTable
                         @exportTable = headerNew.ExportsLocalPtr
+                        found = 1
+                    End
+                    If found == 0 Then
+                        Console.Write "<NOT FOUND>"
                     End
                 End
             ElseIf regImp.Type == 2 Then ' Módulo
@@ -153,6 +164,8 @@ Public Module Assembly
                     @regExp = @regExp + SizeOf(AssemblyImpExpReg)
                 End
                 If found == 0 Then
+                        Console.Write "<NOT FOUND MOD>"
+                        Console.Write ptr
                     Throw NotFoundError
                 End
             ElseIf regImp.Type == 3 Then ' Rotina
@@ -172,14 +185,55 @@ Public Module Assembly
                     End
                     @regExp = @regExp + SizeOf(AssemblyImpExpReg)
                 End
-                If found == 0 Then Throw NotFoundError
+                If found == 0 Then 
+                        Console.Write "<NOT FOUND ROT>"
+                    Throw NotFoundError
+                End
             Else
                 Console.WriteUInt16 regImp.Type
             End
             @regImp = @regImp + SizeOf(AssemblyImpExpReg)
-        End
+        End     
+    End
 
-        
+    Sub Realloc(assm as Assembly)
+        Dim header as AssemblyHeader
+        header = assm.Contents
+        @header = @header + 256
+        ' Realoca executavel
+        Dim realoc as PtrWordArray
+        Dim ptr as PtrWordArray
+        Dim tipoRealoc as UInt16
+        Dim desvio as UInt16
+        Dim soma as UInt16
+        #realoc = #header
+        #ptr = #header
+        @realoc = header.RealocLocalPtr
+        while realoc <> 0
+            tipoRealoc = realoc
+            @realoc ++
+            @realoc ++
+            @ptr = realoc
+            @realoc ++
+            @realoc ++
+            desvio = realoc
+            @realoc ++
+            @realoc ++
+            soma = realoc
+            @realoc ++
+            @realoc ++
+            if tipoRealoc == 3 then
+                desvio = desvio + @ptr
+                ptr = desvio
+                @ptr ++
+                @ptr ++
+                ptr = #header + soma
+            end
+            if tipoRealoc == 1 then
+                @ptr = @ptr + desvio
+                ptr = #header + soma
+            end
+        end
     End
 
     Public Function Run(assm as Assembly, args as String) as UInt16
@@ -192,6 +246,7 @@ Public Module Assembly
         t.WaitReturnCode = 1
         Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
         While t.WaitReturnCode == 1 Thread.Yield
+        t.WaitReturnCode = 0
         Return t.ReturnCode
     End
 
@@ -204,8 +259,12 @@ Public Module Assembly
         String.Copy ptr, args
         t = assm.Thread
         t.WaitReturnCode = 0
-        Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
-        Thread.Yield
+        If assm.Executable Then
+            Thread.Start assm.Thread, assm.StackSize, assm.WorkDirectory, assm.StartingCode
+            While t.NewStack Thread.Yield
+        Else
+            t.Action = assm.Contents
+        End
     End
 
 End

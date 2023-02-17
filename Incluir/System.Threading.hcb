@@ -1,7 +1,22 @@
+Structure Semaphore
+    Dim Count as UInt16
+    Dim Limit as UInt16
+End
+
+Module Semaphore From "husix"
+    Public Sub Initialize(s as Semaphore, limit as UInt16)
+    Public Sub WaitOne(s as Semaphore)
+    Public Sub Release(s as Semaphore)
+End
+
 Module Process From "husix"
     Public Sub Start(filename as String, args as String)
 End
 
 Module Thread From "husix"
     Public Sub Yield()
+    Public Sub Abort(t as Thread)
+    Public Function Current() as PtrByteArray
+    Public Sub Sleep(miliseconds as UInt16)
+    Public Sub SleepSeconds(seconds as UInt16)
 End

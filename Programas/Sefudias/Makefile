@@ -3,7 +3,7 @@
 all:
 	@echo -= Compilando Jogo - Sefudias O Aventureiro =-
 	@hcbasic Sefudias.hcb Sefudias.tmp ../../Incluir/
-	@nasm -f bin -o Sefudias.hsx Sefudias.tmp
+	@nasm -f bin -o ../Sefudias.hsx Sefudias.tmp
 
 ptbr:
 	@-rm Translation.hcb

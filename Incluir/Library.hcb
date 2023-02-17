@@ -1,3 +1,5 @@
+Imports System.Threading
+
 error Error = 0
 error DivByZeroError = 1
 error StackOverflowError = 2
@@ -16,11 +18,6 @@ error InvalidFormatError = 14
 error NotReadyError = 15
 
 Module OS
-    Dim TryStack as UInt16
-    Dim TryCode as UInt16
-    Dim TryBase as UInt16
-    Dim TryFatal as UInt16
-    Dim MinStackPtr as UInt16
 
     Sub Start
         ' Inicializa o compilador
@@ -30,13 +27,14 @@ Module OS
         asm "db 'HSX',1 ; Library"
         asm "dw 1 ; HEADER VERSION"
         asm "dw 0 ; MINIMUM API VERSION"
-        asm "dw .start ; Start Routine"
+        asm "dw _os_start_start ; Start Routine"
         asm "dw END ; Code Size"
-        asm "dw 10240 ; Stack Size"
+        asm "dw 15360 ; Stack Size"
         asm "dw REALOC_TABLE ; Realocation Table"
         asm "dw IMPORT_TABLE ; Import Table"
         asm "dw EXPORT_TABLE ; Export Table"
-        asm ".start:"
+        asm "_os_minstackptr: dw 0"
+        asm "_os_start_start:"
         asm "mov word [_os_minstackptr], 0"
         asm "mov ax, ss"
         asm "mov ds, ax"
@@ -46,54 +44,22 @@ Module OS
     End
 
     Sub StackCheck
-        asm "cmp sp, 128"
+        asm "cs mov ax, [_os_minstackptr]"
+        asm "add ax, 64"
+        asm "cmp sp, ax"
         asm "ja .ok"
         Throw StackOverflowError
         asm ".ok:"
     End
 
     Sub Start2
-        ' Realoca executavel
-        Dim realoc as PtrWordArray
-        Dim ptr as PtrWordArray
-        Dim tipoRealoc as UInt16
-        Dim desvio as UInt16
-        Dim soma as UInt16
-        #realoc = CodeSegment()
-        #ptr = CodeSegment()
-        @realoc = RealocTable()
-        while realoc <> 0
-            tipoRealoc = realoc
-            @realoc ++
-            @realoc ++
-            @ptr = realoc
-            @realoc ++
-            @realoc ++
-            desvio = realoc
-            @realoc ++
-            @realoc ++
-            soma = realoc
-            @realoc ++
-            @realoc ++
-            if tipoRealoc == 3 then
-                desvio = desvio + @ptr
-                ptr = desvio
-                @ptr ++
-                @ptr ++
-                ptr = CodeSegment() + soma
-            end
-            if tipoRealoc == 2 then
-                @ptr = @ptr + desvio
-                ptr = StackSegment() + soma
-            end
-            if tipoRealoc == 1 then
-                @ptr = @ptr + desvio
-                ptr = CodeSegment() + soma
-            end
-        end
         While 1
             asm "int 0x81"
         End
+    End
+
+    Public Sub FatalError()
+        Thread.Abort Thread.Current()
     End
 
     Public Function CodeSegment() as UInt16

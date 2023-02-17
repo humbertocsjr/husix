@@ -1,0 +1,1562 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+_os_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:24:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:26:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:27:13 ===---
+db 'HSX',0 ; Application
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:28:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:29:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:30:13 ===---
+dw _os_start_start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:31:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:32:13 ===---
+dw 20480 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:33:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:34:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:35:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:36:13 ===---
+_os_minstackptr: dw 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:37:13 ===---
+_os_start_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:38:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:39:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:40:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:41:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:42:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:20:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 10
+db 83,121,115,116,101,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:45:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:46:13 ===---
+cs mov ax, [_os_minstackptr]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:47:13 ===---
+add ax, 64
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:48:13 ===---
+cmp sp, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:49:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:50:15 ===---
+cs mov si, [_os_minstackptr]
+ss mov word [si+6], _os
+push cs
+ss pop word [si+6+2]
+mov ax, 50
+ss mov [si+4], ax
+mov ax, 2
+ss mov [si+18], ax
+ss call far [si+0]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:51:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:54:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: args TAM: 4 POS: BP--14 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:56:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-14+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:59:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-14], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:61:11 ===---
+; Armazena Dados do Try Catch
+cs mov si, [_os_minstackptr]
+ss mov ax, [si+0]
+mov [bp+-2], ax
+ss mov ax, [si+2]
+mov [bp+-4], ax
+ss mov ax, [si+14]
+mov [bp+-6], ax
+ss mov ax, [si+16]
+mov [bp+-8], ax
+mov ax, bp
+ss mov [si+16], ax
+mov ax, sp
+ss mov [si+14], ax
+ss mov word [si+0], ROTULO3
+push cs
+ss pop word [si+0+2]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+push es
+push di
+push cs
+call _program_main
+add sp, 4
+jmp near ROTULO4
+ROTULO3:
+mov bx, ax
+cs mov si, [_os_minstackptr]
+ss mov bp, [si+16]
+ss mov sp, [si+14]
+mov ax, bx
+jmp near ROTULO4
+ROTULO6:
+push cs
+call _os_fatalerror
+ROTULO4:
+mov ax, [bp+-2]
+cs mov si, [_os_minstackptr]
+ss mov [si+0], ax
+mov ax, [bp+-4]
+ss mov [si+2], ax
+mov ax, [bp+-6]
+ss mov [si+14], ax
+mov ax, [bp+-8]
+ss mov [si+16], ax
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:67:16 ===---
+_os_fatalerror:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:22 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_current]
+push es
+push di
+cs call far [_thread_abort]
+add sp, 4
+ROTULO7:
+FIM_os_fatalerror:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:71:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:13 ===---
+mov ax, cs
+ROTULO8:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:76:13 ===---
+mov ax, ss
+ROTULO9:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:13 ===---
+mov ax, REALOC_TABLE
+ROTULO10:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== Clock.hcb:6:8 ===---
+; MODULO: program
+NAME_program:
+db 7
+db 112,114,111,103,114,97,109
+db 0
+_program:
+db 9
+db 67,108,111,99,107,46,104,99,98
+db 0
+;     ---=== Clock.hcb:7:9 ===---
+_program_clocktype:
+times 2 db 0
+;     ---=== Clock.hcb:9:14 ===---
+_program_cmosread:
+push bp
+mov bp, sp
+; ARG: reg TAM: 2 POS: BP+6 
+;     ---=== Clock.hcb:9:23 ===---
+;     ---=== Clock.hcb:10:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:10:34 ===---
+;     ---=== Clock.hcb:10:29 ===---
+mov ax, 128
+push ax
+;     ---=== Clock.hcb:10:37 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+mov bx, ax
+pop ax
+or ax, bx
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:10:23 ===---
+mov ax, 112
+push ax
+cs call far [_io_outputbyte]
+add sp, 4
+;     ---=== Clock.hcb:11:9 ===---
+;     ---=== Clock.hcb:11:16 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:11:29 ===---
+mov ax, 113
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+jmp near ROTULO11
+ROTULO11:
+mov sp, bp
+pop bp
+FIM_program_cmosread:
+retf
+;     ---=== Clock.hcb:14:9 ===---
+_program_cmostick:
+push bp
+mov bp, sp
+sub sp, 12
+push cs
+call _os_stackcheck
+; ARG: sec TAM: 2 POS: BP--2 
+; ARG: min TAM: 2 POS: BP--4 
+; ARG: hour TAM: 2 POS: BP--6 
+; ARG: day TAM: 2 POS: BP--8 
+; ARG: mon TAM: 2 POS: BP--10 
+; ARG: year TAM: 2 POS: BP--12 
+;     ---=== Clock.hcb:15:13 ===---
+;     ---=== Clock.hcb:16:13 ===---
+;     ---=== Clock.hcb:17:13 ===---
+;     ---=== Clock.hcb:18:13 ===---
+;     ---=== Clock.hcb:19:13 ===---
+;     ---=== Clock.hcb:20:13 ===---
+;     ---=== Clock.hcb:21:9 ===---
+ROTULO16:
+;     ---=== Clock.hcb:21:29 ===---
+;     ---=== Clock.hcb:21:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:21:24 ===---
+mov ax, 11
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+push ax
+;     ---=== Clock.hcb:21:33 ===---
+mov ax, 128
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+jne ROTULO17
+jmp near ROTULO18
+ROTULO17:
+jmp near ROTULO16
+ROTULO18:
+;     ---=== Clock.hcb:23:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:23:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:23:24 ===---
+xor ax, ax
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-2], ax
+;     ---=== Clock.hcb:24:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:24:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:24:24 ===---
+mov ax, 2
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-4], ax
+;     ---=== Clock.hcb:25:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:25:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:25:25 ===---
+mov ax, 4
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-6], ax
+;     ---=== Clock.hcb:26:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:26:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:26:24 ===---
+mov ax, 7
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-8], ax
+;     ---=== Clock.hcb:27:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:27:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:27:24 ===---
+mov ax, 8
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-10], ax
+;     ---=== Clock.hcb:28:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:28:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:28:25 ===---
+mov ax, 9
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-12], ax
+;     ---=== Clock.hcb:29:9 ===---
+;     ---=== Clock.hcb:29:60 ===---
+;     ---=== Clock.hcb:29:29 ===---
+;     ---=== Clock.hcb:29:19 ===---
+;     ---=== Clock.hcb:29:14 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:29:23 ===---
+mov ax, 128
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+je ROTULO28
+;     ---=== Clock.hcb:29:52 ===---
+;     ---=== Clock.hcb:29:38 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:29:47 ===---
+mov ax, 11
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+push ax
+;     ---=== Clock.hcb:29:56 ===---
+mov ax, 2
+mov bx, ax
+pop ax
+and ax, bx
+cmp ax, 0
+je ROTULO28
+ROTULO27:
+mov ax, 65535
+jmp near ROTULO29
+ROTULO28:
+xor ax, ax
+ROTULO29:
+push ax
+;     ---=== Clock.hcb:29:63 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO24
+jmp near ROTULO25
+ROTULO24:
+mov ax, 65535
+jmp near ROTULO26
+ROTULO25:
+xor ax, ax
+ROTULO26:
+cmp ax, 0
+jne ROTULO22
+jmp near ROTULO23
+ROTULO22:
+;     ---=== Clock.hcb:30:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:30:43 ===---
+;     ---=== Clock.hcb:30:37 ===---
+;     ---=== Clock.hcb:30:39 ===---
+mov ax, 12
+push ax
+;     ---=== Clock.hcb:30:27 ===---
+;     ---=== Clock.hcb:30:22 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:30:31 ===---
+mov ax, 127
+mov bx, ax
+pop ax
+and ax, bx
+pop bx
+add ax, bx
+push ax
+;     ---=== Clock.hcb:30:47 ===---
+mov ax, 24
+cmp ax, 0
+jne ROTULO39
+;     ---=== Clock.hcb:30:47 ===---
+cs mov si, [_os_minstackptr]
+ss mov word [si+6], _program
+push cs
+ss pop word [si+6+2]
+mov ax, 30
+ss mov [si+4], ax
+mov ax, 1
+ss mov [si+18], ax
+ss call far [si+0]
+ROTULO39:
+mov bx, ax
+pop ax
+xor dx, dx
+div bx
+mov ax, dx
+mov [bp+-6], ax
+ROTULO23:
+;     ---=== Clock.hcb:32:9 ===---
+;     ---=== Clock.hcb:32:34 ===---
+;     ---=== Clock.hcb:32:27 ===---
+;     ---=== Clock.hcb:32:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:32:22 ===---
+mov ax, 11
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+push ax
+;     ---=== Clock.hcb:32:31 ===---
+mov ax, 4
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:32:37 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO42
+jmp near ROTULO43
+ROTULO42:
+mov ax, 65535
+jmp near ROTULO44
+ROTULO43:
+xor ax, ax
+ROTULO44:
+cmp ax, 0
+jne ROTULO40
+jmp near ROTULO41
+ROTULO40:
+;     ---=== Clock.hcb:33:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:33:33 ===---
+;     ---=== Clock.hcb:33:24 ===---
+;     ---=== Clock.hcb:33:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:33:28 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:33:49 ===---
+;     ---=== Clock.hcb:33:51 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:33:42 ===---
+;     ---=== Clock.hcb:33:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:33:46 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-2], ax
+;     ---=== Clock.hcb:34:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:34:33 ===---
+;     ---=== Clock.hcb:34:24 ===---
+;     ---=== Clock.hcb:34:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== Clock.hcb:34:28 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:34:49 ===---
+;     ---=== Clock.hcb:34:51 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:34:42 ===---
+;     ---=== Clock.hcb:34:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== Clock.hcb:34:46 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-4], ax
+;     ---=== Clock.hcb:35:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:35:35 ===---
+;     ---=== Clock.hcb:35:26 ===---
+;     ---=== Clock.hcb:35:21 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:35:30 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:35:52 ===---
+;     ---=== Clock.hcb:35:54 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:35:45 ===---
+;     ---=== Clock.hcb:35:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:35:49 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-6], ax
+;     ---=== Clock.hcb:36:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:36:33 ===---
+;     ---=== Clock.hcb:36:24 ===---
+;     ---=== Clock.hcb:36:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== Clock.hcb:36:28 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:36:49 ===---
+;     ---=== Clock.hcb:36:51 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:36:42 ===---
+;     ---=== Clock.hcb:36:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== Clock.hcb:36:46 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-8], ax
+;     ---=== Clock.hcb:37:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:37:33 ===---
+;     ---=== Clock.hcb:37:24 ===---
+;     ---=== Clock.hcb:37:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== Clock.hcb:37:28 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:37:49 ===---
+;     ---=== Clock.hcb:37:51 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:37:42 ===---
+;     ---=== Clock.hcb:37:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== Clock.hcb:37:46 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-10], ax
+;     ---=== Clock.hcb:38:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:38:35 ===---
+;     ---=== Clock.hcb:38:26 ===---
+;     ---=== Clock.hcb:38:21 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:38:30 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:38:52 ===---
+;     ---=== Clock.hcb:38:54 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:38:45 ===---
+;     ---=== Clock.hcb:38:40 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:38:49 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-12], ax
+ROTULO41:
+;     ---=== Clock.hcb:40:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:40:21 ===---
+;     ---=== Clock.hcb:40:23 ===---
+mov ax, 2000
+push ax
+;     ---=== Clock.hcb:40:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+pop bx
+add ax, bx
+mov [bp+-12], ax
+;     ---=== Clock.hcb:41:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'clock'
+;     ---=== Clock.hcb:41:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:41:41 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:41:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:41:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:41:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:41:19 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+xor ah, ah
+push ax
+cs call far [_clock_set]
+add sp, 12
+ROTULO15:
+mov sp, bp
+pop bp
+FIM_program_cmostick:
+retf
+;     ---=== Clock.hcb:44:9 ===---
+_program_asttick:
+push bp
+mov bp, sp
+sub sp, 12
+push cs
+call _os_stackcheck
+; ARG: sec TAM: 2 POS: BP--2 
+; ARG: min TAM: 2 POS: BP--4 
+; ARG: hour TAM: 2 POS: BP--6 
+; ARG: day TAM: 2 POS: BP--8 
+; ARG: mon TAM: 2 POS: BP--10 
+; ARG: year TAM: 2 POS: BP--12 
+;     ---=== Clock.hcb:45:13 ===---
+;     ---=== Clock.hcb:46:13 ===---
+;     ---=== Clock.hcb:47:13 ===---
+;     ---=== Clock.hcb:48:13 ===---
+;     ---=== Clock.hcb:49:13 ===---
+;     ---=== Clock.hcb:50:13 ===---
+;     ---=== Clock.hcb:51:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:51:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:51:28 ===---
+mov ax, 706
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-2], ax
+;     ---=== Clock.hcb:52:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:52:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:52:28 ===---
+mov ax, 707
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-4], ax
+;     ---=== Clock.hcb:53:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:53:16 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:53:29 ===---
+mov ax, 708
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-6], ax
+;     ---=== Clock.hcb:54:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:54:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:54:28 ===---
+mov ax, 710
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-8], ax
+;     ---=== Clock.hcb:55:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:55:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:55:28 ===---
+mov ax, 711
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-10], ax
+;     ---=== Clock.hcb:56:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:56:16 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== Clock.hcb:56:29 ===---
+mov ax, 714
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-12], ax
+;     ---=== Clock.hcb:57:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:57:29 ===---
+;     ---=== Clock.hcb:57:20 ===---
+;     ---=== Clock.hcb:57:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:57:24 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:57:45 ===---
+;     ---=== Clock.hcb:57:47 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:57:38 ===---
+;     ---=== Clock.hcb:57:34 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:57:42 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-2], ax
+;     ---=== Clock.hcb:58:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:58:29 ===---
+;     ---=== Clock.hcb:58:20 ===---
+;     ---=== Clock.hcb:58:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== Clock.hcb:58:24 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:58:45 ===---
+;     ---=== Clock.hcb:58:47 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:58:38 ===---
+;     ---=== Clock.hcb:58:34 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+push ax
+;     ---=== Clock.hcb:58:42 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-4], ax
+;     ---=== Clock.hcb:59:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:59:31 ===---
+;     ---=== Clock.hcb:59:22 ===---
+;     ---=== Clock.hcb:59:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:59:26 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:59:48 ===---
+;     ---=== Clock.hcb:59:50 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:59:41 ===---
+;     ---=== Clock.hcb:59:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:59:45 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-6], ax
+;     ---=== Clock.hcb:60:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:60:29 ===---
+;     ---=== Clock.hcb:60:20 ===---
+;     ---=== Clock.hcb:60:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== Clock.hcb:60:24 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:60:45 ===---
+;     ---=== Clock.hcb:60:47 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:60:38 ===---
+;     ---=== Clock.hcb:60:34 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+push ax
+;     ---=== Clock.hcb:60:42 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-8], ax
+;     ---=== Clock.hcb:61:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:61:29 ===---
+;     ---=== Clock.hcb:61:20 ===---
+;     ---=== Clock.hcb:61:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== Clock.hcb:61:24 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:61:45 ===---
+;     ---=== Clock.hcb:61:47 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:61:38 ===---
+;     ---=== Clock.hcb:61:34 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+push ax
+;     ---=== Clock.hcb:61:42 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr al, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-10], ax
+;     ---=== Clock.hcb:62:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:62:31 ===---
+;     ---=== Clock.hcb:62:22 ===---
+;     ---=== Clock.hcb:62:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:62:26 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:62:48 ===---
+;     ---=== Clock.hcb:62:50 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:62:41 ===---
+;     ---=== Clock.hcb:62:36 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:62:45 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-12], ax
+;     ---=== Clock.hcb:63:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:63:21 ===---
+;     ---=== Clock.hcb:63:23 ===---
+mov ax, 1980
+push ax
+;     ---=== Clock.hcb:63:16 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+pop bx
+add ax, bx
+mov [bp+-12], ax
+;     ---=== Clock.hcb:64:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'clock'
+;     ---=== Clock.hcb:64:46 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-8]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:64:41 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:64:35 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-12]
+push ax
+;     ---=== Clock.hcb:64:30 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:64:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+xor ah, ah
+push ax
+;     ---=== Clock.hcb:64:19 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+xor ah, ah
+push ax
+cs call far [_clock_set]
+add sp, 12
+ROTULO84:
+mov sp, bp
+pop bp
+FIM_program_asttick:
+retf
+;     ---=== Clock.hcb:67:16 ===---
+_program_main:
+push bp
+mov bp, sp
+sub sp, 6
+push cs
+call _os_stackcheck
+; ARG: args TAM: 4 POS: BP+6 
+; ARG: tmp TAM: 2 POS: BP--2 
+; ARG: tmp2 TAM: 2 POS: BP--4 
+; ARG: i TAM: 2 POS: BP--6 
+;     ---=== Clock.hcb:67:21 ===---
+;     ---=== Clock.hcb:68:13 ===---
+;     ---=== Clock.hcb:69:13 ===---
+;     ---=== Clock.hcb:70:13 ===---
+;     ---=== Clock.hcb:72:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:72:15 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:72:24 ===---
+mov ax, 9
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-2], ax
+;     ---=== Clock.hcb:73:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:73:16 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:73:25 ===---
+mov ax, 9
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-4], ax
+;     ---=== Clock.hcb:74:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_clocktype], 0
+;     ---=== Clock.hcb:75:9 ===---
+;     ---=== Clock.hcb:75:34 ===---
+;     ---=== Clock.hcb:75:27 ===---
+;     ---=== Clock.hcb:75:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:75:22 ===---
+mov ax, 11
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+push ax
+;     ---=== Clock.hcb:75:31 ===---
+mov ax, 4
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:75:37 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO124
+jmp near ROTULO125
+ROTULO124:
+mov ax, 65535
+jmp near ROTULO126
+ROTULO125:
+xor ax, ax
+ROTULO126:
+cmp ax, 0
+jne ROTULO122
+jmp near ROTULO123
+ROTULO122:
+;     ---=== Clock.hcb:76:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:76:33 ===---
+;     ---=== Clock.hcb:76:24 ===---
+;     ---=== Clock.hcb:76:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:76:28 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== Clock.hcb:76:49 ===---
+;     ---=== Clock.hcb:76:51 ===---
+mov ax, 10
+push ax
+;     ---=== Clock.hcb:76:42 ===---
+;     ---=== Clock.hcb:76:38 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:76:46 ===---
+mov ax, 4
+mov cx, ax
+pop ax
+shr ax, cl
+pop bx
+mul bx
+mov bx, ax
+pop ax
+or ax, bx
+mov [bp+-2], ax
+ROTULO123:
+;     ---=== Clock.hcb:78:9 ===---
+;     ---=== Clock.hcb:78:21 ===---
+;     ---=== Clock.hcb:78:16 ===---
+;     ---=== Clock.hcb:78:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:78:18 ===---
+mov ax, 22
+mov bx, ax
+pop ax
+cmp ax, bx
+ja ROTULO141
+jmp near ROTULO142
+ROTULO141:
+mov ax, 65535
+jmp near ROTULO143
+ROTULO142:
+xor ax, ax
+ROTULO143:
+cmp ax, 0
+je ROTULO139
+;     ---=== Clock.hcb:78:33 ===---
+;     ---=== Clock.hcb:78:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:78:35 ===---
+mov ax, 25
+mov bx, ax
+pop ax
+cmp ax, bx
+jb ROTULO144
+jmp near ROTULO145
+ROTULO144:
+mov ax, 65535
+jmp near ROTULO146
+ROTULO145:
+xor ax, ax
+ROTULO146:
+cmp ax, 0
+je ROTULO139
+ROTULO138:
+mov ax, 65535
+jmp near ROTULO140
+ROTULO139:
+xor ax, ax
+ROTULO140:
+cmp ax, 0
+jne ROTULO136
+jmp near ROTULO137
+ROTULO136:
+;     ---=== Clock.hcb:79:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_clocktype], 1
+;     ---=== Clock.hcb:80:26 ===---
+;     ---=== Clock.hcb:80:26 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-6], 1
+ROTULO147:
+;     ---=== Clock.hcb:80:26 ===---
+;     ---=== Clock.hcb:80:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-6]
+push ax
+;     ---=== Clock.hcb:80:26 ===---
+mov ax, 20
+mov bx, ax
+pop ax
+cmp ax, bx
+jbe ROTULO150
+jmp near ROTULO151
+ROTULO150:
+mov ax, 65535
+jmp near ROTULO152
+ROTULO151:
+xor ax, ax
+ROTULO152:
+cmp ax, 0
+jne ROTULO148
+jmp near ROTULO149
+ROTULO148:
+;     ---=== Clock.hcb:81:17 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== Clock.hcb:81:23 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== Clock.hcb:81:32 ===---
+mov ax, 9
+xor ah, ah
+push ax
+push cs
+call _program_cmosread
+add sp, 2
+mov [bp+-2], ax
+;     ---=== Clock.hcb:82:17 ===---
+;     ---=== Clock.hcb:82:24 ===---
+;     ---=== Clock.hcb:82:20 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== Clock.hcb:82:27 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+mov bx, ax
+pop ax
+cmp ax, bx
+jne ROTULO155
+jmp near ROTULO156
+ROTULO155:
+mov ax, 65535
+jmp near ROTULO157
+ROTULO156:
+xor ax, ax
+ROTULO157:
+cmp ax, 0
+jne ROTULO153
+jmp near ROTULO154
+ROTULO153:
+;     ---=== Clock.hcb:82:37 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_clocktype], 0
+ROTULO154:
+;     ---=== Clock.hcb:80:26 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-6]
+jmp near ROTULO147
+ROTULO149:
+ROTULO137:
+;     ---=== Clock.hcb:85:9 ===---
+;     ---=== Clock.hcb:85:22 ===---
+;     ---=== Clock.hcb:85:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_clocktype]
+push ax
+;     ---=== Clock.hcb:85:25 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO160
+jmp near ROTULO161
+ROTULO160:
+mov ax, 65535
+jmp near ROTULO162
+ROTULO161:
+xor ax, ax
+ROTULO162:
+cmp ax, 0
+jne ROTULO158
+jmp near ROTULO159
+ROTULO158:
+;     ---=== Clock.hcb:86:13 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_clocktype], 2
+ROTULO159:
+;     ---=== Clock.hcb:88:9 ===---
+ROTULO163:
+;     ---=== Clock.hcb:88:15 ===---
+mov ax, 1
+cmp ax, 0
+jne ROTULO164
+jmp near ROTULO165
+ROTULO164:
+;     ---=== Clock.hcb:89:13 ===---
+;     ---=== Clock.hcb:89:26 ===---
+;     ---=== Clock.hcb:89:16 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_clocktype]
+push ax
+;     ---=== Clock.hcb:89:29 ===---
+mov ax, 1
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO168
+jmp near ROTULO169
+ROTULO168:
+mov ax, 65535
+jmp near ROTULO170
+ROTULO169:
+xor ax, ax
+ROTULO170:
+cmp ax, 0
+jne ROTULO166
+jmp near ROTULO167
+ROTULO166:
+;     ---=== Clock.hcb:90:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _program_cmostick
+jmp near ROTULO171
+ROTULO167:
+;     ---=== Clock.hcb:91:13 ===---
+;     ---=== Clock.hcb:91:30 ===---
+;     ---=== Clock.hcb:91:20 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_clocktype]
+push ax
+;     ---=== Clock.hcb:91:33 ===---
+mov ax, 2
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO174
+jmp near ROTULO175
+ROTULO174:
+mov ax, 65535
+jmp near ROTULO176
+ROTULO175:
+xor ax, ax
+ROTULO176:
+cmp ax, 0
+jne ROTULO172
+jmp near ROTULO173
+ROTULO172:
+;     ---=== Clock.hcb:92:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _program_asttick
+ROTULO173:
+ROTULO171:
+;     ---=== Clock.hcb:95:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+;     ---=== Clock.hcb:95:33 ===---
+mov ax, 30
+push ax
+cs call far [_thread_sleepseconds]
+add sp, 2
+jmp near ROTULO163
+ROTULO165:
+ROTULO121:
+mov sp, bp
+pop bp
+FIM_program_main:
+retf
+; MODULO FIM: program
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:16:8 ===---
+; MODULO: thread
+NAME_thread:
+db 6
+db 116,104,114,101,97,100
+db 0
+_thread:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:17:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:18:16 ===---
+_thread_abort:
+times 4 db 0
+db 5
+db 97,98,111,114,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:19:21 ===---
+_thread_current:
+times 4 db 0
+db 7
+db 99,117,114,114,101,110,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:20:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:21:16 ===---
+_thread_sleepseconds:
+times 4 db 0
+db 12
+db 115,108,101,101,112,115,101,99,111,110,100,115
+times 1 db 0
+; MODULO FIM: thread
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:1:8 ===---
+; MODULO: io
+NAME_io:
+db 2
+db 105,111
+db 0
+_io:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:2:16 ===---
+_io_outputbyte:
+times 4 db 0
+db 10
+db 111,117,116,112,117,116,98,121,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:3:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:4:21 ===---
+_io_inputbyte:
+times 4 db 0
+db 9
+db 105,110,112,117,116,98,121,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:5:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:6:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:7:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:8:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:9:16 ===---
+; MODULO FIM: io
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:19:8 ===---
+; MODULO: clock
+NAME_clock:
+db 5
+db 99,108,111,99,107
+db 0
+_clock:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:20:16 ===---
+_clock_set:
+times 4 db 0
+db 3
+db 115,101,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:21:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:22:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.DateTime.hcb:23:16 ===---
+; MODULO FIM: clock
+EXPORT_TABLE:
+times 2 db 0
+IMPORT_TABLE:
+db 1
+dw _thread
+db 2
+dw NAME_thread
+; QTD REFS: 1
+db 3
+dw _thread_abort
+; QTD REFS: 1
+db 3
+dw _thread_current
+; QTD REFS: 1
+db 3
+dw _thread_sleepseconds
+db 1
+dw _io
+db 2
+dw NAME_io
+; QTD REFS: 1
+db 3
+dw _io_outputbyte
+; QTD REFS: 7
+db 3
+dw _io_inputbyte
+db 1
+dw _clock
+db 2
+dw NAME_clock
+; QTD REFS: 2
+db 3
+dw _clock_set
+times 2 db 0
+REALOC_TABLE:
+dw 0
+dw 0
+dw 0
+dw 0
+END:

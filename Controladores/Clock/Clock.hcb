@@ -1,0 +1,98 @@
+Imports System
+Imports System.IO
+Imports System.DateTime
+Imports System.Threading
+
+Module Program
+    Dim ClockType as Uint16
+
+    Function CMOSRead(reg as UInt8) as UInt8
+        IO.OutputByte 0x70, 0x80 Or reg
+        Return IO.InputByte(0x71) 
+    End
+
+    Sub CMOSTick()
+        Dim sec as UInt8
+        Dim min as UInt8
+        Dim hour as UInt8
+        Dim day as UInt8
+        Dim mon as UInt8
+        Dim year as UInt16
+        While CMOSRead(0xb) And 0x80
+        End
+        sec = CMOSRead(0x00)
+        min = CMOSRead(0x02)
+        hour = CMOSRead(0x04)
+        day = CMOSRead(0x07)
+        mon = CMOSRead(0x08)
+        year = CMOSRead(0x09)
+        If ((hour And 0x80) AndAlso (CMOSRead(0xb) And 2)) == 0 Then
+            hour = ((hour And 0x7f) + 12) Mod 24
+        End
+        If (CMOSRead(0xb) And 4) == 0 Then
+            sec = (sec And 0xf) Or ((sec Shr 4) * 10)
+            min = (min And 0xf) Or ((min Shr 4) * 10)
+            hour = (hour And 0xf) Or ((hour Shr 4) * 10)
+            day = (day And 0xf) Or ((day Shr 4) * 10)
+            mon = (mon And 0xf) Or ((mon Shr 4) * 10)
+            year = (year And 0xf) Or ((year Shr 4) * 10)
+        End
+        year = year + 2000
+        Clock.Set hour, min, sec, year, mon, day
+    End
+
+    Sub ASTTick()
+        Dim sec as UInt8
+        Dim min as UInt8
+        Dim hour as UInt8
+        Dim day as UInt8
+        Dim mon as UInt8
+        Dim year as UInt16
+        sec = IO.InputByte(0x2c2)
+        min = IO.InputByte(0x2c3)
+        hour = IO.InputByte(0x2c4)
+        day = IO.InputByte(0x2c6)
+        mon = IO.InputByte(0x2c7)
+        year = IO.InputByte(0x2ca)
+        sec = (sec And 0xf) Or ((sec Shr 4) * 10)
+        min = (min And 0xf) Or ((min Shr 4) * 10)
+        hour = (hour And 0xf) Or ((hour Shr 4) * 10)
+        day = (day And 0xf) Or ((day Shr 4) * 10)
+        mon = (mon And 0xf) Or ((mon Shr 4) * 10)
+        year = (year And 0xf) Or ((year Shr 4) * 10)
+        year = year + 1980
+        Clock.Set hour, min, sec, year, mon, day
+    End
+
+    Friend Sub Main(args as String)
+        Dim tmp as UInt16
+        Dim tmp2 as UInt16
+        Dim i as UInt16
+        ' Tenta detectar CMOS por força bruta, tentando ler o ano repetidas vezes
+        tmp = CMOSRead(0x09)
+        tmp2 = CMOSRead(0x09)
+        ClockType = 0
+        If (CMOSRead(0xb) And 4) == 0 Then
+            tmp = (tmp And 0xf) Or ((tmp Shr 4) * 10)
+        End
+        If tmp > 22 AndAlso tmp < 25 Then 
+            ClockType = 1
+            For i = 1 to 20
+                tmp = CMOSRead(0x09)
+                If tmp <> tmp2 Then ClockType = 0
+            End
+        End
+        If ClockType == 0 Then
+            ClockType = 2
+        End
+        While 1
+            If ClockType == 1 Then 
+                CMOSTick
+            ElseIf ClockType == 2 Then
+                ASTTick
+            Else
+            End
+            Thread.SleepSeconds 30
+        End
+    End
+End

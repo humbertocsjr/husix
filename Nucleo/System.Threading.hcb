@@ -125,6 +125,9 @@ Module MultiThreading
         Current = Int81Temp
         ss = Current.StackSegment
         sp = Current.StackPointer
+        'Console.Write " >"
+        'Console.WriteUInt16 Current.Id
+        'Console.Write Current.Name
         If Current.Suspended Then Goto find_next
         If Current.NewStack Then
             Current.NewStack = 0
@@ -203,18 +206,11 @@ Module MultiThreading
     ' Inicia uma Thread gerada pelo RequestNew (USO INTERNO)
     Public Sub StartThread(t as Thread)
         Dim status as UInt16
-        Dim ptrP as PtrByteArray
-        Dim ptrN as PtrByteArray
         status = IsActive()
         If status Then Suspend
-        #ptrN = #t
-        @ptrN = @t
-        ptrP = Current.Previous
-        Current.Next = ptrN
-        #ptrN = #Current
-        @ptrN = @Current
-        t.Previous = ptrP
-        t.Next = ptrN
+        t.Next = KernelThread.Next
+        KernelThread.Next = t
+        t.Previous = KernelThread
         If status Then Resume
     End
 

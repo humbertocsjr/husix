@@ -12,9 +12,12 @@ Para testar este projeto sem compilar basa usar um disquete com o nome terminado
 
 ## Novidades
 
+- Implementado Relogio via CMOS(AT ou Superior) e ASTClock(PC/XT com AST SuperPak)
+- Implementado Protótipo do Controlador de PS/2
 - Implementado System.Drawing
 - Implementado Sistema Inicial Luzia
-- Implementado Controlador de Vídeo VGA
+- Implementado Controlador de Vídeo VGA (Otimizado)
+- Implementado Controlador de Vídeo CGA (SEM OTIMIZACAO - NAO USAR - LENTO)
 - Implementado Carregamendo de executáveis
 - Implementado Carregamento de bibliotecas(Dependências)
 
@@ -60,7 +63,7 @@ Esta lista é focada em quem quer entender o funcionamento do sistema, e serve c
 
 # Bugs Conhecidos
 
-- Quando uma rotina chama outra em outro segmento e nesta segunda emite um erro, existe uma falha no Try que caso seja multisegmento ele perde o segmento do erro e perde os ponteiros ErrorLine() e ErrorFile()
+- Existem falhas de verificação do Redraw, fazendo que trechos da tela possam não atualizar
 
 # Objetivos para Versão 1.0
 

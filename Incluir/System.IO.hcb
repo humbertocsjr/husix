@@ -1,0 +1,10 @@
+Module IO From "husix"
+    Public Sub OutputByte(port as UInt16, value as UInt8)
+    Public Sub OutputWord(port as UInt16, value as UInt16)
+    Public Function InputByte(port as UInt16) as UInt8
+    Public Function InputWord(port as UInt16) as UInt16
+    Public Sub RegisterHandler(interrupt as UInt8, handler as PtrByteArray)
+    Public Function GetHandler(interrupt as UInt8) as PtrByteArray
+    Public Sub DisableInterrupts()
+    Public Sub EnableInterrupts()
+End

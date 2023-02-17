@@ -1,0 +1,24 @@
+
+Structure DateTime
+    Dim MiliSecond as UInt16
+    Dim Second as UInt16
+    Dim Minute as UInt16
+    Dim Hour as UInt16
+    Dim Day as UInt16
+    Dim Month as UInt16
+    Dim Year as UInt16
+    Spacing 10 ' Espaco reservado para uso futuro
+End
+
+Module DateTime From "husix"
+    Public Sub Now(dt as DateTime)
+    Public Sub ToTimeString(dt as DateTime, out as String)
+    Public Sub ToSmallTimeString(dt as DateTime, out as String)
+End
+
+Module Clock From "husix"
+    Public Sub Set(h as UInt8, m as UInt8, s as UInt8, y as UInt16, mon as UInt8, d as UInt8)
+    Public Function GetTimezoneHour() as Int16
+    Public Function GetTimezoneMinute() as Int16
+    Public Sub SetTimezone(hour as Int16, minute as Int16)
+End

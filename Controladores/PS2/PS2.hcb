@@ -1,0 +1,208 @@
+Imports System
+Imports System.IO
+Imports System.IO.Console
+Imports System.Forms
+Imports System.Threading
+
+Module Program
+    ' 0x60 Valor
+    ' 0x64 Status
+    ' - 1 = Saída Cheia
+    ' - 2 = Entrada Cheia
+
+    Public Dim MainForm as Control
+    Public Dim ScanCodeDescLabel as Control
+    Public Dim ScanCodeLabel as Control
+    Public Dim ScanCode2Label as Control
+    Public Dim AsciiDescLabel as Control
+    Public Dim AsciiLabel as Control
+    Public Dim UTF8DescLabel as Control
+    Public Dim UTF8HighLabel as Control
+    Public Dim UTF8LowLabel as Control
+    Public Dim Debug as UInt16
+
+    Friend Sub Main(args as String)
+        Debug = 0
+        If String.Equals(args, "debug") Then Debug = 1
+        PS2Keyboard.ScanCodeMap = Embed("USIntl.keymap")
+        IO.RegisterHandler 9, AddressOf(Irq1)
+        PS2Keyboard.Initialize
+        Application.SetKeyboardUpdate AddressOf(PS2Keyboard.KeyboardUpdate)
+        If Debug Then
+            Form.Initialize MainForm
+            MainForm.Top = 20
+            MainForm.Left = 20
+            MainForm.Width = 150
+            MainForm.Height = 70
+            MainForm.Text = "PS/2 Debug"
+
+            Label.Initialize ScanCodeDescLabel
+            ScanCodeDescLabel.Top = 5
+            ScanCodeDescLabel.Left = 5
+            ScanCodeDescLabel.Width = 50
+            ScanCodeDescLabel.Height = 15
+            ScanCodeDescLabel.Visible = 1
+            ScanCodeDescLabel.Text = "Input:"
+            Control.Add MainForm, ScanCodeDescLabel
+
+            HexLabel.Initialize ScanCodeLabel
+            ScanCodeLabel.Top = 5
+            ScanCodeLabel.Left = 65
+            ScanCodeLabel.Width = 50
+            ScanCodeLabel.Height = 15
+            ScanCodeLabel.Visible = 1
+            Control.Add MainForm, ScanCodeLabel
+
+            HexLabel.Initialize ScanCode2Label
+            ScanCode2Label.Top = 5
+            ScanCode2Label.Left = 106
+            ScanCode2Label.Width = 50
+            ScanCode2Label.Height = 15
+            ScanCode2Label.Visible = 1
+            Control.Add MainForm, ScanCode2Label
+
+            Label.Initialize UTF8DescLabel
+            UTF8DescLabel.Top = 20
+            UTF8DescLabel.Left = 5
+            UTF8DescLabel.Width = 50
+            UTF8DescLabel.Height = 15
+            UTF8DescLabel.Visible = 1
+            UTF8DescLabel.Text = "UTF-8:"
+            Control.Add MainForm, UTF8DescLabel
+
+            HexLabel.Initialize UTF8HighLabel
+            UTF8HighLabel.Top = 20
+            UTF8HighLabel.Left = 106
+            UTF8HighLabel.Width = 40
+            UTF8HighLabel.Height = 15
+            UTF8HighLabel.Visible = 1
+            Control.Add MainForm, UTF8HighLabel
+
+            HexLabel.Initialize UTF8LowLabel
+            UTF8LowLabel.Top = 20
+            UTF8LowLabel.Left = 65
+            UTF8LowLabel.Width = 39
+            UTF8LowLabel.Height = 15
+            UTF8LowLabel.Visible = 1
+            Control.Add MainForm, UTF8LowLabel
+
+            Label.Initialize AsciiDescLabel
+            AsciiDescLabel.Top = 35
+            AsciiDescLabel.Left = 5
+            AsciiDescLabel.Width = 50
+            AsciiDescLabel.Height = 15
+            AsciiDescLabel.Visible = 1
+            AsciiDescLabel.Text = "ASCII:"
+            Control.Add MainForm, AsciiDescLabel
+
+            Label.Initialize AsciiLabel
+            AsciiLabel.Top = 35
+            AsciiLabel.Left = 65
+            AsciiLabel.Width = 20
+            AsciiLabel.Height = 15
+            AsciiLabel.Visible = 1
+            AsciiLabel.Text = " "
+            Control.Add MainForm, AsciiLabel
+            
+            Application.Run MainForm
+        Else
+            While 1 Thread.Yield
+        End
+    End
+
+    Sub Irq1() Handles Interrupt
+        PS2Keyboard.Write IO.InputByte(0x60)
+        Dim tmp as UInt8
+        tmp = IO.InputByte(0x61)
+        IO.OutputByte 0x61, tmp Or 128 ' Avisa o teclado que recebeu
+        IO.OutputByte 0x61, tmp
+        IO.OutputByte 0x20, 0x20
+    End
+End
+
+Structure KeyboardBuffer
+    Spacing 16
+End
+
+Module PS2Keyboard
+    Public Dim ScanCodeMap as PtrByteArray
+    Public Dim Buffer as KeyboardBuffer
+    Public Dim BufferWritePtr as UInt16
+    Public Dim BufferReadPtr as UInt16
+
+    Friend Sub KeyboardUpdate(ctrl as Control)
+        Process
+    End
+
+    Friend Sub Initialize
+        BufferReadPtr = 0
+        BufferWritePtr = 0
+    End
+
+    Friend Sub Write(value as UInt8)
+        Dim ptr as PtrByteArray
+        ptr = Buffer
+        @ptr = @ptr + BufferWritePtr
+        ptr = value
+        BufferWritePtr++
+        BufferWritePtr = BufferWritePtr And 0xf
+    End
+
+    Friend Function Read as UInt8
+        Dim ptr as PtrByteArray
+        If BufferReadPtr == BufferWritePtr Then Return 0
+        ptr = Buffer
+        @ptr = @ptr + BufferReadPtr
+        BufferReadPtr++
+        BufferReadPtr = BufferReadPtr And 0xf
+        Return ptr
+    End
+
+    Friend Sub Process
+        Dim value as UInt8
+        Dim e as KeyboardEventArgs
+        Dim ptr as PtrByteArray
+        Dim ptrW as PtrByteArray
+        value = Read()
+        If value == 0 Then Return
+        e = New
+        ptr = ScanCodeMap
+        @ptr = @ptr + ((value And 0x7f) SHL 2)
+        ptrW = ptr
+        e.AsciiChar = ptr
+        e.UTF8LowWord = ptrW
+        @ptrW++
+        @ptrW++
+        e.UTF8HighWord = ptrW
+        e.Pressed = ptr And 128
+        e.Cancel = 0
+        Application.SendKeyboardEvent e
+        If Program.Debug Then
+            Dim ctrl as Control
+            ctrl = Program.UTF8LowLabel
+            ctrl.Value = e.UTF8LowWord
+            ctrl = Program.UTF8HighLabel
+            ctrl.Value = e.UTF8HighWord
+            ctrl = Program.ScanCodeLabel
+            ctrl.Value = value
+            ctrl = Program.ScanCode2Label
+            ctrl.Value = value And 0x7f
+            ctrl = Program.AsciiLabel
+            ptr = ctrl.Text
+            @ptr++
+            If e.AsciiChar >= 32 Then
+                ptr = e.AsciiChar
+            Else
+                ptr = 32
+            End
+            Control.Suppress Program.MainForm
+            Control.Redraw Program.AsciiLabel
+            Control.Redraw Program.ScanCodeLabel
+            Control.Redraw Program.ScanCode2Label
+            Control.Redraw Program.UTF8LowLabel
+            Control.Redraw Program.UTF8HighLabel
+            Control.Resume Program.MainForm
+        End
+    End
+
+End

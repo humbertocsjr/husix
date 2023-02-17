@@ -1,30 +1,25 @@
 Module OS
-    Dim TryStack as UInt16
-    Dim TryCode as UInt16
-    Dim TryBase as UInt16
-    Dim TryFatal as UInt16
-    Dim MinStackPtr as UInt16
+    Public Dim StackSize as UInt16
 
     Sub Start
         ' Inicializa o compilador
         asm "cpu 8086"
         asm "bits 16"
         asm "org 0x100"
-        asm "mov sp, 0xfffe"
-        asm "mov word [_os_minstackptr], END"
-        Start2
-    End
-
-    Sub StackCheck
-        asm "mov ax, ss"
-        asm "mov bx, ax"
+        asm "jmp _os_start_pula"
+        asm "times 20-($-$$) db 0"
+        asm "_os_minstackptr: dw 0"
+        asm "_os_start_pula:"
+        asm "cli"
         asm "mov ax, cs"
-        asm "cmp ax, bx"
-        asm "jne .fim"
-        asm "cmp sp, END"
-        asm "ja .fim"
-        Throw StackOverflowError
-        asm ".fim:"
+        asm "add ax, 4096"
+        asm "mov ss, ax"
+        asm "mov ds, ax"
+        asm "mov es, ax"
+        asm "mov sp, 24576"
+        asm "cs mov word [_os_stacksize], 24576"
+        asm "sti"
+        Start2
     End
 
     Sub Start2
@@ -115,15 +110,24 @@ Module OS
         End
     End
 
+    Sub StackCheck
+        asm "cs mov ax, [_os_minstackptr]"
+        asm "add ax, 64"
+        asm "cmp sp, ax"
+        asm "ja .ok"
+        Throw StackOverflowError
+        asm ".ok:"
+    End
+
+    Public Sub FatalError()
+        Program.FatalError "Não implementado", ErrorFile(), ErrorLine()
+    End
+
     Public Function CodeSegment() as UInt16
         asm "mov ax, cs"
     End
 
     Public Function StackSegment() as UInt16
-        asm "mov ax, ss"
-    End
-
-    Public Function StackPointer() as UInt16
         asm "mov ax, ss"
     End
 

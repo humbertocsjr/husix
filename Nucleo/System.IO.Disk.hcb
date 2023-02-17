@@ -38,11 +38,29 @@ Structure DiskInfo
     Dim Param8 as UInt16
 End
 
+Structure DiskBufferPacket
+    Spacing 512
+    Dim Refs as UInt16
+    Dim DiskPtr as PtrByteArray
+    Dim PositionLow as UInt16
+    Dim PositionHigh as UInt16
+End
+
 Public Module Disk
     Dim Disks as List
+    Dim Buffer as PtrByteArray
 
     Friend Sub Initialize
         List.Initialize Disks, SizeOf(DiskInfo)
+        Buffer = Memory.Alloc(SizeOf(DiskBufferPacket) * 16)
+        Dim i as UInt16
+        Dim buff as DiskBufferPacket
+        Dim tmp as PtrByteArray
+        For i = 1 to 16
+            buff = Buffer
+            @buff = @buff + ((i-1) * SizeOf(DiskBufferPacket))
+            buff.Refs = 0
+        End
     End
     
     Public Function RegisterNew(name as String, internalId as UInt16, cylinders as UInt16, heads as UInt16, sectors as UInt16, blockSize as UInt16) as PtrByteArray
@@ -118,7 +136,45 @@ Public Module Disk
     End
 
     Public Sub ReadBlock(d as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        Dim i as UInt16
+        Dim buff as DiskBufferPacket
+        If d.BlockSize == 512 Then
+            For i = 1 to 16
+                buff = Buffer
+                @buff = @buff + ((i-1) * SizeOf(DiskBufferPacket))
+                If buff.Refs Then
+                    If (#buff.DiskPtr == #d) AndAlso (@buff.DiskPtr == @d) Then
+                        If (buff.PositionLow == addressLow) Then 
+                            If (buff.PositionHigh == addressHigh) Then
+                                buff.Refs++
+                                Memory.Copy data, buff, 512
+                                Return
+                            End
+                        End
+                    End
+                End
+            End
+        End
         d.ReadBlock.Invoke data, addressLow, addressHigh
+        If d.BlockSize == 512 Then
+            Dim dest as DiskBufferPacket
+            dest = Buffer
+            For i = 1 to 16
+                buff = Buffer
+                @buff = @buff + ((i-1) * SizeOf(DiskBufferPacket))
+                If (dest.Refs > buff.Refs) Then
+                    dest = buff
+                ElseIf buff.Refs Then
+                    buff.Refs --
+                Else
+                End
+            End
+            dest.Refs = 5
+            dest.DiskPtr = d
+            dest.PositionLow = addressLow
+            dest.PositionHigh = addressHigh
+            Memory.Copy dest, data, 512
+        End
     End
 
     Public Sub ReadBlockByName(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
@@ -128,6 +184,42 @@ Public Module Disk
             d = List.Item(Disks, i)
             If String.Equals(d.Name, name) Then 
                 d.ReadBlock.Invoke data, addressLow, addressHigh
+                Return
+            End
+        End
+        Throw NotFoundError
+    End
+
+    Public Sub WriteBlock(d as DiskInfo, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        d.ReadBlock.Invoke data, addressLow, addressHigh
+        Dim i as UInt16
+        Dim buff as DiskBufferPacket
+        If d.BlockSize == 512 Then
+            For i = 1 to 16
+                buff = Buffer
+                @buff = @buff + ((i-1) * SizeOf(DiskBufferPacket))
+                If buff.Refs Then
+                    If (#buff.DiskPtr == #d) AndAlso (@buff.DiskPtr == @d) Then
+                        If (buff.PositionLow == addressLow) Then 
+                            If (buff.PositionHigh == addressHigh) Then
+                                buff.Refs++
+                                Memory.Copy buff, data, 512
+                                Return
+                            End
+                        End
+                    End
+                End
+            End
+        End
+    End
+
+    Public Sub WriteBlockByName(name as String, data as PtrByteArray, addressLow as UInt16, addressHigh as UInt16)
+        Dim i as UInt16
+        For i = 1 to List.Count(Disks)
+            Dim d as DiskInfo
+            d = List.Item(Disks, i)
+            If String.Equals(d.Name, name) Then 
+                d.WriteBlock.Invoke data, addressLow, addressHigh
                 Return
             End
         End

@@ -3,7 +3,7 @@ Imports System.IO
 Imports System.Threading
 
 ' Relógio Global
-Module Clock
+Public Module Clock
     Public Dim TimerMiliSeconds as UInt16
     Public Dim TimerSeconds as UInt16
     Public Dim MiliSecond as UInt16
@@ -13,6 +13,8 @@ Module Clock
     Public Dim Day as UInt16
     Public Dim Month as UInt16
     Public Dim Year as UInt16
+    Public Dim TimezoneHour as Int16
+    Public Dim TimezoneMinute as Int16
 
     Public Sub Initialize
         Year = 2023
@@ -23,6 +25,21 @@ Module Clock
         Second = 0
         MiliSecond = 0
         TimerSeconds = 0
+        TimezoneHour = 0
+        TimezoneMinute = 0
+    End
+
+    Public Function GetTimezoneHour() as Int16
+        Return TimezoneHour
+    End
+
+    Public Function GetTimezoneMinute() as Int16
+        Return TimezoneMinute
+    End
+
+    Public Sub SetTimezone(hour as Int16, minute as Int16)
+        TimezoneHour = hour
+        TimezoneMinute = minute
     End
 
     Public Sub AutoAjust
@@ -45,6 +62,20 @@ Module Clock
         End
         end_ajust:
     End
+
+    Public Sub Set(h as UInt8, m as UInt8, s as UInt8, y as UInt16, mon as UInt8, d as UInt8)
+        Hour = h + TimezoneHour
+        Minute = m + TimezoneMinute
+        If Minute >= 60 Then
+            Hour++
+            Minute = Minute - 60
+        End
+        Second = s
+        Year = y
+        Month = mon
+        Day = d
+        AutoAjust
+    End
 End
 
 Module SystemTimer
@@ -66,7 +97,8 @@ Module SystemTimer
 
     End
 
-    Sub IntTick() Handles Interrupt
+    Sub IntTick() Handles RawInterrupt
+        asm "push ax"
         asm "cs add word [_systemtimer_ticklow], 1"
         asm "cs adc word [_systemtimer_tickhigh], 0"
         ' Chama antiga interrupcao 0x8 (BIOS)
@@ -78,6 +110,8 @@ Module SystemTimer
         asm "cs push word [_systemtimer_biosint8ip]"
         asm "retf"
         asm ".return:"
+        asm "mov ax, 0x20"
+        asm "out 0x20, al"
         ' Atualiza o relógio
         asm "cs add word [_clock_milisecond], 55"
         asm "cs add word [_clock_timermiliseconds], 55"
@@ -95,11 +129,26 @@ Module SystemTimer
         asm "jb .end_clock"
         asm "cs mov word [_clock_minute], 0"
         asm "cs inc word [_clock_hour]"
+        asm "push bx"
+        asm "push cx"
+        asm "push dx"
+        asm "push bp"
+        asm "push es"
+        asm "push di"
+        asm "push ds"
+        asm "push si"
         Clock.AutoAjust
+        asm "pop si"
+        asm "pop ds"
+        asm "pop di"
+        asm "pop es"
+        asm "pop bp"
+        asm "pop dx"
+        asm "pop cx"
+        asm "pop bx"
         asm ".end_clock:"
         ' Troca de tarefa
-        Thread.Yield
-        asm "mov ax, 0x20"
-        asm "out 0x20, al"
+        asm "int 0x81"
+        asm "pop ax"
     End
 End

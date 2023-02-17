@@ -97,7 +97,9 @@ Module Graphics From "System.Drawing.dll"
     Public Sub DrawLine(x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16)
     Public Sub DrawRectangle(x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, borderColor as UInt16, backgroundColor as UInt16)
     Public Sub DrawCircle(xm as UInt16, ym as UInt16, r as UInt16, borderColor as UInt16, backgroundColor as UInt16)
-    Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, multiline as UInt16)
+    Public Sub DrawText(font as Font, text as String, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
+    Public Sub DrawUInt(font as Font, number as UInt16, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
+    Public Sub DrawHex(font as Font, number as UInt16, x1 as UInt16, y1 as UInt16, x2 as UInt16, y2 as UInt16, color as UInt16, backgroundColor as UInt16, multiline as UInt16)
     Public Sub CalcFontSize(font as Font, text as String, size as Size, totalWidth as UInt16, multiline as UInt16)
     Public Sub ClearScreen(color as UInt16)
     Public Function GetActive() as UInt16

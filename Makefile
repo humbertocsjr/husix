@@ -152,12 +152,16 @@ discos_copia_ptbr:
 	@minixfs mkdir img.img /Bibliotecas
 	@minixfs mkdir img.img /Config
 	@minixfs mkdir img.img /Sistema
-	@minixfs add img.img Programas/Luzia/Luzia.hsx /Sistema/Luzia.hsx
-	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /Sistema/BandoDeDados.hsx
-	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programas/Sefudias.hsx
+	@minixfs add img.img Programas/Luzia.hsx /Sistema/Luzia.hsx
+	@minixfs add img.img Programas/BandoDeDados.hsx /Sistema/BandoDeDados.hsx
+	@minixfs add img.img Programas/Sefudias.hsx /Programas/Sefudias.hsx
+	@minixfs add img.img Programas/MarcoPolo.hsx /Sistema/MarcoPolo.hsx
 	@minixfs add img.img Bibliotecas/System.Drawing.dll /Bibliotecas/System.Drawing.dll
 	@minixfs add img.img Bibliotecas/System.Forms.dll /Bibliotecas/System.Forms.dll
-	@minixfs add img.img Controladores/VGA/VGA.hsx /Sistema/VGA.hsx
+	@minixfs add img.img Controladores/VGA.hsx /Sistema/VGA.hsx
+	@minixfs add img.img Controladores/CGA.hsx /Sistema/CGA.hsx
+	@minixfs add img.img Controladores/PS2.hsx /Sistema/PS2.hsx
+	@minixfs add img.img Controladores/Clock.hsx /Sistema/Clock.hsx
 	@minixfs add img.img LICENSE /Licença
 
 discos_copia_enus:
@@ -167,12 +171,16 @@ discos_copia_enus:
 	@minixfs mkdir img.img /Librarys
 	@minixfs mkdir img.img /Config
 	@minixfs mkdir img.img /System
-	@minixfs add img.img Programas/Luzia/Luzia.hsx /System/Luzia.hsx
-	@minixfs add img.img Programas/BandoDeDados/BandoDeDados.hsx /System/BandoDeDados.hsx
-	@minixfs add img.img Programas/Sefudias/Sefudias.hsx /Programs/Sefudias.hsx
+	@minixfs add img.img Programas/Luzia.hsx /System/Luzia.hsx
+	@minixfs add img.img Programas/BandoDeDados.hsx /System/BandoDeDados.hsx
+	@minixfs add img.img Programas/Sefudias.hsx /Programs/Sefudias.hsx
+	@minixfs add img.img Programas/MarcoPolo.hsx /System/MarcoPolo.hsx
 	@minixfs add img.img Bibliotecas/System.Drawing.dll /Librarys/System.Drawing.dll
 	@minixfs add img.img Bibliotecas/System.Forms.dll /Librarys/System.Forms.dll
-	@minixfs add img.img Controladores/VGA/VGA.hsx /System/VGA.hsx
+	@minixfs add img.img Controladores/VGA.hsx /System/VGA.hsx
+	@minixfs add img.img Controladores/CGA.hsx /System/CGA.hsx
+	@minixfs add img.img Controladores/PS2.hsx /System/PS2.hsx
+	@minixfs add img.img Controladores/Clock.hsx /System/Clock.hsx
 	@minixfs add img.img LICENSE /License
 
 teste-qemu:
@@ -218,6 +226,30 @@ teste-dosbox:
 	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
 	@echo -= Iniciando emulacao [DOSBox] =-
 	@dosbox -C "IMGMOUNT 0 Distro/1440TEST.img -size 512,18,2,80 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "c:\husix Mode=DOS Disk=BIOSDisk000" > /dev/null
+
+teste-dosbox-360:
+	@$(MAKE) clean
+	@$(MAKE) ptbr
+	@$(MAKE) config_pc
+	@$(MAKE) alfa_ptbr
+	@TRADUCAO=ptbr $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
+	@echo -= Iniciando emulacao [DOSBox] =-
+	@dosbox -C "IMGMOUNT 0 Distro/360TEST.img -size 512,9,2,40 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "BOOT -l A" > /dev/null
+
+teste-dosbox-1440:
+	@$(MAKE) clean
+	@$(MAKE) ptbr
+	@$(MAKE) config_pc
+	@$(MAKE) alfa_ptbr
+	@TRADUCAO=ptbr $(MAKE) discos
+	@echo -= Tamanho do Kernel:
+	@ls -lah Nucleo/husix.com | cut -d ' ' -f 5
+	@echo -= Iniciando emulacao [DOSBox] =-
+	@dosbox -C "IMGMOUNT 0 Distro/1440TEST.img -size 512,18,2,80 -fs none -t floppy" -C "MOUNT C: ./Nucleo"  -C "BOOT -l A" > /dev/null
+
+
 
 ptbr:
 	@echo -= Aplicando Tradução PT-BR =-

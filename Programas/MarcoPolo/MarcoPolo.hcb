@@ -1,0 +1,66 @@
+Imports System
+Imports System.DateTime
+Imports System.Drawing
+Imports System.Forms
+
+
+Module Program
+    Dim MenuBar as Control
+    Dim DateTimeNow as DateTime
+    Dim LastMinute as UInt16
+    Dim DateTimeLabel as Control
+    Dim DateTimeText as String
+
+    Friend Sub Main(args as String)
+        LastMinute = 99
+        MenuBar.Initialize MenuBar
+        Label.Initialize DateTimeLabel
+        DateTimeLabel.Top = 1
+        DateTimeLabel.Left = MenuBar.Width - 40
+        DateTimeLabel.Height = 14
+        DateTimeLabel.Width = 35
+        DateTimeLabel.Text = DateTimeText
+        DateTimeLabel.Visible = 1
+        String.Copy DateTimeText, "00:00"
+        Control.Add MenuBar, DateTimeLabel
+        Application.RunWithLoop MenuBar, AddressOf(InternalLoop)
+    End
+
+    Sub InternalLoop(ctrl as Control)
+        DateTime.Now DateTimeNow
+        If LastMinute <> DateTimeNow.Minute Then
+            LastMinute = DateTimeNow.Minute
+            DateTime.ToSmallTimeString DateTimeNow, DateTimeText
+            Control.Redraw DateTimeLabel
+            Screen.Redraw
+        End
+
+    End
+End
+
+Module MenuBar
+    Public Sub Initialize(ctrl as Control)
+        Dim scr as Control
+        scr = Screen.GetCurrentScreen()
+        scr.PaddingTop = 16
+        Control.Initialize ctrl
+        ctrl.Width = scr.Width -1
+        ctrl.Height = 16
+        ctrl.PaddingTop = -16
+        ctrl.ControlPaint = AddressOf(ControlPaint)
+        ctrl.ForceRedraw = 1
+        ctrl.Window = ctrl
+    End
+
+    Sub ControlPaint(ctrl as Control, focusChangeOnly as UInt16)
+        Graphics.DrawRectangle 0, 0, ctrl.Width, ctrl.Height, SystemColors.WindowColor(), SystemColors.WindowColor()
+        Graphics.DrawLine 0, ctrl.Height, ctrl.Width, ctrl.Height, SystemColors.WindowBorderColor()
+        Control.DrawChildren ctrl
+        Graphics.DrawLine 0, 0, 3, 0, SystemColors.WindowBorderColor()
+        Graphics.DrawLine 0, 0, 0, 3, SystemColors.WindowBorderColor()
+        Graphics.DrawPixel 1, 1, SystemColors.WindowBorderColor()
+        Graphics.DrawLine ctrl.Width - 3, 0, ctrl.Width, 0, SystemColors.WindowBorderColor()
+        Graphics.DrawLine ctrl.Width, 0, ctrl.Width, 3, SystemColors.WindowBorderColor()
+        Graphics.DrawPixel ctrl.Width - 1, 1, SystemColors.WindowBorderColor()
+    End
+End

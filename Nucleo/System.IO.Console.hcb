@@ -39,7 +39,7 @@ Public Module Console
         VideoCardName = "VGA"
         ' Apenas placas VGA ou superior tem o serviço AH=0x1a
         asm "xor bx, bx"
-        asm "mov ah, 0x1a"
+        asm "mov ax, 0x1a00"
         asm "int 0x10"
         asm "mov [bp-2], bx"
         If (teste == 7) OrElse (teste == 8) Then 
@@ -65,7 +65,7 @@ Public Module Console
         asm "mov [bp-2], ax"
 
         If teste <> 7 Then
-            VideoCardName = "VGA"
+            VideoCardName = "CGA"
             SupportLevel = 1
         Else
             VideoCardName = "Hercules"

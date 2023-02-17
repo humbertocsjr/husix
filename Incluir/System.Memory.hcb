@@ -1,0 +1,8 @@
+Module GlobalMemory From "husix"
+    Public Function GetAvailKiB() as UInt16
+    Public Function AllocKiB(t as Thread, sizeKiB as UInt16) as PtrByteArray
+End
+
+Module Memory From "husix"
+    Public Sub Copy(dest as PtrByteArray, orig as PtrByteArray, len as UInt16)
+End

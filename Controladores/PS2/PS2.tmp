@@ -1,0 +1,2108 @@
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+_os_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:24:13 ===---
+cpu 8086
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:25:13 ===---
+bits 16
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:26:13 ===---
+org 0x100
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:27:13 ===---
+db 'HSX',0 ; Application
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:28:13 ===---
+dw 1 ; HEADER VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:29:13 ===---
+dw 0 ; MINIMUM API VERSION
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:30:13 ===---
+dw _os_start_start ; Start Routine
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:31:13 ===---
+dw END ; Code Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:32:13 ===---
+dw 20480 ; Stack Size
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:33:13 ===---
+dw REALOC_TABLE ; Realocation Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:34:13 ===---
+dw IMPORT_TABLE ; Import Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:35:13 ===---
+dw EXPORT_TABLE ; Export Table
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:36:13 ===---
+_os_minstackptr: dw 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:37:13 ===---
+_os_start_start:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:38:13 ===---
+mov ax, ss
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:39:13 ===---
+mov ds, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:40:13 ===---
+mov es, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:41:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_start2
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:42:13 ===---
+retf
+ROTULO0:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:20:8 ===---
+; MODULO: os
+NAME_os:
+db 2
+db 111,115
+db 0
+_os:
+db 10
+db 83,121,115,116,101,109,46,104,99,98
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:22:9 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:45:9 ===---
+_os_stackcheck:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:46:13 ===---
+cs mov ax, [_os_minstackptr]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:47:13 ===---
+add ax, 64
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:48:13 ===---
+cmp sp, ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:49:13 ===---
+ja .ok
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:50:15 ===---
+cs mov si, [_os_minstackptr]
+ss mov word [si+6], _os
+push cs
+ss pop word [si+6+2]
+mov ax, 50
+ss mov [si+4], ax
+mov ax, 2
+ss mov [si+18], ax
+ss call far [si+0]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:51:13 ===---
+.ok:
+ROTULO1:
+FIM_os_stackcheck:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:54:9 ===---
+_os_start2:
+push bp
+mov bp, sp
+sub sp, 14
+push cs
+call _os_stackcheck
+; ARG: args TAM: 4 POS: BP--14 
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:56:13 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:10 ===---
+; ACAO GRAVACAO - Grava segmento em variavel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:58:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _os_codesegment
+mov word [bp+-14+2], ax
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:59:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+mov word [bp+-14], 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:61:11 ===---
+; Armazena Dados do Try Catch
+cs mov si, [_os_minstackptr]
+ss mov ax, [si+0]
+mov [bp+-2], ax
+ss mov ax, [si+2]
+mov [bp+-4], ax
+ss mov ax, [si+14]
+mov [bp+-6], ax
+ss mov ax, [si+16]
+mov [bp+-8], ax
+mov ax, bp
+ss mov [si+16], ax
+mov ax, sp
+ss mov [si+14], ax
+ss mov word [si+0], ROTULO3
+push cs
+ss pop word [si+0+2]
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:13 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:62:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+push es
+push di
+push cs
+call _program_main
+add sp, 4
+jmp near ROTULO4
+ROTULO3:
+mov bx, ax
+cs mov si, [_os_minstackptr]
+ss mov bp, [si+16]
+ss mov sp, [si+14]
+mov ax, bx
+jmp near ROTULO4
+ROTULO6:
+push cs
+call _os_fatalerror
+ROTULO4:
+mov ax, [bp+-2]
+cs mov si, [_os_minstackptr]
+ss mov [si+0], ax
+mov ax, [bp+-4]
+ss mov [si+2], ax
+mov ax, [bp+-6]
+ss mov [si+14], ax
+mov ax, [bp+-8]
+ss mov [si+16], ax
+ROTULO2:
+mov sp, bp
+pop bp
+FIM_os_start2:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:67:16 ===---
+_os_fatalerror:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:68:22 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_current]
+push es
+push di
+cs call far [_thread_abort]
+add sp, 4
+ROTULO7:
+FIM_os_fatalerror:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:71:21 ===---
+_os_codesegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:72:13 ===---
+mov ax, cs
+ROTULO8:
+FIM_os_codesegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:75:21 ===---
+_os_stacksegment:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:76:13 ===---
+mov ax, ss
+ROTULO9:
+FIM_os_stacksegment:
+retf
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:79:21 ===---
+_os_realoctable:
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:80:13 ===---
+mov ax, REALOC_TABLE
+ROTULO10:
+FIM_os_realoctable:
+retf
+; MODULO FIM: os
+;     ---=== PS2.hcb:7:8 ===---
+; MODULO: program
+NAME_program:
+db 7
+db 112,114,111,103,114,97,109
+db 0
+_program:
+db 7
+db 80,83,50,46,104,99,98
+db 0
+;     ---=== PS2.hcb:13:16 ===---
+_program_mainform:
+times 108 db 0
+;     ---=== PS2.hcb:14:16 ===---
+_program_scancodedesclabel:
+times 108 db 0
+;     ---=== PS2.hcb:15:16 ===---
+_program_scancodelabel:
+times 108 db 0
+;     ---=== PS2.hcb:16:16 ===---
+_program_scancode2label:
+times 108 db 0
+;     ---=== PS2.hcb:17:16 ===---
+_program_asciidesclabel:
+times 108 db 0
+;     ---=== PS2.hcb:18:16 ===---
+_program_asciilabel:
+times 108 db 0
+;     ---=== PS2.hcb:19:16 ===---
+_program_utf8desclabel:
+times 108 db 0
+;     ---=== PS2.hcb:20:16 ===---
+_program_utf8highlabel:
+times 108 db 0
+;     ---=== PS2.hcb:21:16 ===---
+_program_utf8lowlabel:
+times 108 db 0
+;     ---=== PS2.hcb:22:16 ===---
+_program_debug:
+times 2 db 0
+;     ---=== PS2.hcb:24:16 ===---
+_program_main:
+push bp
+mov bp, sp
+; ARG: args TAM: 4 POS: BP+6 
+;     ---=== PS2.hcb:24:21 ===---
+;     ---=== PS2.hcb:25:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_debug], 0
+;     ---=== PS2.hcb:26:9 ===---
+;     ---=== PS2.hcb:26:12 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'string'
+;     ---=== PS2.hcb:26:32 ===---
+push cs
+pop es
+mov di, ROTULO15
+jmp near ROTULO14
+ROTULO15:
+db 5
+db 100,101,98,117,103
+times 1 db 0
+ROTULO14:
+push es
+push di
+;     ---=== PS2.hcb:26:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+6+2]
+pop es
+mov di, [bp+6]
+push es
+push di
+cs call far [_string_equals]
+add sp, 8
+cmp ax, 0
+jne ROTULO12
+jmp near ROTULO13
+ROTULO12:
+;     ---=== PS2.hcb:26:46 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_program_debug], 1
+ROTULO13:
+;     ---=== PS2.hcb:27:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:27:35 ===---
+; ACAO CHAMADA - Carrega binario embutido
+jmp near ROTULO16
+ROTULO17:
+db 0,0,0,0,27,0,0,0,49,0,0,0,50,0,0,0,51,0,0,0,52,0,0,0,53,0,0,0,54,0,0,0,55,0,0,0,56,0,0,0,57,0,0,0,48,0,0,0,45,0,0,0,61,0,0,0,9,0,0,0,8,0,0,0,113,0,0,0,119,0,0,0,101,0,0,0,114,0,0,0,116,0,0,0,121,0,0,0,117,0,0,0,105,0,0,0,111,0,0,0,112,0,0,0,91,0,0,0,93,0,0,0,13,0,0,0,0,0,0,0,97,0,0,0,115,0,0,0,100,0,0,0,102,0,0,0,103,0,0,0,104,0,0,0,106,0,0,0,107,0,0,0,108,0,0,0,59,0,0,0,39,0,0,0,96,0,0,0,0,0,0,0,92,0,0,0,122,0,0,0,120,0,0,0,99,0,0,0,118,0,0,0,98,0,0,0,110,0,0,0,109,0,0,0,44,0,0,0,46,0,0,0,47,0,0,0,0,0,0,0,42,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55,0,0,0,56,0,0,0,57,0,0,0,45,0,0,0,52,0,0,0,53,0,0,0,54,0,0,0,43,0,0,0,49,0,0,0,50,0,0,0,51,0,0,0,48,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,0,0,0,33,0,0,0,64,0,0,0,35,0,0,0,36,0,0,0,37,0,0,0,94,0,0,0,38,0,0,0,42,0,0,0,40,0,0,0,41,0,0,0,95,0,0,0,43,0,0,0,9,0,0,0,8,0,0,0,81,0,0,0,87,0,0,0,69,0,0,0,82,0,0,0,84,0,0,0,89,0,0,0,85,0,0,0,73,0,0,0,79,0,0,0,80,0,0,0,123,0,0,0,125,0,0,0,13,0,0,0,0,0,0,0,65,0,0,0,83,0,0,0,68,0,0,0,70,0,0,0,71,0,0,0,72,0,0,0,74,0,0,0,75,0,0,0,76,0,0,0,58,0,0,0,34,0,0,0,126,0,0,0,0,0,0,0,124,0,0,0,90,0,0,0,88,0,0,0,67,0,0,0,86,0,0,0,66,0,0,0,78,0,0,0,77,0,0,0,60,0,0,0,62,0,0,0,63,0,0,0,0,0,0,0,42,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55,0,0,0,56,0,0,0,57,0,0,0,45,0,0,0,52,0,0,0,53,0,0,0,54,0,0,0,43,0,0,0,49,0,0,0,50,0,0,0,51,0,0,0,48,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,255,0,0,0,0,0,0,1,255,0,0,8,255,0,0,3,255,0,0,0,0,0,0,10,255,0,0,0,0,0,0,11,255,0,0,0,0,0,0,6,255,0,0,9,255,0,0,4,255,0,0,0,255,0,0,5,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ROTULO16:
+push cs
+pop es
+mov di, ROTULO17
+push es
+cs pop word [_ps2keyboard_scancodemap+2]
+cs mov [_ps2keyboard_scancodemap], di
+;     ---=== PS2.hcb:28:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:28:31 ===---
+push cs
+pop es
+mov di, _program_irq1
+push es
+push di
+;     ---=== PS2.hcb:28:28 ===---
+mov ax, 9
+xor ah, ah
+push ax
+cs call far [_io_registerhandler]
+add sp, 6
+;     ---=== PS2.hcb:29:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _ps2keyboard_initialize
+;     ---=== PS2.hcb:30:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'application'
+;     ---=== PS2.hcb:30:39 ===---
+push cs
+pop es
+mov di, _ps2keyboard_keyboardupdate
+push es
+push di
+cs call far [_application_setkeyboardupdate]
+add sp, 4
+;     ---=== PS2.hcb:31:9 ===---
+;     ---=== PS2.hcb:31:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_debug]
+cmp ax, 0
+jne ROTULO18
+jmp near ROTULO19
+ROTULO18:
+;     ---=== PS2.hcb:32:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'form'
+;     ---=== PS2.hcb:32:29 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_form_initialize]
+add sp, 4
+;     ---=== PS2.hcb:33:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:33:28 ===---
+mov ax, 20
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:34:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:34:29 ===---
+mov ax, 20
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:35:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:35:30 ===---
+mov ax, 150
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:36:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:36:31 ===---
+mov ax, 70
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:37:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:37:29 ===---
+push cs
+pop es
+mov di, ROTULO21
+jmp near ROTULO20
+ROTULO21:
+db 10
+db 80,83,47,50,32,68,101,98,117,103
+times 1 db 0
+ROTULO20:
+push es
+push di
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:39:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'label'
+;     ---=== PS2.hcb:39:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancodedesclabel+2]
+pop es
+cs mov di, [_program_scancodedesclabel]
+push es
+push di
+cs call far [_label_initialize]
+add sp, 4
+;     ---=== PS2.hcb:40:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:40:37 ===---
+mov ax, 5
+cs push word [_program_scancodedesclabel+2]
+pop es
+cs mov di, [_program_scancodedesclabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:41:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:41:38 ===---
+mov ax, 5
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:42:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:42:39 ===---
+mov ax, 50
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:43:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:43:40 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:44:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:44:41 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:45:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:45:38 ===---
+push cs
+pop es
+mov di, ROTULO23
+jmp near ROTULO22
+ROTULO23:
+db 6
+db 73,110,112,117,116,58
+times 1 db 0
+ROTULO22:
+push es
+push di
+cs push word [_program_scancodedesclabel+2]
+pop es
+cs mov di, [_program_scancodedesclabel]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:46:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:46:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:46:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:48:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'hexlabel'
+;     ---=== PS2.hcb:48:33 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancodelabel+2]
+pop es
+cs mov di, [_program_scancodelabel]
+push es
+push di
+cs call far [_hexlabel_initialize]
+add sp, 4
+;     ---=== PS2.hcb:49:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:49:33 ===---
+mov ax, 5
+cs push word [_program_scancodelabel+2]
+pop es
+cs mov di, [_program_scancodelabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:50:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:50:34 ===---
+mov ax, 65
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:51:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:51:35 ===---
+mov ax, 50
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:52:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:52:36 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:53:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:53:37 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:54:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:54:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:54:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:56:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'hexlabel'
+;     ---=== PS2.hcb:56:33 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancode2label+2]
+pop es
+cs mov di, [_program_scancode2label]
+push es
+push di
+cs call far [_hexlabel_initialize]
+add sp, 4
+;     ---=== PS2.hcb:57:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:57:34 ===---
+mov ax, 5
+cs push word [_program_scancode2label+2]
+pop es
+cs mov di, [_program_scancode2label]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:58:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:58:35 ===---
+mov ax, 106
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:59:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:59:36 ===---
+mov ax, 50
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:60:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:60:37 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:61:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:61:38 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:62:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:62:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:62:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:64:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'label'
+;     ---=== PS2.hcb:64:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8desclabel+2]
+pop es
+cs mov di, [_program_utf8desclabel]
+push es
+push di
+cs call far [_label_initialize]
+add sp, 4
+;     ---=== PS2.hcb:65:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:65:33 ===---
+mov ax, 20
+cs push word [_program_utf8desclabel+2]
+pop es
+cs mov di, [_program_utf8desclabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:66:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:66:34 ===---
+mov ax, 5
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:67:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:67:35 ===---
+mov ax, 50
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:68:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:68:36 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:69:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:69:37 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:70:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:70:34 ===---
+push cs
+pop es
+mov di, ROTULO25
+jmp near ROTULO24
+ROTULO25:
+db 6
+db 85,84,70,45,56,58
+times 1 db 0
+ROTULO24:
+push es
+push di
+cs push word [_program_utf8desclabel+2]
+pop es
+cs mov di, [_program_utf8desclabel]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:71:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:71:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:71:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:73:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'hexlabel'
+;     ---=== PS2.hcb:73:33 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8highlabel+2]
+pop es
+cs mov di, [_program_utf8highlabel]
+push es
+push di
+cs call far [_hexlabel_initialize]
+add sp, 4
+;     ---=== PS2.hcb:74:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:74:33 ===---
+mov ax, 20
+cs push word [_program_utf8highlabel+2]
+pop es
+cs mov di, [_program_utf8highlabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:75:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:75:34 ===---
+mov ax, 106
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:76:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:76:35 ===---
+mov ax, 40
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:77:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:77:36 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:78:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:78:37 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:79:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:79:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:79:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:81:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'hexlabel'
+;     ---=== PS2.hcb:81:33 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8lowlabel+2]
+pop es
+cs mov di, [_program_utf8lowlabel]
+push es
+push di
+cs call far [_hexlabel_initialize]
+add sp, 4
+;     ---=== PS2.hcb:82:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:82:32 ===---
+mov ax, 20
+cs push word [_program_utf8lowlabel+2]
+pop es
+cs mov di, [_program_utf8lowlabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:83:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:83:33 ===---
+mov ax, 65
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:84:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:84:34 ===---
+mov ax, 39
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:85:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:85:35 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:86:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:86:36 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:87:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:87:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:87:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:89:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'label'
+;     ---=== PS2.hcb:89:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_asciidesclabel+2]
+pop es
+cs mov di, [_program_asciidesclabel]
+push es
+push di
+cs call far [_label_initialize]
+add sp, 4
+;     ---=== PS2.hcb:90:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:90:34 ===---
+mov ax, 35
+cs push word [_program_asciidesclabel+2]
+pop es
+cs mov di, [_program_asciidesclabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:91:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:91:35 ===---
+mov ax, 5
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:92:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:92:36 ===---
+mov ax, 50
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:93:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:93:37 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:94:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:94:38 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:95:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:95:35 ===---
+push cs
+pop es
+mov di, ROTULO27
+jmp near ROTULO26
+ROTULO27:
+db 6
+db 65,83,67,73,73,58
+times 1 db 0
+ROTULO26:
+push es
+push di
+cs push word [_program_asciidesclabel+2]
+pop es
+cs mov di, [_program_asciidesclabel]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:96:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:96:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:96:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:98:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'label'
+;     ---=== PS2.hcb:98:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_asciilabel+2]
+pop es
+cs mov di, [_program_asciilabel]
+push es
+push di
+cs call far [_label_initialize]
+add sp, 4
+;     ---=== PS2.hcb:99:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:99:30 ===---
+mov ax, 35
+cs push word [_program_asciilabel+2]
+pop es
+cs mov di, [_program_asciilabel]
+es mov [di+0], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:100:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:100:31 ===---
+mov ax, 65
+es mov [di+2], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:101:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:101:32 ===---
+mov ax, 20
+es mov [di+6], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:102:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:102:33 ===---
+mov ax, 15
+es mov [di+4], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:103:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:103:34 ===---
+mov ax, 1
+es mov [di+14], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:104:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:104:31 ===---
+push cs
+pop es
+mov di, ROTULO29
+jmp near ROTULO28
+ROTULO29:
+db 1
+db 32
+times 1 db 0
+ROTULO28:
+push es
+push di
+cs push word [_program_asciilabel+2]
+pop es
+cs mov di, [_program_asciilabel]
+es pop word [di+10]
+es pop word [di+10+2]
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:105:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:105:35 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+;     ---=== PS2.hcb:105:25 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_add]
+add sp, 8
+;     ---=== PS2.hcb:107:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'application'
+;     ---=== PS2.hcb:107:29 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_application_run]
+add sp, 4
+jmp near ROTULO30
+ROTULO19:
+;     ---=== PS2.hcb:109:13 ===---
+ROTULO31:
+;     ---=== PS2.hcb:109:19 ===---
+mov ax, 1
+cmp ax, 0
+jne ROTULO32
+jmp near ROTULO33
+ROTULO32:
+;     ---=== PS2.hcb:109:21 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'thread'
+cs call far [_thread_yield]
+jmp near ROTULO31
+ROTULO33:
+ROTULO30:
+ROTULO11:
+mov sp, bp
+pop bp
+FIM_program_main:
+retf
+;     ---=== PS2.hcb:113:9 ===---
+_program_irq1:
+push di
+push es
+push si
+push ds
+push dx
+push cx
+push bx
+push ax
+push bp
+mov ax, sp
+push ax
+push ss
+push ss
+pop ds
+push bp
+mov bp, sp
+sub sp, 2
+; ARG: tmp TAM: 2 POS: BP--2 
+;     ---=== PS2.hcb:115:13 ===---
+;     ---=== PS2.hcb:114:9 ===---
+; ACAO CHAMADA - Chama rotina
+;     ---=== PS2.hcb:114:27 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:114:40 ===---
+mov ax, 96
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+xor ah, ah
+push ax
+push cs
+call _ps2keyboard_write
+add sp, 2
+;     ---=== PS2.hcb:116:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:116:15 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:116:28 ===---
+mov ax, 97
+push ax
+cs call far [_io_inputbyte]
+add sp, 2
+mov [bp+-2], ax
+;     ---=== PS2.hcb:117:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:117:33 ===---
+;     ---=== PS2.hcb:117:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== PS2.hcb:117:36 ===---
+mov ax, 128
+mov bx, ax
+pop ax
+or ax, bx
+xor ah, ah
+push ax
+;     ---=== PS2.hcb:117:23 ===---
+mov ax, 97
+push ax
+cs call far [_io_outputbyte]
+add sp, 4
+;     ---=== PS2.hcb:118:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:118:29 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+xor ah, ah
+push ax
+;     ---=== PS2.hcb:118:23 ===---
+mov ax, 97
+push ax
+cs call far [_io_outputbyte]
+add sp, 4
+;     ---=== PS2.hcb:119:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'io'
+;     ---=== PS2.hcb:119:29 ===---
+mov ax, 32
+xor ah, ah
+push ax
+;     ---=== PS2.hcb:119:23 ===---
+mov ax, 32
+push ax
+cs call far [_io_outputbyte]
+add sp, 4
+ROTULO34:
+mov sp, bp
+pop bp
+pop ax
+pop bx
+mov ss, ax
+mov sp, bx
+pop bp
+pop ax
+pop bx
+pop cx
+pop dx
+pop ds
+pop si
+pop es
+pop di
+FIM_program_irq1:
+iret
+; MODULO FIM: program
+;     ---=== PS2.hcb:127:8 ===---
+; MODULO: ps2keyboard
+NAME_ps2keyboard:
+db 11
+db 112,115,50,107,101,121,98,111,97,114,100
+db 0
+_ps2keyboard:
+db 7
+db 80,83,50,46,104,99,98
+db 0
+;     ---=== PS2.hcb:128:16 ===---
+_ps2keyboard_scancodemap:
+times 4 db 0
+;     ---=== PS2.hcb:129:16 ===---
+_ps2keyboard_buffer:
+times 20 db 0
+;     ---=== PS2.hcb:130:16 ===---
+_ps2keyboard_bufferwriteptr:
+times 2 db 0
+;     ---=== PS2.hcb:131:16 ===---
+_ps2keyboard_bufferreadptr:
+times 2 db 0
+;     ---=== PS2.hcb:133:16 ===---
+_ps2keyboard_keyboardupdate:
+push bp
+mov bp, sp
+; ARG: ctrl TAM: 4 POS: BP+6 
+;     ---=== PS2.hcb:133:31 ===---
+;     ---=== PS2.hcb:134:9 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _ps2keyboard_process
+ROTULO38:
+mov sp, bp
+pop bp
+FIM_ps2keyboard_keyboardupdate:
+retf
+;     ---=== PS2.hcb:137:16 ===---
+_ps2keyboard_initialize:
+;     ---=== PS2.hcb:138:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_ps2keyboard_bufferreadptr], 0
+;     ---=== PS2.hcb:139:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+cs mov word [_ps2keyboard_bufferwriteptr], 0
+ROTULO39:
+FIM_ps2keyboard_initialize:
+retf
+;     ---=== PS2.hcb:142:16 ===---
+_ps2keyboard_write:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: value TAM: 2 POS: BP+6 
+; ARG: ptr TAM: 4 POS: BP--4 
+;     ---=== PS2.hcb:142:22 ===---
+;     ---=== PS2.hcb:143:13 ===---
+;     ---=== PS2.hcb:144:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:144:15 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_ps2keyboard_buffer+2]
+pop es
+cs mov di, [_ps2keyboard_buffer]
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== PS2.hcb:145:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:145:21 ===---
+;     ---=== PS2.hcb:145:23 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferwriteptr]
+push ax
+;     ---=== PS2.hcb:145:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+pop bx
+add ax, bx
+mov [bp+-4], ax
+;     ---=== PS2.hcb:146:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:146:15 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+6]
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+es mov [di+0], al
+;     ---=== PS2.hcb:147:9 ===---
+; ACAO INC - Incrementa variavel
+cs inc word [_ps2keyboard_bufferwriteptr]
+;     ---=== PS2.hcb:148:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:148:41 ===---
+;     ---=== PS2.hcb:148:26 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferwriteptr]
+push ax
+;     ---=== PS2.hcb:148:45 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+cs mov [_ps2keyboard_bufferwriteptr], ax
+ROTULO40:
+mov sp, bp
+pop bp
+FIM_ps2keyboard_write:
+retf
+;     ---=== PS2.hcb:151:21 ===---
+_ps2keyboard_read:
+push bp
+mov bp, sp
+sub sp, 4
+push cs
+call _os_stackcheck
+; ARG: ptr TAM: 4 POS: BP--4 
+;     ---=== PS2.hcb:152:13 ===---
+;     ---=== PS2.hcb:153:9 ===---
+;     ---=== PS2.hcb:153:26 ===---
+;     ---=== PS2.hcb:153:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferreadptr]
+push ax
+;     ---=== PS2.hcb:153:29 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferwriteptr]
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO47
+jmp near ROTULO48
+ROTULO47:
+mov ax, 65535
+jmp near ROTULO49
+ROTULO48:
+xor ax, ax
+ROTULO49:
+cmp ax, 0
+jne ROTULO45
+jmp near ROTULO46
+ROTULO45:
+;     ---=== PS2.hcb:153:49 ===---
+;     ---=== PS2.hcb:153:56 ===---
+xor ax, ax
+jmp near ROTULO44
+ROTULO46:
+;     ---=== PS2.hcb:154:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:154:15 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_ps2keyboard_buffer+2]
+pop es
+cs mov di, [_ps2keyboard_buffer]
+push es
+pop word [bp+-4+2]
+mov [bp+-4], di
+;     ---=== PS2.hcb:155:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:155:21 ===---
+;     ---=== PS2.hcb:155:23 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferreadptr]
+push ax
+;     ---=== PS2.hcb:155:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-4]
+pop bx
+add ax, bx
+mov [bp+-4], ax
+;     ---=== PS2.hcb:156:9 ===---
+; ACAO INC - Incrementa variavel
+cs inc word [_ps2keyboard_bufferreadptr]
+;     ---=== PS2.hcb:157:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:157:39 ===---
+;     ---=== PS2.hcb:157:25 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_ps2keyboard_bufferreadptr]
+push ax
+;     ---=== PS2.hcb:157:43 ===---
+mov ax, 15
+mov bx, ax
+pop ax
+and ax, bx
+cs mov [_ps2keyboard_bufferreadptr], ax
+;     ---=== PS2.hcb:158:9 ===---
+;     ---=== PS2.hcb:158:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-4+2]
+pop es
+mov di, [bp+-4]
+xor ax, ax
+es mov al, [di+0]
+jmp near ROTULO44
+ROTULO44:
+mov sp, bp
+pop bp
+FIM_ps2keyboard_read:
+retf
+;     ---=== PS2.hcb:161:16 ===---
+_ps2keyboard_process:
+push bp
+mov bp, sp
+sub sp, 18
+push cs
+call _os_stackcheck
+; ARG: value TAM: 2 POS: BP--2 
+; ARG: e TAM: 4 POS: BP--6 
+; ARG: ptr TAM: 4 POS: BP--10 
+; ARG: ptrw TAM: 4 POS: BP--14 
+; ARG: ctrl TAM: 4 POS: BP--18 
+;     ---=== PS2.hcb:162:13 ===---
+;     ---=== PS2.hcb:163:13 ===---
+;     ---=== PS2.hcb:164:13 ===---
+;     ---=== PS2.hcb:165:13 ===---
+;     ---=== PS2.hcb:181:17 ===---
+;     ---=== PS2.hcb:166:9 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:166:17 ===---
+; ACAO CHAMADA - Chama rotina
+push cs
+call _ps2keyboard_read
+mov [bp+-2], ax
+;     ---=== PS2.hcb:167:9 ===---
+;     ---=== PS2.hcb:167:18 ===---
+;     ---=== PS2.hcb:167:12 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== PS2.hcb:167:21 ===---
+xor ax, ax
+mov bx, ax
+pop ax
+cmp ax, bx
+je ROTULO56
+jmp near ROTULO57
+ROTULO56:
+mov ax, 65535
+jmp near ROTULO58
+ROTULO57:
+xor ax, ax
+ROTULO58:
+cmp ax, 0
+jne ROTULO54
+jmp near ROTULO55
+ROTULO54:
+;     ---=== PS2.hcb:167:28 ===---
+;     ---=== PS2.hcb:167:33 ===---
+xor ax, ax
+jmp near ROTULO53
+ROTULO55:
+;     ---=== PS2.hcb:168:9 ===---
+; ACAO STRUCTURE - Aloca estrutura na pilha
+sub sp, 9
+push ss
+pop es
+mov di, sp
+push es
+pop word [bp+-6+2]
+mov [bp+-6], di
+;     ---=== PS2.hcb:169:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:169:15 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_ps2keyboard_scancodemap+2]
+pop es
+cs mov di, [_ps2keyboard_scancodemap]
+push es
+pop word [bp+-10+2]
+mov [bp+-10], di
+;     ---=== PS2.hcb:170:10 ===---
+; ACAO GRAVACAO - Grava em variavel
+;     ---=== PS2.hcb:170:21 ===---
+;     ---=== PS2.hcb:170:41 ===---
+;     ---=== PS2.hcb:170:31 ===---
+;     ---=== PS2.hcb:170:25 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== PS2.hcb:170:35 ===---
+mov ax, 127
+mov bx, ax
+pop ax
+and ax, bx
+push ax
+;     ---=== PS2.hcb:170:45 ===---
+mov ax, 2
+mov cx, ax
+pop ax
+shl ax, cl
+push ax
+;     ---=== PS2.hcb:170:17 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-10]
+pop bx
+add ax, bx
+mov [bp+-10], ax
+;     ---=== PS2.hcb:171:9 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:171:16 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+push es
+pop word [bp+-14+2]
+mov [bp+-14], di
+;     ---=== PS2.hcb:172:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:172:23 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+xor ax, ax
+es mov al, [di+0]
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov [di+0], al
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:173:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:173:25 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+xor ax, ax
+es mov al, [di+0]
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov [di+1], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:174:10 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== PS2.hcb:175:10 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-14]
+;     ---=== PS2.hcb:176:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:176:26 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-14+2]
+pop es
+mov di, [bp+-14]
+xor ax, ax
+es mov al, [di+0]
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov [di+3], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:177:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:177:25 ===---
+;     ---=== PS2.hcb:177:21 ===---
+; ACAO LEITURA - Le ponteiro
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== PS2.hcb:177:29 ===---
+mov ax, 128
+mov bx, ax
+pop ax
+and ax, bx
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov [di+5], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:178:9 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:178:20 ===---
+xor ax, ax
+es mov [di+7], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:179:9 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'application'
+;     ---=== PS2.hcb:179:39 ===---
+; ACAO LEITURA - Le ponteiro
+push es
+push di
+cs call far [_application_sendkeyboardevent]
+add sp, 4
+;     ---=== PS2.hcb:180:9 ===---
+;     ---=== PS2.hcb:180:12 ===---
+; ACAO LEITURA - Le variavel
+cs mov ax, [_program_debug]
+cmp ax, 0
+jne ROTULO65
+jmp near ROTULO66
+ROTULO65:
+;     ---=== PS2.hcb:182:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:182:20 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8lowlabel+2]
+pop es
+cs mov di, [_program_utf8lowlabel]
+push es
+pop word [bp+-18+2]
+mov [bp+-18], di
+;     ---=== PS2.hcb:183:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:183:26 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 1
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov ax, [di+1]
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:184:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:184:20 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8highlabel+2]
+pop es
+cs mov di, [_program_utf8highlabel]
+push es
+pop word [bp+-18+2]
+mov [bp+-18], di
+;     ---=== PS2.hcb:185:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:185:26 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int16 - Desvio 3
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+es mov ax, [di+3]
+push word [bp+-18+2]
+pop es
+mov di, [bp+-18]
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:186:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:186:20 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancodelabel+2]
+pop es
+cs mov di, [_program_scancodelabel]
+push es
+pop word [bp+-18+2]
+mov [bp+-18], di
+;     ---=== PS2.hcb:187:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:187:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:188:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:188:20 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancode2label+2]
+pop es
+cs mov di, [_program_scancode2label]
+push es
+pop word [bp+-18+2]
+mov [bp+-18], di
+;     ---=== PS2.hcb:189:13 ===---
+; ACAO STRUCTURE - Gravacao de Ponteiro- Prepara
+;     ---=== PS2.hcb:189:32 ===---
+;     ---=== PS2.hcb:189:26 ===---
+; ACAO LEITURA - Le variavel
+mov ax, [bp+-2]
+push ax
+;     ---=== PS2.hcb:189:36 ===---
+mov ax, 127
+mov bx, ax
+pop ax
+and ax, bx
+es mov [di+8], ax
+; ACAO STRUCTURE - Gravacao de Ponteiro - Fim
+;     ---=== PS2.hcb:190:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:190:20 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_asciilabel+2]
+pop es
+cs mov di, [_program_asciilabel]
+push es
+pop word [bp+-18+2]
+mov [bp+-18], di
+;     ---=== PS2.hcb:191:13 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:191:19 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - Ponteiro Byte - Desvio 10
+es push word [di+10+2]
+es push word [di+10]
+pop di
+pop es
+push es
+pop word [bp+-10+2]
+mov [bp+-10], di
+;     ---=== PS2.hcb:192:14 ===---
+; ACAO INC - Incrementa variavel
+inc word [bp+-10]
+inc di
+;     ---=== PS2.hcb:193:13 ===---
+;     ---=== PS2.hcb:193:28 ===---
+;     ---=== PS2.hcb:193:16 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+xor ax, ax
+es mov al, [di+0]
+push ax
+;     ---=== PS2.hcb:193:31 ===---
+mov ax, 32
+mov bx, ax
+pop ax
+cmp ax, bx
+jae ROTULO72
+jmp near ROTULO73
+ROTULO72:
+mov ax, 65535
+jmp near ROTULO74
+ROTULO73:
+xor ax, ax
+ROTULO74:
+cmp ax, 0
+jne ROTULO70
+jmp near ROTULO71
+ROTULO70:
+;     ---=== PS2.hcb:194:17 ===---
+; ACAO GRAVACAO - Gravacao em ponteiro
+;     ---=== PS2.hcb:194:23 ===---
+; ACAO STRUCTURE - Leitura de Ponteiro - (U)Int8 - Desvio 0
+push word [bp+-6+2]
+pop es
+mov di, [bp+-6]
+xor ax, ax
+es mov al, [di+0]
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+es mov [di+0], al
+jmp near ROTULO75
+ROTULO71:
+;     ---=== PS2.hcb:196:17 ===---
+; ACAO GRAVACAO - Gravacao de numero em ponteiro
+push word [bp+-10+2]
+pop es
+mov di, [bp+-10]
+es mov byte [di+0], 32
+ROTULO75:
+;     ---=== PS2.hcb:198:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:198:30 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_suppress]
+add sp, 4
+;     ---=== PS2.hcb:199:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:199:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_asciilabel+2]
+pop es
+cs mov di, [_program_asciilabel]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== PS2.hcb:200:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:200:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancodelabel+2]
+pop es
+cs mov di, [_program_scancodelabel]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== PS2.hcb:201:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:201:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_scancode2label+2]
+pop es
+cs mov di, [_program_scancode2label]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== PS2.hcb:202:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:202:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8lowlabel+2]
+pop es
+cs mov di, [_program_utf8lowlabel]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== PS2.hcb:203:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:203:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_utf8highlabel+2]
+pop es
+cs mov di, [_program_utf8highlabel]
+push es
+push di
+cs call far [_control_redraw]
+add sp, 4
+;     ---=== PS2.hcb:204:13 ===---
+; ACAO CHAMADA - Chama rotina
+; ACAO CHAMADA - ROTINA EXTERNA 'control'
+;     ---=== PS2.hcb:204:28 ===---
+; ACAO LEITURA - Le ponteiro
+cs push word [_program_mainform+2]
+pop es
+cs mov di, [_program_mainform]
+push es
+push di
+cs call far [_control_resume]
+add sp, 4
+ROTULO66:
+ROTULO53:
+mov sp, bp
+pop bp
+FIM_ps2keyboard_process:
+retf
+; MODULO FIM: ps2keyboard
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:16:8 ===---
+; MODULO: thread
+NAME_thread:
+db 6
+db 116,104,114,101,97,100
+db 0
+_thread:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:17:16 ===---
+_thread_yield:
+times 4 db 0
+db 5
+db 121,105,101,108,100
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:18:16 ===---
+_thread_abort:
+times 4 db 0
+db 5
+db 97,98,111,114,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:19:21 ===---
+_thread_current:
+times 4 db 0
+db 7
+db 99,117,114,114,101,110,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:20:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Threading.hcb:21:16 ===---
+; MODULO FIM: thread
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:88:8 ===---
+; MODULO: string
+NAME_string:
+db 6
+db 115,116,114,105,110,103
+db 0
+_string:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:89:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:90:21 ===---
+_string_equals:
+times 4 db 0
+db 6
+db 101,113,117,97,108,115
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:91:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.hcb:92:21 ===---
+; MODULO FIM: string
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:1:8 ===---
+; MODULO: io
+NAME_io:
+db 2
+db 105,111
+db 0
+_io:
+db 5
+db 104,117,115,105,120
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:2:16 ===---
+_io_outputbyte:
+times 4 db 0
+db 10
+db 111,117,116,112,117,116,98,121,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:3:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:4:21 ===---
+_io_inputbyte:
+times 4 db 0
+db 9
+db 105,110,112,117,116,98,121,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:5:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:6:16 ===---
+_io_registerhandler:
+times 4 db 0
+db 15
+db 114,101,103,105,115,116,101,114,104,97,110,100,108,101,114
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:7:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:8:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.IO.hcb:9:16 ===---
+; MODULO FIM: io
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:75:8 ===---
+; MODULO: control
+NAME_control:
+db 7
+db 99,111,110,116,114,111,108
+db 0
+_control:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:76:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:77:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:78:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:79:16 ===---
+_control_add:
+times 4 db 0
+db 3
+db 97,100,100
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:80:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:81:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:82:16 ===---
+_control_redraw:
+times 4 db 0
+db 6
+db 114,101,100,114,97,119
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:83:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:84:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:85:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:86:16 ===---
+_control_suppress:
+times 4 db 0
+db 8
+db 115,117,112,112,114,101,115,115
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:87:16 ===---
+_control_resume:
+times 4 db 0
+db 6
+db 114,101,115,117,109,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:88:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:89:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:90:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:91:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:92:16 ===---
+; MODULO FIM: control
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:109:8 ===---
+; MODULO: label
+NAME_label:
+db 5
+db 108,97,98,101,108
+db 0
+_label:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:110:16 ===---
+_label_initialize:
+times 4 db 0
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+; MODULO FIM: label
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:117:8 ===---
+; MODULO: hexlabel
+NAME_hexlabel:
+db 8
+db 104,101,120,108,97,98,101,108
+db 0
+_hexlabel:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:118:16 ===---
+_hexlabel_initialize:
+times 4 db 0
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+; MODULO FIM: hexlabel
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:121:8 ===---
+; MODULO: form
+NAME_form:
+db 4
+db 102,111,114,109
+db 0
+_form:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:122:16 ===---
+_form_initialize:
+times 4 db 0
+db 10
+db 105,110,105,116,105,97,108,105,122,101
+times 1 db 0
+; MODULO FIM: form
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:134:8 ===---
+; MODULO: application
+NAME_application:
+db 11
+db 97,112,112,108,105,99,97,116,105,111,110
+db 0
+_application:
+db 16
+db 83,121,115,116,101,109,46,70,111,114,109,115,46,100,108,108
+db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:135:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:136:21 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:137:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:138:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:139:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:140:16 ===---
+_application_setkeyboardupdate:
+times 4 db 0
+db 17
+db 115,101,116,107,101,121,98,111,97,114,100,117,112,100,97,116,101
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:141:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:142:16 ===---
+_application_sendkeyboardevent:
+times 4 db 0
+db 17
+db 115,101,110,100,107,101,121,98,111,97,114,100,101,118,101,110,116
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:143:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:144:16 ===---
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:145:16 ===---
+_application_run:
+times 4 db 0
+db 3
+db 114,117,110
+times 1 db 0
+;     ---=== /home/humberto/Nextcloud/hcso/Incluir/System.Forms.hcb:146:16 ===---
+; MODULO FIM: application
+EXPORT_TABLE:
+times 2 db 0
+IMPORT_TABLE:
+db 1
+dw _thread
+db 2
+dw NAME_thread
+; QTD REFS: 1
+db 3
+dw _thread_yield
+; QTD REFS: 1
+db 3
+dw _thread_abort
+; QTD REFS: 1
+db 3
+dw _thread_current
+db 1
+dw _string
+db 2
+dw NAME_string
+; QTD REFS: 1
+db 3
+dw _string_equals
+db 1
+dw _io
+db 2
+dw NAME_io
+; QTD REFS: 3
+db 3
+dw _io_outputbyte
+; QTD REFS: 2
+db 3
+dw _io_inputbyte
+; QTD REFS: 1
+db 3
+dw _io_registerhandler
+db 1
+dw _control
+db 2
+dw NAME_control
+; QTD REFS: 8
+db 3
+dw _control_add
+; QTD REFS: 5
+db 3
+dw _control_redraw
+; QTD REFS: 1
+db 3
+dw _control_suppress
+; QTD REFS: 1
+db 3
+dw _control_resume
+db 1
+dw _label
+db 2
+dw NAME_label
+; QTD REFS: 4
+db 3
+dw _label_initialize
+db 1
+dw _hexlabel
+db 2
+dw NAME_hexlabel
+; QTD REFS: 4
+db 3
+dw _hexlabel_initialize
+db 1
+dw _form
+db 2
+dw NAME_form
+; QTD REFS: 1
+db 3
+dw _form_initialize
+db 1
+dw _application
+db 2
+dw NAME_application
+; QTD REFS: 1
+db 3
+dw _application_setkeyboardupdate
+; QTD REFS: 1
+db 3
+dw _application_sendkeyboardevent
+; QTD REFS: 1
+db 3
+dw _application_run
+times 2 db 0
+REALOC_TABLE:
+dw 3
+dw _program_mainform
+dw 4
+dw 0
+dw 3
+dw _program_scancodedesclabel
+dw 4
+dw 0
+dw 3
+dw _program_scancodelabel
+dw 4
+dw 0
+dw 3
+dw _program_scancode2label
+dw 4
+dw 0
+dw 3
+dw _program_asciidesclabel
+dw 4
+dw 0
+dw 3
+dw _program_asciilabel
+dw 4
+dw 0
+dw 3
+dw _program_utf8desclabel
+dw 4
+dw 0
+dw 3
+dw _program_utf8highlabel
+dw 4
+dw 0
+dw 3
+dw _program_utf8lowlabel
+dw 4
+dw 0
+dw 3
+dw _ps2keyboard_buffer
+dw 4
+dw 0
+dw 0
+dw 0
+dw 0
+dw 0
+END:
