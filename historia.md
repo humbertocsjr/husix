@@ -2,6 +2,22 @@
 
 Abaixo segue em ordem cronológica as versões do HUSIX.
 
+## v2023.2 R4622
+
+- Implementado Controlador de Video VGA Otimizado
+- Implementado Verificações para o Redraw
+- Implementado Controlador de Relógio CMOS e SixPack
+
+**Situação Atual:** Implementando Controladores de Hardware
+
+**Tradução EN-US**
+
+![Tradução EN-US](Imagens/v2023.2r4622.png)
+
+**Tradução PT-BR**
+
+![Tradução PT-BR](Imagens/v2023.2r4622.png)
+
 ## v2023.2 R4209
 
 - Implementado System.Drawing
